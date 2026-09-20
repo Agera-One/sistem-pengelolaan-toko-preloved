@@ -8,4 +8,24 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /*
+     * Warna utama Sistem Pengelolaan Toko Preloved.
+     * Ubah nilai di sini, seluruh halaman ikut berubah.
+     *
+     * Contoh pemakaian di Blade:
+     *   bg-brand  hover:bg-brand-hover  text-brand-light  ring-brand/25
+     *   text-link hover:text-link-hover
+     */
+
+    /* Olive tua: tombol, fokus, ikon status */
+    --color-brand: #4A5A2A;
+    /* Olive lebih gelap: hover dan tombol saat loading */
+    --color-brand-hover: #3C4923;
+    /* Olive terang: khusus ikon/dekorasi di latar gelap */
+    --color-brand-light: #8A9B5B;
+
+    /* Cokelat: link dan nama toko di versi mobile */
+    --color-link: var(--color-amber-900);
+    --color-link-hover: var(--color-amber-950);
 }
