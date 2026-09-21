@@ -49,6 +49,18 @@ function initSidebar() {
     });
 
     render();
+
+    sidebar.querySelectorAll('[data-sidebar-toggle]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const expanded = button.getAttribute('aria-expanded') === 'true';
+            const submenu = document.getElementById(button.getAttribute('aria-controls'));
+            const chevron = button.querySelector('[data-sidebar-chevron]');
+
+            button.setAttribute('aria-expanded', String(!expanded));
+            submenu?.classList.toggle('hidden', expanded);
+            chevron?.classList.toggle('rotate-180', !expanded);
+        });
+    });
 }
 
 if (document.readyState === 'loading') {
