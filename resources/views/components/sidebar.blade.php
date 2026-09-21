@@ -1,12 +1,6 @@
 @props(['storeName' => 'TRISTANTI STORE'])
 
 @php
-    /*
-     * Daftar menu. Ubah 'route' dan 'active' sesuai nama route di project Anda.
-     * - route  : nama route tujuan. Jika route belum ada, link otomatis menjadi "#".
-     * - active : pola nama route yang menandai menu ini sedang dibuka (mis. 'barang.*').
-     * - icon   : path SVG Heroicons (outline, 24x24).
-     */
     $menus = [
         [
             'label'  => 'Dashboard',
@@ -27,9 +21,9 @@
             'icon'   => 'M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z',
         ],
         [
-            'label'  => 'Supplier',
-            'route'  => 'supplier.index',
-            'active' => 'supplier.*',
+            'label'  => 'Pemasok',
+            'route'  => 'pemasok.index',
+            'active' => 'pemasok.*',
             'icon'   => 'M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12',
         ],
         [
@@ -63,18 +57,15 @@
     $userInitial = mb_strtoupper(mb_substr($userName, 0, 1));
 @endphp
 
-{{-- Latar gelap saat menu dibuka di HP/tablet --}}
 <div id="sidebar-overlay" class="fixed inset-0 z-40 hidden bg-stone-900/50 lg:hidden" aria-hidden="true"></div>
 
 <aside id="sidebar"
        aria-label="Menu samping"
        class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col border-r border-stone-200 bg-stone-50 transition-transform duration-200 ease-in-out motion-reduce:transition-none lg:translate-x-0">
 
-    {{-- Identitas toko --}}
     <div class="flex items-start justify-between gap-2 border-b border-stone-200 px-5 py-5">
         <div class="min-w-0">
-            {{-- Ganti dengan logo asli bila sudah ada, contoh:
-                 <img src="{{ asset('images/logo.png') }}" alt="{{ $storeName }}" class="h-10 w-auto"> --}}
+            {{-- <img src="{{ asset('images/logo.png') }}" alt="{{ $storeName }}" class="h-10 w-auto"> --}}
             <p class="flex items-center gap-2 font-serif text-xl font-bold text-stone-900">
                 <svg class="h-6 w-6 shrink-0 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linejoin="round" aria-hidden="true">
@@ -83,10 +74,8 @@
                 </svg>
                 <span class="truncate">{{ $storeName }}</span>
             </p>
-            <p class="mt-1 text-base text-stone-600">Pengelolaan Toko Preloved</p>
         </div>
 
-        {{-- Tombol tutup, hanya di HP/tablet --}}
         <button type="button" id="sidebar-close" aria-label="Tutup menu"
                 class="-mr-2 -mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-stone-700 transition duration-200 ease-in-out hover:bg-stone-200/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand/40 lg:hidden">
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -96,7 +85,6 @@
         </button>
     </div>
 
-    {{-- Menu utama --}}
     <nav aria-label="Menu utama" class="flex-1 overflow-y-auto px-4 py-5">
         <ul class="space-y-1">
             @foreach ($menus as $menu)
@@ -124,7 +112,6 @@
         </ul>
     </nav>
 
-    {{-- Pengguna dan keluar --}}
     <div class="border-t border-stone-200 p-4">
         <div class="flex items-center gap-3 px-2 pb-4">
             <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand text-lg font-semibold text-white"
@@ -137,7 +124,6 @@
             </div>
         </div>
 
-        {{-- Tombol keluar hanya tampil bila route logout tersedia (mis. Breeze/Fortify) --}}
         @if (Route::has('logout'))
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
