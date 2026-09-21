@@ -12,7 +12,6 @@ class Pemasok extends Model
     protected $fillable = [
         'kode',
         'nama',
-        'email',
         'nomor_telepon',
         'kota',
     ];

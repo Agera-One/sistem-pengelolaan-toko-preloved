@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->char('kode', 15)->unique();
             $table->string('nama');
-            $table->string('email')->unique();
             $table->string('nomor_telepon', 15)->unique();
             $table->text('alamat');
             $table->timestamps();
