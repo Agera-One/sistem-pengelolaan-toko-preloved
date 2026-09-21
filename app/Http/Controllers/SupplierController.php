@@ -34,7 +34,7 @@ class SupplierController extends Controller
         $kode = $codeGenerator->generate(
         new Supplier(),
             'kode',
-            'SUP'
+            'SPL'
         );
 
         return view('pages.supplier', compact('supplier', 'user', 'kode'));
@@ -52,7 +52,7 @@ class SupplierController extends Controller
             return redirect()->route('supplier.index');
         }
 
-        $kode = $codeGenerator->generate(new Supplier(), 'kode', 'SUP');
+        $kode = $codeGenerator->generate(new Supplier(), 'kode', 'SPL');
 
         try {
             Supplier::create([
