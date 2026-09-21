@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->char('kode', 15)->unique();
-            $table->integer('total');
+            $table->unsignedInteger('total');
             $table->timestamps();
 
             $table->foreignId('supplier_id')->constrained('supplier');

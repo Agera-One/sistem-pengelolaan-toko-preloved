@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->char('kode', 15)->unique();
             $table->string('nama');
-            $table->integer('lingkar');
-            $table->integer('panjang');
-            $table->integer('harga_jual');
+            $table->unsignedInteger('lingkar');
+            $table->unsignedInteger('panjang');
+            $table->unsignedInteger('harga_jual');
             $table->string('kategori');
             $table->string('status');
             $table->timestamps();

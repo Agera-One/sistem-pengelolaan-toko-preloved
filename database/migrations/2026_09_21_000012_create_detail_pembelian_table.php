@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('barang_id')->constrained('barang');
             $table->foreignId('pembelian_id')->constrained('pembelian');
-            $table->integer('harga_beli');
+            $table->unsignedInteger('harga_beli');
         });
     }
 

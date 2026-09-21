@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->char('kode', 15)->unique();
-            $table->integer('kerugian_pengiriman');
+            $table->unsignedInteger('kerugian_pengiriman');
             $table->string('alasan', 255);
             $table->string('tipe', 255);
             $table->timestamps();

@@ -9,33 +9,19 @@ Sistem Manajemen Toko Preloved
 │   ├── Total Laba
 │   └── Barang Tersedia
 │
-├── Barang
-│   ├── Daftar Barang
-│   ├── Tambah Barang
-│   ├── Detail Barang
-│   └── Edit Barang
-│
-├── Supplier
-│   ├── Daftar Supplier
-│   ├── Tambah Supplier
-│   ├── Detail Supplier
-│   └── Edit Supplier
-│
-├── Pelanggan
-│   ├── Daftar Pelanggan
-│   ├── Tambah Pelanggan
-│   ├── Detail Pelanggan
-│   └── Edit Pelanggan
+├── Data Utama
+│   ├── Barang
+│   ├── Supplier
+│   └── Pelanggan
 │
 ├── Pembelian
-│   ├── Daftar Pembelian
-│   ├── Tambah Pembelian
-│   └── Detail Pembelian
+│   ├── Pesanan Pembelian
+│   └── Pembayaran Pembelian
 │
 ├── Penjualan
-│   ├── Daftar Penjualan
-│   ├── Tambah Penjualan
-│   └── Detail Penjualan
+│   ├── Pesanan Penjualan
+│   ├── Retur Penjualan
+│   └── Pembayaran Penjualan
 │
 ├── Keuangan
 │   ├── Pemasukan
