@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
     public function index(): View
     {
-        return view('pages.login.index');
+        return view('pages.login');
     }
 
     public function attempt(Request $request): RedirectResponse
