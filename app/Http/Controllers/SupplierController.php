@@ -12,8 +12,6 @@ class SupplierController extends Controller
 {
     public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
-        $user = Auth::user();
-
         $keyword = trim((string) $request->query('q', ''));
 
         $supplier = Supplier::query()
