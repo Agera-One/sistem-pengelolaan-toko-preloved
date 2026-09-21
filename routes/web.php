@@ -11,6 +11,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', fn () => view('pages.dashboard'))->name('dashboard');
-    Route::resource('pelanggan', PelangganController::class)->except(['create', 'show']);
+    Route::resource('pelanggan', PelangganController::class)->except(['show', 'create', 'edit']);
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
