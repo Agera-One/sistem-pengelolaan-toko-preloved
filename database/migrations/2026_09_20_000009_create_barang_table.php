@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->char('kode', 15)->unique();
             $table->string('nama');
-            $table->integer('lingkar_dada')->nullable();
-            $table->integer('panjang_baju')->nullable();
-            $table->integer('lingkar_pinggang')->nullable();
-            $table->integer('panjang_celana')->nullable();
+            $table->integer('lingkar')->nullable();
+            $table->integer('panjang')->nullable();
             $table->integer('harga_beli');
             $table->integer('harga_jual');
             $table->string('status');
