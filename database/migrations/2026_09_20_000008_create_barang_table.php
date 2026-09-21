@@ -19,10 +19,10 @@ return new class extends Migration
             $table->integer('panjang')->nullable();
             $table->integer('harga_beli');
             $table->integer('harga_jual');
+            $table->string('kategori');
             $table->string('status');
             $table->timestamps();
 
-            $table->foreignId('kategori_id')->constrained('kategori');
             $table->foreignId('pembelian_id')->nullable()->constrained('pembelian');
             $table->foreignId('penjualan_id')->nullable()->constrained('penjualan');
             $table->foreignId('retur_id')->nullable()->constrained('retur');
