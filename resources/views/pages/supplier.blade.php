@@ -33,8 +33,8 @@
             </div>
         @endif
 
-        <div class="mt-6 overflow-hidden rounded-xl border border-stone-200 bg-white">
-            <div class="flex flex-col gap-3 border-b border-stone-200 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white">
+            <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <form method="GET" action="{{ route('supplier.index') }}"
                       class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative w-full sm:max-w-sm">
@@ -67,7 +67,7 @@
 
             <div class="overflow-x-auto">
                 <table class="min-w-full text-left">
-                    <thead class="bg-brand/5 text-stone-600">
+                    <thead class="bg-brand/5 text-stone-600 border-b border-stone-300">
                         <tr>
                             <th scope="col" class="w-16 px-4 py-3 font-medium">No</th>
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
@@ -78,7 +78,7 @@
                         </tr>
                     </thead>
 
-                    <tbody class="divide-y divide-stone-100">
+                    <tbody class="divide-y divide-stone-300">
                         @forelse ($supplier as $s)
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">
@@ -118,7 +118,7 @@
                                     <div id="menu-supplier-{{ $s->getKey() }}"
                                          role="menu"
                                          hidden
-                                         class="fixed z-50 w-44 rounded-lg border border-stone-200 bg-white p-1 text-left shadow-lg">
+                                         class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
                                         <button type="button" role="menuitem"
                                                 data-detail-open="modal-detail"
                                                 data-kode="{{ $s->kode }}"
@@ -218,11 +218,11 @@
 
     <dialog id="modal-tambah"
             aria-labelledby="modal-tambah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-200 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
+            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
         <form method="POST" action="{{ route('supplier.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
 
-            <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
+            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
                 <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah supplier</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
@@ -238,7 +238,7 @@
                         <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
                         <input name="kode" type="text" id="kode" value="{{ $kode }}"
                                 readonly aria-describedby="hint-kode"
-                                class="w-full cursor-not-allowed rounded-lg border border-stone-200 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
                         <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
                     </div>
 
@@ -280,7 +280,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-end gap-2 border-t border-stone-200 bg-stone-50 px-6 py-4">
+            <div class="flex items-center justify-end gap-2 border-t border-stone-300 bg-stone-50 px-6 py-4">
                 <button type="button" data-modal-close
                         class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     Batal
@@ -295,13 +295,13 @@
 
     <dialog id="modal-ubah"
             aria-labelledby="modal-ubah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-200 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
+            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
         {{-- action diisi oleh supplier.js saat modal dibuka --}}
         <form method="POST" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
             @method('PUT')
 
-            <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
+            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
                 <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah supplier</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
@@ -317,7 +317,7 @@
                         <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
                         <input type="text" id="edit-kode" data-fill="kode"
                                 readonly aria-describedby="hint-edit-kode"
-                                class="w-full cursor-not-allowed rounded-lg border border-stone-200 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
                         <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
                     </div>
 
@@ -362,7 +362,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-end gap-2 border-t border-stone-200 bg-stone-50 px-6 py-4">
+            <div class="flex items-center justify-end gap-2 border-t border-stone-300 bg-stone-50 px-6 py-4">
                 <button type="button" data-modal-close
                         class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     Batal
@@ -377,10 +377,10 @@
 
     <dialog id="modal-detail"
         aria-labelledby="modal-detail-title"
-        class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-200 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
+        class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
         <div class="flex max-h-[90vh] flex-col">
 
-            <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
+            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
                 <h2 id="modal-detail-title" class="text-lg font-semibold">Detail supplier</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
@@ -400,7 +400,7 @@
                     </div>
                 </div>
 
-                <dl class="mt-5 divide-y divide-stone-100 border-t border-stone-100">
+                <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                         <dt class="text-stone-500">Nomor telepon</dt>
                         <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
@@ -420,7 +420,7 @@
                 </dl>
             </div>
 
-            <div class="flex items-center justify-end border-t border-stone-200 bg-stone-50 px-6 py-4">
+            <div class="flex items-center justify-end border-t border-stone-300 bg-stone-50 px-6 py-4">
                 <button type="button" data-modal-close
                         class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     Tutup
