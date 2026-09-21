@@ -14,7 +14,7 @@ class Pemasok extends Model
         'nama',
         'email',
         'nomor_telepon',
-        'alamat',
+        'kota',
     ];
 
     public function pembelian(): HasMany

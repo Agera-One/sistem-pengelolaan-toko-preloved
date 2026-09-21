@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('email')->unique();
             $table->string('nomor_telepon', 15)->unique();
-            $table->text('alamat');
+            $table->string('kota');
             $table->timestamps();
         });
     }
