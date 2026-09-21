@@ -12,8 +12,6 @@ class PelangganController extends Controller
 {
     public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
-        $user = Auth::user();
-
         $keyword = trim((string) $request->query('q', ''));
 
         $pelanggan = Pelanggan::query()
@@ -37,7 +35,7 @@ class PelangganController extends Controller
             'PLG'
         );
 
-        return view('pages.pelanggan', compact('pelanggan', 'user', 'kode'));
+        return view('pages.pelanggan', compact('pelanggan', 'kode'));
     }
 
     public function store(Request $request, CodeGeneratorService $codeGenerator)
