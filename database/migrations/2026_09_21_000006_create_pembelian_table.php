@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('total');
             $table->timestamps();
 
-            $table->foreignId('pemasok_id')->constrained('pemasok');
+            $table->foreignId('supplier_id')->constrained('supplier');
             $table->foreignId('user_id')->constrained('users');
         });
     }
