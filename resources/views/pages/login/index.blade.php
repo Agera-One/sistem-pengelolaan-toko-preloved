@@ -111,7 +111,7 @@
                 </div>
             @endif
 
-            <form id="login-form" method="POST" action="" class="mt-8 space-y-6">
+            <form id="login-form" method="POST" action="{{ route('login.attempt') }}" class="mt-8 space-y-6">
                 @csrf
 
                 {{-- Email --}}
