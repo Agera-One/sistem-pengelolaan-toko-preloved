@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Services\CodeGeneratorService;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,7 +34,7 @@ class SupplierController extends Controller
             'SPL'
         );
 
-        return view('pages.supplier', compact('supplier', 'user', 'kode'));
+        return view('pages.supplier', compact('supplier', 'kode'));
     }
 
     public function store(Request $request, CodeGeneratorService $codeGenerator)
