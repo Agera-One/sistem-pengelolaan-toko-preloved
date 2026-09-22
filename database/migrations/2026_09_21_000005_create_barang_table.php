@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('nama');
             $table->unsignedInteger('lingkar');
             $table->unsignedInteger('panjang');
-            $table->unsignedInteger('harga_jual');
             $table->string('kategori');
             $table->string('status');
             $table->timestamps();

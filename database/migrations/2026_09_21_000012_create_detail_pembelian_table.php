@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('barang_id')->constrained('barang')->onDelete('restrict');;
             $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');;
             $table->unsignedInteger('harga_beli');
+            $table->unsignedInteger('harga_jual');
         });
     }
 

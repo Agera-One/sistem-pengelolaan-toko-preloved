@@ -15,6 +15,7 @@ class DetailPembelian extends Model
         'barang_id',
         'pembelian_id',
         'harga_beli',
+        'harga_jual',
     ];
 
     public function barang(): BelongsTo

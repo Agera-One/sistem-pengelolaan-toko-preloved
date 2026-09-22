@@ -15,7 +15,6 @@ class Barang extends Model
         'nama',
         'lingkar',
         'panjang',
-        'harga_jual',
         'kategori',
         'status',
     ];
