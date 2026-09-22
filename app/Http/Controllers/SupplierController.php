@@ -64,7 +64,7 @@ class SupplierController extends Controller
             report($e);
 
             return redirect()->route('supplier.index')
-                ->with('error', 'Gagal menyimpan data supplier.');
+                ->with('error', 'Nomor telepon tidak boleh sama.');
         }
     }
 

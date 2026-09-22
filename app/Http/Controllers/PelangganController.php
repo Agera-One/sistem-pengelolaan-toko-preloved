@@ -64,7 +64,7 @@ class PelangganController extends Controller
             report($e);
 
             return redirect()->route('pelanggan.index')
-                ->with('error', 'Gagal menyimpan data pelanggan.');
+                ->with('error', 'Nomor telepon tidak boleh sama.');
         }
     }
 
