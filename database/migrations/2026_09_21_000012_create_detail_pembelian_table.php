@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('detail_pembelian', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('barang_id')->constrained('barang');
-            $table->foreignId('pembelian_id')->constrained('pembelian');
+            $table->foreignId('barang_id')->constrained('barang')->onDelete('restrict');;
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');;
             $table->unsignedInteger('harga_beli');
         });
     }

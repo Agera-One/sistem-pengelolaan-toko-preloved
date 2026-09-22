@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedInteger('total');
             $table->timestamps();
 
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('pelanggan_id')->constrained('pelanggan');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');;
+            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onDelete('restrict');;
         });
     }
 

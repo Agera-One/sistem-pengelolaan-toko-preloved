@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('metode_pembayaran');
             $table->timestamps();
 
-            $table->foreignId('pembelian_id')->constrained('pembelian');
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');;
         });
     }
 
