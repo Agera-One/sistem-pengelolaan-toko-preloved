@@ -44,7 +44,7 @@
                         </svg>
                         <label for="q" class="sr-only">Cari supplier</label>
                         <input type="search" id="q" name="q" value="{{ request('q') }}"
-                               placeholder="Cari kode, nama, atau telepon"
+                               placeholder="Cari kode, nama, telepon, atau kota"
                                class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </div>
 
