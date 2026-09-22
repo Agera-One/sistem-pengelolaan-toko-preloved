@@ -243,6 +243,19 @@
                     </div>
 
                     <div>
+                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-nomor_telepon"
+                                class="{{ $field }}">
+                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div>
                         <label for="nama" class="mb-1.5 block text-stone-900">
                             Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
@@ -253,19 +266,6 @@
                                 class="{{ $field }}">
                         <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
-                </div>
-
-                <div>
-                    <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
-                        Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
-                            placeholder="08xxxxxxxxxx" autocomplete="off"
-                            data-label="Nomor telepon" data-rules="required|max:15"
-                            aria-describedby="err-nomor_telepon"
-                            class="{{ $field }}">
-                    <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
 
                 <div>
                     <label for="alamat" class="mb-1.5 block text-stone-900">
@@ -296,7 +296,6 @@
     <dialog id="modal-ubah"
             aria-labelledby="modal-ubah-title"
             class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        {{-- action diisi oleh pelanggan.js saat modal dibuka --}}
         <form method="POST" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
             @method('PUT')
@@ -322,30 +321,30 @@
                     </div>
 
                     <div>
-                        <label for="edit-nama" class="mb-1.5 block text-stone-900">
-                            Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="edit-nama" name="nama"
-                                autocomplete="off" autofocus
-                                data-fill="nama"
-                                data-label="Nama lengkap" data-rules="required"
-                                aria-describedby="err-edit-nama"
+                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-fill="telepon"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-edit-nomor_telepon"
                                 class="{{ $field }}">
-                        <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
 
                 <div>
-                    <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
-                        Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                    <label for="edit-nama" class="mb-1.5 block text-stone-900">
+                        Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
-                    <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
-                            placeholder="08xxxxxxxxxx" autocomplete="off"
-                            data-fill="telepon"
-                            data-label="Nomor telepon" data-rules="required|max:15"
-                            aria-describedby="err-edit-nomor_telepon"
+                    <input type="text" id="edit-nama" name="nama"
+                            autocomplete="off" autofocus
+                            data-fill="nama"
+                            data-label="Nama lengkap" data-rules="required"
+                            aria-describedby="err-edit-nama"
                             class="{{ $field }}">
-                    <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
                 <div>

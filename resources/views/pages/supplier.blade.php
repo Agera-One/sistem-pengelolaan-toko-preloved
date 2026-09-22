@@ -233,50 +233,50 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
+                <div>
+                    <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                    <input name="kode" type="text" id="kode" value="{{ $kode }}"
+                            readonly aria-describedby="hint-kode"
+                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                    <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                </div>
+
+                <div>
+                    <label for="nama" class="mb-1.5 block text-stone-900">
+                        Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="nama" name="nama"
+                            autocomplete="off" autofocus
+                            data-label="Nama lengkap" data-rules="required"
+                            aria-describedby="err-nama"
+                            class="{{ $field }}">
+                    <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
+
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
-                        <input name="kode" type="text" id="kode" value="{{ $kode }}"
-                                readonly aria-describedby="hint-kode"
-                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
-                        <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-nomor_telepon"
+                                class="{{ $field }}">
+                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
                     <div>
-                        <label for="nama" class="mb-1.5 block text-stone-900">
-                            Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="kota" class="mb-1.5 block text-stone-900">
+                            Kota <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="nama" name="nama"
-                                autocomplete="off" autofocus
-                                data-label="Nama lengkap" data-rules="required"
-                                aria-describedby="err-nama"
-                                class="{{ $field }}">
-                        <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
-                        Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
-                            placeholder="08xxxxxxxxxx" autocomplete="off"
-                            data-label="Nomor telepon" data-rules="required|max:15"
-                            aria-describedby="err-nomor_telepon"
-                            class="{{ $field }}">
-                    <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div>
-                    <label for="kota" class="mb-1.5 block text-stone-900">
-                        kota lengkap <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <textarea id="kota" name="kota" rows="3"
-                                placeholder="Jalan, nomor, kelurahan, kota"
-                                data-label="kota lengkap" data-rules="required"
+                        <input type="text" id="kota" name="kota"
+                                placeholder="Contoh: Surabaya" autocomplete="off"
+                                data-label="Kota" data-rules="required"
                                 aria-describedby="err-kota"
-                                class="{{ $field }}"></textarea>
-                    <p id="err-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                                class="{{ $field }}">
+                        <p id="err-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
             </div>
 
@@ -296,7 +296,6 @@
     <dialog id="modal-ubah"
             aria-labelledby="modal-ubah-title"
             class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        {{-- action diisi oleh supplier.js saat modal dibuka --}}
         <form method="POST" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
             @method('PUT')
@@ -312,53 +311,53 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
+                <div>
+                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                    <input type="text" id="edit-kode" data-fill="kode"
+                            readonly aria-describedby="hint-edit-kode"
+                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
+                    <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                </div>
+
+                <div>
+                    <label for="edit-nama" class="mb-1.5 block text-stone-900">
+                        Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="edit-nama" name="nama"
+                            autocomplete="off" autofocus
+                            data-fill="nama"
+                            data-label="Nama lengkap" data-rules="required"
+                            aria-describedby="err-edit-nama"
+                            class="{{ $field }}">
+                    <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
+
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
-                        <input type="text" id="edit-kode" data-fill="kode"
-                                readonly aria-describedby="hint-edit-kode"
-                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
-                        <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-fill="telepon"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-edit-nomor_telepon"
+                                class="{{ $field }}">
+                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
                     <div>
-                        <label for="edit-nama" class="mb-1.5 block text-stone-900">
-                            Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="edit-kota" class="mb-1.5 block text-stone-900">
+                            Kota <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="edit-nama" name="nama"
-                                autocomplete="off" autofocus
-                                data-fill="nama"
-                                data-label="Nama lengkap" data-rules="required"
-                                aria-describedby="err-edit-nama"
-                                class="{{ $field }}">
-                        <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
-                        Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
-                            placeholder="08xxxxxxxxxx" autocomplete="off"
-                            data-fill="telepon"
-                            data-label="Nomor telepon" data-rules="required|max:15"
-                            aria-describedby="err-edit-nomor_telepon"
-                            class="{{ $field }}">
-                    <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div>
-                    <label for="edit-kota" class="mb-1.5 block text-stone-900">
-                        kota lengkap <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <textarea id="edit-kota" name="kota" rows="3"
-                                placeholder="Jalan, nomor, kelurahan, kota"
+                        <input type="text" id="edit-kota" name="kota"
+                                placeholder="Contoh: Surabaya" autocomplete="off"
                                 data-fill="kota"
-                                data-label="kota lengkap" data-rules="required"
+                                data-label="Kota" data-rules="required"
                                 aria-describedby="err-edit-kota"
-                                class="{{ $field }}"></textarea>
-                    <p id="err-edit-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                                class="{{ $field }}">
+                        <p id="err-edit-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
             </div>
 
@@ -407,7 +406,7 @@
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                         <dt class="text-stone-500">kota</dt>
-                        <dd data-detail="kota" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
+                        <dd data-detail="kota" class="break-words text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                         <dt class="text-stone-500">Terdaftar pada</dt>
