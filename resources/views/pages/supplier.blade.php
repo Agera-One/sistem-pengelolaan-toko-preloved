@@ -243,11 +243,11 @@
 
                 <div>
                     <label for="nama" class="mb-1.5 block text-stone-900">
-                        Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                        Nama <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <input type="text" id="nama" name="nama"
                             autocomplete="off" autofocus
-                            data-label="Nama lengkap" data-rules="required"
+                            data-label="Nama" data-rules="required"
                             aria-describedby="err-nama"
                             class="{{ $field }}">
                     <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -321,12 +321,12 @@
 
                 <div>
                     <label for="edit-nama" class="mb-1.5 block text-stone-900">
-                        Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                        Nama <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <input type="text" id="edit-nama" name="nama"
                             autocomplete="off" autofocus
                             data-fill="nama"
-                            data-label="Nama lengkap" data-rules="required"
+                            data-label="Nama" data-rules="required"
                             aria-describedby="err-edit-nama"
                             class="{{ $field }}">
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
