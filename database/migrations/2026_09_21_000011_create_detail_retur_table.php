@@ -8,10 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('detail_retur', function (Blueprint $table) {
+        Schema::create('detail_penjualan', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('barang_id')->constrained('barang')->onDelete('restrict');;
             $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');;
-            $table->foreignId('retur_id')->constrained('retur')->onDelete('restrict');;
+            $table->unsignedInteger('harga_jual');
         });
     }
 
