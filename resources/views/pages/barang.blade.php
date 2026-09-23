@@ -463,39 +463,46 @@
             </div>
 
             <div class="overflow-y-auto px-6 py-5">
-                <div class="flex items-center gap-4">
-                    <span data-detail-initial aria-hidden="true"
-                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xl font-semibold text-brand"></span>
-                    <div class="min-w-0">
+                <div class="flex items-start gap-4">
+                    <span aria-hidden="true"
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+                        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 2 8.5 5H6a2 2 0 0 0-2 2v1.2a1 1 0 0 0 .68.95L7 10v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V10l2.32-.85A1 1 0 0 0 20 8.2V7a2 2 0 0 0-2-2h-2.5L12 2Z" />
+                        </svg>
+                    </span>
+                    <div class="min-w-0 flex-1">
                         <p data-detail="nama" class="break-words text-lg font-semibold text-stone-900"></p>
-                        <p data-detail="kode" class="mt-0.5 text-stone-500"></p>
+                        <p data-detail="kode" class="mt-0.5 font-mono text-sm text-stone-500"></p>
+                        <span data-detail-status-badge class="mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium">
+                            <span data-detail-status-dot class="h-1.5 w-1.5 rounded-full"></span>
+                            <span data-detail="status"></span>
+                        </span>
                     </div>
                 </div>
 
-                <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Kategori</dt>
-                        <dd data-detail="kategori" class="text-stone-900 sm:col-span-2"></dd>
+                <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    <div class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
+                        <p class="text-xs text-stone-500">Kategori</p>
+                        <p data-detail="kategori" class="mt-0.5 font-medium text-stone-900"></p>
                     </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Status</dt>
-                        <dd data-detail="status" class="break-words text-stone-900 sm:col-span-2"></dd>
+                    <div class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
+                        <p id="detail-lingkar-label" class="text-xs text-stone-500">Lingkar Dada/Pinggang</p>
+                        <p data-detail="lingkar" class="mt-0.5 font-medium text-stone-900"></p>
                     </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt id="detail-lingkar-label" class="text-stone-500">Lingkar Dada/Pinggang</dt>
-                        <dd data-detail="lingkar" class="text-stone-900 sm:col-span-2"></dd>
+                    <div class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
+                        <p id="detail-panjang-label" class="text-xs text-stone-500">Panjang Baju/Celana</p>
+                        <p data-detail="panjang" class="mt-0.5 font-medium text-stone-900"></p>
                     </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt id="detail-panjang-label" class="text-stone-500">Panjang Baju/Celana</dt>
-                        <dd data-detail="panjang" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                </div>
+
+                <dl class="mt-5 divide-y divide-stone-200 border-t border-stone-200 text-sm">
+                    <div class="flex items-center justify-between py-2.5">
                         <dt class="text-stone-500">Terdaftar pada</dt>
-                        <dd data-detail="dibuat" class="text-stone-900 sm:col-span-2"></dd>
+                        <dd data-detail="dibuat" class="font-medium text-stone-900"></dd>
                     </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                    <div class="flex items-center justify-between py-2.5">
                         <dt class="text-stone-500">Terakhir diperbarui</dt>
-                        <dd data-detail="diperbarui" class="text-stone-900 sm:col-span-2"></dd>
+                        <dd data-detail="diperbarui" class="font-medium text-stone-900"></dd>
                     </div>
                 </dl>
             </div>
