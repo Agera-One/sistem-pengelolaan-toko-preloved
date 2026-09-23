@@ -145,6 +145,8 @@
                                                 data-panjang="{{ $b->panjang }}"
                                                 data-kategori="{{ $b->kategori }}"
                                                 data-status="{{ $b->status }}"
+                                                data-harga-beli="{{ $b->harga_beli ?? '' }}"
+                                                data-harga-jual="{{ $b->harga_jual ?? '' }}"
                                                 data-dibuat="{{ $b->created_at?->translatedFormat('d F Y') }}"
                                                 data-diperbarui="{{ $b->updated_at?->translatedFormat('d F Y') }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
@@ -472,39 +474,49 @@
                     </span>
                     <div class="min-w-0 flex-1">
                         <p data-detail="nama" class="break-words text-lg font-semibold text-stone-900"></p>
-                        <p data-detail="kode" class="mt-0.5 font-mono text-sm text-stone-500"></p>
-                        <span data-detail-status-badge class="mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium">
+                        <p data-detail="kode" class="mt-0.5 font-mono text-stone-500"></p>
+                        <span data-detail-status-badge class="mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-medium">
                             <span data-detail-status-dot class="h-1.5 w-1.5 rounded-full"></span>
                             <span data-detail="status"></span>
                         </span>
                     </div>
                 </div>
 
-                <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    <div class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
-                        <p class="text-xs text-stone-500">Kategori</p>
-                        <p data-detail="kategori" class="mt-0.5 font-medium text-stone-900"></p>
+                <div class="overflow-y-auto py-6 space-y-5 -mt-3 bg-white rounded-t-2xl">
+                    <div class="mt-5 grid grid-cols-2 divide-x divide-brand/20 overflow-hidden rounded-lg border border-brand/20 bg-brand/5">
+                        <div class="px-3 py-2.5">
+                            <p class= text-stone-500">Harga Beli</p>
+                            <p data-detail="harga_beli" class="mt-0.5 font-medium text-stone-900"></p>
+                        </div>
+                        <div class="px-3 py-2.5">
+                            <p class= text-stone-500">Harga Jual</p>
+                            <p data-detail="harga_jual" class="mt-0.5 font-medium text-brand"></p>
+                        </div>
                     </div>
-                    <div class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
-                        <p id="detail-lingkar-label" class="text-xs text-stone-500">Lingkar Dada/Pinggang</p>
-                        <p data-detail="lingkar" class="mt-0.5 font-medium text-stone-900"></p>
-                    </div>
-                    <div class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
-                        <p id="detail-panjang-label" class="text-xs text-stone-500">Panjang Baju/Celana</p>
-                        <p data-detail="panjang" class="mt-0.5 font-medium text-stone-900"></p>
+
+                    <div class="rounded-xl border border-stone-200 overflow-hidden divide-y divide-stone-100 shadow-sm">
+                        <div class="flex justify-between items-center px-4 py-3 bg-white">
+                            <span class="text-stone-500">Kategori</span>
+                            <span data-detail="kategori" class="font-medium text-stone-900"></span>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-3 bg-white">
+                            <span class="text-stone-500">Lingkar Dada/Pinggang</span>
+                            <span data-detail="lingkar" class="font-medium text-stone-900"></span>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-3 bg-white">
+                            <span class="text-stone-500">Panjang Baju/Celana</span>
+                            <span data-detail="panjang" class="font-medium text-stone-900"></span>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-3 bg-stone-50/60">
+                            <span class="text-stone-500">Terdaftar pada</span>
+                            <span data-detail="dibuat" class="font-medium text-stone-900"></span>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-3 bg-stone-50/60">
+                            <span class="text-stone-500">Terakhir diperbarui</span>
+                            <span data-detail="diperbarui" class="font-medium text-stone-900"></span>
+                        </div>
                     </div>
                 </div>
-
-                <dl class="mt-5 divide-y divide-stone-200 border-t border-stone-200 text-sm">
-                    <div class="flex items-center justify-between py-2.5">
-                        <dt class="text-stone-500">Terdaftar pada</dt>
-                        <dd data-detail="dibuat" class="font-medium text-stone-900"></dd>
-                    </div>
-                    <div class="flex items-center justify-between py-2.5">
-                        <dt class="text-stone-500">Terakhir diperbarui</dt>
-                        <dd data-detail="diperbarui" class="font-medium text-stone-900"></dd>
-                    </div>
-                </dl>
             </div>
 
             <div class="flex items-center justify-end border-t border-stone-300 bg-stone-50 px-6 py-4">

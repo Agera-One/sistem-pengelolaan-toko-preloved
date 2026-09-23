@@ -196,6 +196,17 @@
         terjual: { badge: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200', dot: 'bg-blue-500' }
     };
     var detailSizeFields = { lingkar: true, panjang: true };
+    var detailPriceFields = { hargaBeli: true, hargaJual: true };
+
+    function formatRupiah(value) {
+        var number = Number(value);
+
+        if (value === '' || value === null || isNaN(number)) {
+            return '-';
+        }
+
+        return 'Rp' + number.toLocaleString('id-ID');
+    }
 
     document.querySelectorAll('[data-detail-open]').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -203,14 +214,27 @@
 
             dialog.querySelectorAll('[data-detail]').forEach(function (el) {
                 var key = el.dataset.detail;
-                var value = (btn.dataset[key] || '').trim();
+                var camelKey = key.replace(/_([a-z])/g, function (m, c) { return c.toUpperCase(); });
+                var rawValue = (btn.dataset[camelKey] || '').trim();
 
+                if (detailPriceFields[camelKey]) {
+                    el.textContent = formatRupiah(rawValue);
+                    return;
+                }
+
+                var value = rawValue;
                 if (value !== '' && detailSizeFields[key]) {
                     value += ' cm';
                 }
 
                 el.textContent = value !== '' ? value : '-';
             });
+
+            var initialEl = dialog.querySelector('[data-detail-initial]');
+            if (initialEl) {
+                var nama = (btn.dataset.nama || '').trim();
+                initialEl.textContent = nama ? nama.charAt(0).toUpperCase() : '?';
+            }
 
             var badge = dialog.querySelector('[data-detail-status-badge]');
             var dot = dialog.querySelector('[data-detail-status-dot]');
