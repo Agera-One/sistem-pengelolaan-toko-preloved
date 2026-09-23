@@ -268,7 +268,7 @@
                     </label>
                     <input type="text" id="nama" name="nama"
                             autocomplete="off" autofocus
-                            data-label="Nama" data-rules="required"
+                            data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-nama"
                             class="{{ $field }}">
                     <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -307,7 +307,7 @@
                         Kategori <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <select id="kategori" name="kategori"
-                            data-label="Kategori" data-rules="required"
+                            data-label="Kategori" data-rules="required|string|max:255"
                             aria-describedby="err-kategori"
                             class="{{ $field }}">
                         <option value="" disabled selected>Pilih kategori</option>
@@ -372,7 +372,7 @@
                     <input type="text" id="edit-nama" name="nama"
                             autocomplete="off" autofocus
                             data-fill="nama"
-                            data-label="Nama" data-rules="required"
+                            data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-edit-nama"
                             class="{{ $field }}">
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -415,7 +415,7 @@
                     </label>
                     <select id="edit-kategori" name="kategori"
                             data-fill="kategori"
-                            data-label="Kategori" data-rules="required"
+                            data-label="Kategori" data-rules="required|string|max:255"
                             aria-describedby="err-edit-kategori"
                             class="{{ $field }}">
                         <option value="" disabled selected>Pilih kategori</option>

@@ -40,9 +40,9 @@ class SupplierController extends Controller
     public function store(Request $request, CodeGeneratorService $codeGenerator)
     {
         $validator = Validator::make($request->all(), [
-            'nama'          => 'required',
+            'nama'          => 'required|string|max:255',
             'nomor_telepon' => 'required|max:15',
-            'kota'        => 'required',
+            'kota'          => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -73,14 +73,16 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'nama'          => 'required',
+            'nama'          => 'required|string|max:255',
             'nomor_telepon' => 'required|max:15',
-            'kota'          => 'required',
+            'kota'          => 'required|string|max:255',
         ], [
             'nama.required'          => 'Nama lengkap wajib diisi.',
+            'nama.max'               => 'Nama lengkap maksimal 255 karakter.',
             'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
             'nomor_telepon.max'      => 'Nomor telepon maksimal 15 karakter.',
             'kota.required'          => 'kota wajib diisi.',
+            'kota.max'               => 'kota maksimal 255 karakter.',
         ]);
 
         if ($validator->fails()) {

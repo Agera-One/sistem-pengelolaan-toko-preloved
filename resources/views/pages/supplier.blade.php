@@ -250,7 +250,7 @@
                     </label>
                     <input type="text" id="nama" name="nama"
                             autocomplete="off" autofocus
-                            data-label="Nama" data-rules="required"
+                            data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-nama"
                             class="{{ $field }}">
                     <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -275,7 +275,7 @@
                         </label>
                         <input type="text" id="kota" name="kota"
                                 placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-label="Kota" data-rules="required"
+                                data-label="Kota" data-rules="required|string|max:255"
                                 aria-describedby="err-kota"
                                 class="{{ $field }}">
                         <p id="err-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -329,7 +329,7 @@
                     <input type="text" id="edit-nama" name="nama"
                             autocomplete="off" autofocus
                             data-fill="nama"
-                            data-label="Nama" data-rules="required"
+                            data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-edit-nama"
                             class="{{ $field }}">
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -356,7 +356,7 @@
                         <input type="text" id="edit-kota" name="kota"
                                 placeholder="Contoh: Surabaya" autocomplete="off"
                                 data-fill="kota"
-                                data-label="Kota" data-rules="required"
+                                data-label="Kota" data-rules="required|string|max:255"
                                 aria-describedby="err-edit-kota"
                                 class="{{ $field }}">
                         <p id="err-edit-kota" class="mt-1.5 text-xs text-red-600" hidden></p>

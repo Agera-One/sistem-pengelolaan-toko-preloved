@@ -83,11 +83,13 @@ class BarangController extends Controller
             'kategori'   => 'required|string|max:255',
         ], [
             'nama.required'     => 'Nama barang wajib diisi.',
+            'nama.max'          => 'Nama barang maksimal 255 karakter.',
             'lingkar.required'  => 'Lingkar wajib diisi.',
             'lingkar.numeric'   => 'Lingkar harus berbentuk angka.',
             'panjang.required'  => 'Panjang wajib diisi.',
             'panjang.numeric'   => 'Panjang harus berbentuk angka.',
             'kategori.required' => 'Kategori wajib diisi.',
+            'kategori.max'      => 'Kategori barang maksimal 255 karakter.',
         ]);
 
         if ($validator->fails()) {

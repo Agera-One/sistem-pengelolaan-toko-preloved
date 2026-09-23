@@ -40,7 +40,7 @@ class PelangganController extends Controller
     public function store(Request $request, CodeGeneratorService $codeGenerator)
     {
         $validator = Validator::make($request->all(), [
-            'nama'          => 'required',
+            'nama'          => 'required|string|max:255',
             'nomor_telepon' => 'required|max:15',
             'alamat'        => 'required',
         ]);
@@ -73,11 +73,12 @@ class PelangganController extends Controller
         $pelanggan = Pelanggan::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'nama'          => 'required',
+            'nama'          => 'required|string|max:255',
             'nomor_telepon' => 'required|max:15',
             'alamat'        => 'required',
         ], [
             'nama.required'          => 'Nama lengkap wajib diisi.',
+            'nama.max'               => 'Nama lengkap maksimal 255 karakter.',
             'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
             'nomor_telepon.max'      => 'Nomor telepon maksimal 15 karakter.',
             'alamat.required'        => 'Alamat lengkap wajib diisi.',
