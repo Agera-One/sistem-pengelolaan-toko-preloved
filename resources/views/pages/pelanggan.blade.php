@@ -90,15 +90,15 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 font-medium text-stone-900">
-                                    {{ $p->nama }}
+                                    {{ Str::title($p->nama) }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ $p->nomor_telepon ?: '-' }}
+                                    {{ $p->nomor_telepon }}
                                 </td>
 
-                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ $p->alamat }}">
-                                    {{ $p->alamat ?: '-' }}
+                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ Str::title($p->alamat) }}">
+                                    {{ Str::title($p->alamat) }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -106,7 +106,7 @@
                                             data-menu-toggle="menu-pelanggan-{{ $p->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ $p->nama }}"
+                                            aria-label="Aksi untuk {{ Str::title($p->nama) }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -223,7 +223,7 @@
             @csrf
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah pelanggan</h2>
+                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Pelanggan</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -301,7 +301,7 @@
             @method('PUT')
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah pelanggan</h2>
+                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Pelanggan</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -380,7 +380,7 @@
         <div class="flex max-h-[90vh] flex-col">
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail pelanggan</h2>
+                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Pelanggan</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

@@ -11,7 +11,7 @@
     @vite([
         'resources/css/app.css',
         'resources/js/sidebar.js',
-        'resources/js/pelanggan.js'
+        'resources/js/modal.js',
     ])
 </head>
 

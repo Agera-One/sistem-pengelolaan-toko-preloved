@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Supplier')
+@section('title', 'Daftar Barang')
 
 @section('content')
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold text-stone-900">Daftar Supplier</h1>
+                <h1 class="text-2xl font-semibold text-stone-900">Daftar Barang</h1>
             </div>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
@@ -22,7 +22,7 @@
                             <path d="m9 18 6-6-6-6" />
                         </svg>
                     </li>
-                    <li class="font-medium text-stone-900" aria-current="page">Daftar Supplier</li>
+                    <li class="font-medium text-stone-900" aria-current="page">Daftar Barang</li>
                 </ol>
             </nav>
         </div>
@@ -35,21 +35,21 @@
 
         <div class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <form method="GET" action="{{ route('supplier.index') }}"
+                <form method="GET" action="{{ route('barang.index') }}"
                       class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative w-full sm:max-w-sm">
                         <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="11" cy="11" r="7" />
                             <path d="m20 20-3.5-3.5" />
                         </svg>
-                        <label for="q" class="sr-only">Cari supplier</label>
+                        <label for="q" class="sr-only">Cari barang</label>
                         <input type="search" id="q" name="q" value="{{ request('q') }}"
-                               placeholder="Cari kode, nama, telepon, atau kota"
+                               placeholder="Cari kode, nama, kategori, atau status"
                                class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <a href="{{ route('supplier.index') }}"
+                        <a href="{{ route('barang.index') }}"
                             class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                             Reset
                         </a>
@@ -61,7 +61,7 @@
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Tambah supplier
+                    Tambah barang
                 </button>
             </div>
 
@@ -72,41 +72,59 @@
                             <th scope="col" class="w-16 px-4 py-3 font-medium">No</th>
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
                             <th scope="col" class="px-4 py-3 font-medium">Nama</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Telepon</th>
-                            <th scope="col" class="px-4 py-3 font-medium">kota</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Kategori</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Status</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-stone-300">
-                        @forelse ($supplier as $s)
+                        @forelse ($barang as $b)
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">
-                                    {{ $supplier->firstItem() + $loop->index }}
+                                    {{ $barang->firstItem() + $loop->index }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-700">
-                                    {{ $s->kode }}
+                                    {{ $b->kode }}
                                 </td>
 
                                 <td class="px-4 py-3.5 font-medium text-stone-900">
-                                    {{ Str::title($s->nama) }}
+                                    {{ Str::title($b->nama) }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ $s->nomor_telepon }}
+                                    {{ Str::title($b->kategori) }}
                                 </td>
 
-                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ Str::title($s->kota) }}">
-                                    {{ Str::title($s->kota) }}
+                                @php
+                                    $statusKey = strtolower($b->status);
+                                    $statusBadge = match ($statusKey) {
+                                        'draft' => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
+                                        'tersedia' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200',
+                                        'terjual' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200',
+                                        default => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
+                                    };
+                                    $statusDot = match ($statusKey) {
+                                        'draft' => 'bg-stone-400',
+                                        'tersedia' => 'bg-emerald-500',
+                                        'terjual' => 'bg-blue-500',
+                                        default => 'bg-stone-400',
+                                    };
+                                @endphp
+                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ Str::title($b->status) }}">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
+                                        {{ Str::title($b->status) }}
+                                    </span>
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
                                     <button type="button"
-                                            data-menu-toggle="menu-supplier-{{ $s->getKey() }}"
+                                            data-menu-toggle="menu-barang-{{ $b->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ Str::title($s->nama) }}"
+                                            aria-label="Aksi untuk {{ Str::title($b->nama) }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -115,18 +133,20 @@
                                         </svg>
                                     </button>
 
-                                    <div id="menu-supplier-{{ $s->getKey() }}"
+                                    <div id="menu-barang-{{ $b->getKey() }}"
                                          role="menu"
                                          hidden
                                          class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
                                         <button type="button" role="menuitem"
                                                 data-detail-open="modal-detail"
-                                                data-kode="{{ $s->kode }}"
-                                                data-nama="{{ $s->nama }}"
-                                                data-telepon="{{ $s->nomor_telepon }}"
-                                                data-kota="{{ $s->kota }}"
-                                                data-dibuat="{{ $s->created_at?->translatedFormat('d F Y') }}"
-                                                data-diperbarui="{{ $s->updated_at?->translatedFormat('d F Y') }}"
+                                                data-kode="{{ $b->kode }}"
+                                                data-nama="{{ $b->nama }}"
+                                                data-lingkar="{{ $b->lingkar }}"
+                                                data-panjang="{{ $b->panjang }}"
+                                                data-kategori="{{ $b->kategori }}"
+                                                data-status="{{ $b->status }}"
+                                                data-dibuat="{{ $b->created_at?->translatedFormat('d F Y') }}"
+                                                data-diperbarui="{{ $b->updated_at?->translatedFormat('d F Y') }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
@@ -137,11 +157,12 @@
 
                                         <button type="button" role="menuitem"
                                                 data-edit-open="modal-ubah"
-                                                data-action="{{ route('supplier.update', $s) }}"
-                                                data-kode="{{ $s->kode }}"
-                                                data-nama="{{ $s->nama }}"
-                                                data-telepon="{{ $s->nomor_telepon }}"
-                                                data-kota="{{ $s->kota }}"
+                                                data-action="{{ route('barang.update', $b) }}"
+                                                data-kode="{{ $b->kode }}"
+                                                data-nama="{{ $b->nama }}"
+                                                data-lingkar="{{ $b->lingkar }}"
+                                                data-panjang="{{ $b->panjang }}"
+                                                data-kategori="{{ $b->kategori }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" />
@@ -150,8 +171,8 @@
                                             Ubah
                                         </button>
 
-                                        <form action="{{ route('supplier.destroy', $s) }}" method="POST"
-                                              data-confirm="Hapus supplier {{ $s->nama }}? Data yang dihapus tidak bisa dikembalikan.">
+                                        <form action="{{ route('barang.destroy', $b) }}" method="POST"
+                                              data-confirm="Hapus barang {{ $b->nama }}? Data yang dihapus tidak bisa dikembalikan.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -171,36 +192,33 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-4 py-16 text-center">
+                                <td colspan="7" class="px-4 py-16 text-center">
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
-                                            <!-- SVG Icon Supplier / Truk -->
                                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
-                                                <path d="M15 18H9" />
-                                                <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
-                                                <circle cx="7" cy="18" r="2" />
-                                                <circle cx="17" cy="18" r="2" />
+                                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                                <path d="m3.3 7 8.7 5 8.7-5" />
+                                                <path d="M12 22V12" />
                                             </svg>
                                         </span>
 
                                         @if (request()->filled('q'))
-                                            <p class="mt-4 font-medium text-stone-900">Supplier tidak ditemukan</p>
+                                            <p class="mt-4 font-medium text-stone-900">Barang tidak ditemukan</p>
                                             <p class="mt-1 text-stone-500">
                                                 Tidak ada hasil untuk "{{ request('q') }}". Coba kata kunci lain.
                                             </p>
-                                            <a href="{{ route('supplier.index') }}"
+                                            <a href="{{ route('barang.index') }}"
                                             class="mt-4 font-medium text-link hover:text-link-hover hover:underline">
-                                                Tampilkan semua supplier
+                                                Tampilkan semua barang
                                             </a>
-                                        @else
-                                            <p class="mt-4 font-medium text-stone-900">Belum ada supplier</p>
+                                    @else
+                                            <p class="mt-4 font-medium text-stone-900">Belum ada barang</p>
                                             <p class="mt-1 text-stone-500">
-                                                Tambahkan supplier pertama Anda untuk mulai mencatat pembelian.
+                                                Tambahkan barang pertama Anda untuk mulai mencatat penjualan.
                                             </p>
                                             <button type="button" data-modal-open="modal-tambah"
                                                     class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                Tambah supplier
+                                                Tambah barang
                                             </button>
                                         @endif
                                     </div>
@@ -211,7 +229,7 @@
                 </table>
             </div>
 
-            <x-pagination :paginator="$supplier" />
+            <x-pagination :paginator="$barang" />
         </div>
     </div>
 
@@ -222,11 +240,11 @@
     <dialog id="modal-tambah"
             aria-labelledby="modal-tambah-title"
             class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        <form method="POST" action="{{ route('supplier.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
+        <form method="POST" action="{{ route('barang.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Supplier</h2>
+                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Barang</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -237,7 +255,7 @@
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div>
-                    <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                    <label for="kode" class="mb-1.5 block text-stone-900">Kode barang</label>
                     <input name="kode" type="text" id="kode" value="{{ $kode }}"
                             readonly aria-describedby="hint-kode"
                             class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
@@ -258,28 +276,53 @@
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="lingkar" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="lingkar">Lingkar Dada/Pinggang</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-nomor_telepon"
+                        <input type="number" inputmode="numeric" min="0" id="lingkar" name="lingkar"
+                                placeholder="Contoh: 90" autocomplete="off"
+                                data-label="Lingkar" data-rules="required|numeric"
+                                aria-describedby="err-lingkar"
                                 class="{{ $field }}">
-                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
                     <div>
-                        <label for="kota" class="mb-1.5 block text-stone-900">
-                            Kota <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="panjang" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="panjang">Panjang Baju/Celana</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="kota" name="kota"
-                                placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-label="Kota" data-rules="required"
-                                aria-describedby="err-kota"
+                        <input type="number" inputmode="numeric" min="0" id="panjang" name="panjang"
+                                placeholder="Contoh: 60" autocomplete="off"
+                                data-label="Panjang" data-rules="required|numeric"
+                                aria-describedby="err-panjang"
                                 class="{{ $field }}">
-                        <p id="err-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
+                </div>
+
+                <div>
+                    <label for="kategori" class="mb-1.5 block text-stone-900">
+                        Kategori <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <select id="kategori" name="kategori"
+                            data-label="Kategori" data-rules="required"
+                            aria-describedby="err-kategori"
+                            class="{{ $field }}">
+                        <option value="" disabled selected>Pilih kategori</option>
+                        <option value="Blouse">Blouse</option>
+                        <option value="Kemeja">Kemeja</option>
+                        <option value="Rok">Rok</option>
+                        <option value="Celana">Celana</option>
+                        <option value="Overall">Overall</option>
+                        <option value="Outher">Outher</option>
+                        <option value="Jaket">Jaket</option>
+                        <option value="Vest">Vest</option>
+                        <option value="Gamis">Gamis</option>
+                        <option value="Dress">Dress</option>
+                    </select>
+                    <p id="err-kategori" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -290,21 +333,21 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan supplier
+                    Simpan barang
                 </button>
             </div>
         </form>
     </dialog>
 
     <dialog id="modal-ubah"
-            aria-labelledby="modal-ubah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
+        aria-labelledby="modal-ubah-title"
+        class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
         <form method="POST" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
             @method('PUT')
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Supplier</h2>
+                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Barang</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -315,7 +358,7 @@
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div>
-                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode barang</label>
                     <input type="text" id="edit-kode" data-fill="kode"
                             readonly aria-describedby="hint-edit-kode"
                             class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
@@ -337,30 +380,57 @@
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="edit-lingkar" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="edit-lingkar">Lingkar Dada/Pinggang</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-fill="telepon"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-edit-nomor_telepon"
+                        <input type="number" inputmode="numeric" min="0" id="edit-lingkar" name="lingkar"
+                                placeholder="Contoh: 90" autocomplete="off"
+                                data-fill="lingkar"
+                                data-label="Lingkar" data-rules="required|numeric"
+                                aria-describedby="err-edit-lingkar"
                                 class="{{ $field }}">
-                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-edit-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
                     <div>
-                        <label for="edit-kota" class="mb-1.5 block text-stone-900">
-                            Kota <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="edit-panjang" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="edit-panjang">Panjang Baju/Celana</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="edit-kota" name="kota"
-                                placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-fill="kota"
-                                data-label="Kota" data-rules="required"
-                                aria-describedby="err-edit-kota"
+                        <input type="number" inputmode="numeric" min="0" id="edit-panjang" name="panjang"
+                                placeholder="Contoh: 60" autocomplete="off"
+                                data-fill="panjang"
+                                data-label="Panjang" data-rules="required|numeric"
+                                aria-describedby="err-edit-panjang"
                                 class="{{ $field }}">
-                        <p id="err-edit-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-edit-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
+                </div>
+
+
+                <div>
+                    <label for="edit-kategori" class="mb-1.5 block text-stone-900">
+                        Kategori <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <select id="edit-kategori" name="kategori"
+                            data-fill="kategori"
+                            data-label="Kategori" data-rules="required"
+                            aria-describedby="err-edit-kategori"
+                            class="{{ $field }}">
+                        <option value="" disabled selected>Pilih kategori</option>
+                        <option value="Blouse">Blouse</option>
+                        <option value="Kemeja">Kemeja</option>
+                        <option value="Rok">Rok</option>
+                        <option value="Celana">Celana</option>
+                        <option value="Overall">Overall</option>
+                        <option value="Outher">Outher</option>
+                        <option value="Jaket">Jaket</option>
+                        <option value="Vest">Vest</option>
+                        <option value="Gamis">Gamis</option>
+                        <option value="Dress">Dress</option>
+                    </select>
+                    <p id="err-edit-kategori" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -383,7 +453,7 @@
         <div class="flex max-h-[90vh] flex-col">
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Supplier</h2>
+                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Barang</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -404,12 +474,20 @@
 
                 <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Nomor telepon</dt>
-                        <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
+                        <dt class="text-stone-500">Kategori</dt>
+                        <dd data-detail="kategori" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">kota</dt>
-                        <dd data-detail="kota" class="break-words text-stone-900 sm:col-span-2"></dd>
+                        <dt class="text-stone-500">Status</dt>
+                        <dd data-detail="status" class="break-words text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt id="detail-lingkar-label" class="text-stone-500">Lingkar Dada/Pinggang</dt>
+                        <dd data-detail="lingkar" class="text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt id="detail-panjang-label" class="text-stone-500">Panjang Baju/Celana</dt>
+                        <dd data-detail="panjang" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                         <dt class="text-stone-500">Terdaftar pada</dt>
