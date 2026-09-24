@@ -1,4 +1,4 @@
-Sistem Manajemen Toko Preloved 
+Sistem Manajemen Toko Preloved
 │
 ├── Login
 │
@@ -16,7 +16,7 @@ Sistem Manajemen Toko Preloved
 │
 ├── Pembelian
 │   ├── Daftar Pembelian
-│   └── Pembayaran Pembelian
+│   └── Pembayaran
 │
 ├── Penjualan
 │   ├── Daftar Penjualan
