@@ -483,18 +483,18 @@
                 </div>
 
                 <div class="overflow-y-auto py-6 space-y-5 -mt-3 bg-white rounded-t-2xl">
-                    <div class="mt-5 grid grid-cols-2 divide-x divide-brand/20 overflow-hidden rounded-lg border border-brand/20 bg-brand/5">
+                    <div class="mt-5 grid grid-cols-2 divide-x divide-brand/20 overflow-hidden rounded-lg border border-stone-300 bg-brand/5">
                         <div class="px-3 py-2.5">
-                            <p class= text-stone-500">Harga Beli</p>
+                            <p class="text-stone-500">Harga Beli</p>
                             <p data-detail="harga_beli" class="mt-0.5 font-medium text-stone-900"></p>
                         </div>
                         <div class="px-3 py-2.5">
-                            <p class= text-stone-500">Harga Jual</p>
+                            <p class="text-stone-500">Harga Jual</p>
                             <p data-detail="harga_jual" class="mt-0.5 font-medium text-brand"></p>
                         </div>
                     </div>
 
-                    <div class="rounded-xl border border-stone-200 overflow-hidden divide-y divide-stone-100 shadow-sm">
+                    <div class="rounded-xl border border-stone-300 overflow-hidden divide-y divide-stone-100 shadow-sm">
                         <div class="flex justify-between items-center px-4 py-3 bg-white">
                             <span class="text-stone-500">Kategori</span>
                             <span data-detail="kategori" class="font-medium text-stone-900"></span>
