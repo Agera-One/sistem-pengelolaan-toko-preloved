@@ -12,10 +12,11 @@ class Pembelian extends Model
     protected $table = 'pembelian';
 
     protected $fillable = [
-        'tanggal',
         'kode',
+        'tanggal',
         'total',
-        'pemasok_id',
+        'status',
+        'supplier_id',
         'user_id',
     ];
 
@@ -26,9 +27,9 @@ class Pembelian extends Model
         ];
     }
 
-    public function pemasok(): BelongsTo
+    public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Pemasok::class, 'pemasok_id');
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     public function user(): BelongsTo
