@@ -13,6 +13,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->char('kode', 15)->unique();
             $table->unsignedInteger('total');
+            $table->string('status');
             $table->timestamps();
 
             $table->foreignId('supplier_id')->constrained('supplier')->onDelete('restrict');;
