@@ -100,16 +100,16 @@
                                 @php
                                     $statusKey = strtolower($b->status);
                                     $statusBadge = match ($statusKey) {
-                                        'draft' => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
-                                        'tersedia' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200',
-                                        'terjual' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200',
-                                        default => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
+                                        'draft' => 'bg-stone-100 text-stone-700 ring-1 ring-inset ring-stone-300',
+                                        'tersedia' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
+                                        'terjual' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-300',
+                                        default => 'bg-stone-100 text-stone-700 ring-1 ring-inset ring-stone-300',
                                     };
                                     $statusDot = match ($statusKey) {
-                                        'draft' => 'bg-stone-400',
+                                        'draft' => 'bg-stone-500',
                                         'tersedia' => 'bg-emerald-500',
                                         'terjual' => 'bg-blue-500',
-                                        default => 'bg-stone-400',
+                                        default => 'bg-stone-500',
                                     };
                                 @endphp
                                 <td class="whitespace-nowrap px-4 py-3.5" title="{{ Str::title($b->status) }}">
