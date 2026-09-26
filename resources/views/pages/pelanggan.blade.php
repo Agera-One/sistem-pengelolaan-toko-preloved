@@ -100,15 +100,15 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 font-medium text-stone-900">
-                                    {{ Str::title($p->nama) }}
+                                    {{ $p->nama }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
                                     {{ $p->nomor_telepon }}
                                 </td>
 
-                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ Str::title($p->alamat) }}">
-                                    {{ Str::title($p->alamat) }}
+                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ $p->alamat }}">
+                                    {{ $p->alamat }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -116,7 +116,7 @@
                                             data-menu-toggle="menu-pelanggan-{{ $p->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ Str::title($p->nama) }}"
+                                            aria-label="Aksi untuk {{ $p->nama }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />

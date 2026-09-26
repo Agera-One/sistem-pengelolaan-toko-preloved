@@ -100,11 +100,11 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 font-medium text-stone-900">
-                                    {{ Str::title($b->nama) }}
+                                    {{ $b->nama }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ Str::title($b->kategori) }}
+                                    {{ $b->kategori }}
                                 </td>
 
                                 @php
@@ -122,10 +122,10 @@
                                         default => 'bg-stone-400',
                                     };
                                 @endphp
-                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ Str::title($b->status) }}">
+                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ $b->status }}">
                                     <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
                                         <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
-                                        {{ Str::title($b->status) }}
+                                        {{ $b->status }}
                                     </span>
                                 </td>
 
@@ -134,7 +134,7 @@
                                             data-menu-toggle="menu-barang-{{ $b->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ Str::title($b->nama) }}"
+                                            aria-label="Aksi untuk {{ $b->nama }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
