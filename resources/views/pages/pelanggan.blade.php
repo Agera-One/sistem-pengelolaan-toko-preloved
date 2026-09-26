@@ -22,6 +22,16 @@
                             <path d="m9 18 6-6-6-6" />
                         </svg>
                     </li>
+                    <li>
+                        <a class="rounded transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                            Data Utama
+                        </a>
+                    </li>
+                    <li aria-hidden="true">
+                        <svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </li>
                     <li class="font-medium text-stone-900" aria-current="page">Daftar Pelanggan</li>
                 </ol>
             </nav>
