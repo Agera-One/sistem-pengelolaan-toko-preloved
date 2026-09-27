@@ -92,11 +92,11 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 font-medium text-stone-900">
-                                    {{ Str::title($b->nama) }}
+                                    {{ $b->nama }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ Str::title($b->kategori) }}
+                                    {{ $b->kategori }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
@@ -122,10 +122,10 @@
                                         default => 'bg-stone-500',
                                     };
                                 @endphp
-                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ Str::title($b->status) }}">
+                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ $b->status }}">
                                     <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
                                         <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
-                                        {{ Str::title($b->status) }}
+                                        {{ $b->status }}
                                     </span>
                                 </td>
 
@@ -134,7 +134,7 @@
                                             data-menu-toggle="menu-barang-{{ $b->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ Str::title($b->nama) }}"
+                                            aria-label="Aksi untuk {{ $b->nama }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -157,8 +157,7 @@
                                                 data-harga-jual="{{ $b->harga_jual }}"
                                                 data-kategori="{{ $b->kategori }}"
                                                 data-status="{{ $b->status }}"
-                                                data-dibuat="{{ $b->created_at?->translatedFormat('d F Y') }}"
-                                                data-diperbarui="{{ $b->updated_at?->translatedFormat('d F Y') }}"
+                                                data-kode-pembelian="{{ $b->pembelian->kode }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
@@ -177,6 +176,8 @@
                                                 data-harga-beli="{{ $b->harga_beli }}"
                                                 data-harga-jual="{{ $b->harga_jual }}"
                                                 data-kategori="{{ $b->kategori }}"
+                                                data-pembelian-id="{{ $b->pembelian_id }}"
+                                                data-status="{{ $b->status }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" />
@@ -225,7 +226,7 @@
                                             class="mt-4 font-medium text-link hover:text-link-hover hover:underline">
                                                 Tampilkan semua barang
                                             </a>
-                                    @else
+                                        @else
                                             <p class="mt-4 font-medium text-stone-900">Belum ada barang</p>
                                             <p class="mt-1 text-stone-500">
                                                 Tambahkan barang pertama Anda untuk mulai mencatat penjualan.
@@ -269,11 +270,27 @@
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div>
-                    <label for="kode" class="mb-1.5 block text-stone-900">Kode barang</label>
+                    <label for="kode" class="mb-1.5 block text-stone-900">Kode Barang</label>
                     <input name="kode" type="text" id="kode" value="{{ $kode }}"
                             readonly aria-describedby="hint-kode"
                             class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
                     <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                </div>
+
+                <div>
+                    <label for="pembelian_id" class="mb-1.5 block text-stone-900">
+                        Pembelian <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <select id="pembelian_id" name="pembelian_id"
+                            data-label="Pembelian" data-rules="required"
+                            aria-describedby="err-pembelian_id"
+                            class="{{ $field }}">
+                        <option value="">Pilih pembelian</option>
+                        @foreach ($pembelian as $p)
+                            <option value="{{ $p->id }}">{{ $p->kode }}</option>
+                        @endforeach
+                    </select>
+                    <p id="err-pembelian_id" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
                 <div>
@@ -404,11 +421,32 @@
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div>
-                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode barang</label>
+                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode Barang</label>
                     <input type="text" id="edit-kode" data-fill="kode"
                             readonly aria-describedby="hint-edit-kode"
                             class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
                     <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                </div>
+
+                <div>
+                    <label for="edit-pembelian_id" class="mb-1.5 block text-stone-900">
+                        Pembelian <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <select id="edit-pembelian_id" name="pembelian_id"
+                            data-fill="pembelianId"
+                            data-lock-if-terjual
+                            data-label="Pembelian" data-rules="required"
+                            aria-describedby="err-edit-pembelian_id"
+                            class="{{ $field }}">
+                        <option value="">Pilih pembelian</option>
+                        @foreach ($pembelian as $p)
+                            <option value="{{ $p->id }}">{{ $p->kode }}</option>
+                        @endforeach
+                    </select>
+                    <p id="hint-edit-pembelian_id" class="mt-1.5 text-xs text-stone-500" hidden>
+                        Barang sudah terjual, pembelian tidak dapat diubah.
+                    </p>
+                    <p id="err-edit-pembelian_id" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
                 <div>
@@ -488,10 +526,14 @@
                             <input type="number" inputmode="numeric" min="1" id="edit-harga_beli" name="harga_beli"
                                     placeholder="Contoh: 90000" autocomplete="off"
                                     data-fill="hargaBeli"
+                                    data-lock-if-terjual
                                     data-label="Harga Beli" data-rules="required|numeric|min:1"
                                     aria-describedby="err-edit-harga_beli"
                                     class="{{ $field }} pl-9">
                         </div>
+                        <p id="hint-edit-harga_beli" class="mt-1.5 text-xs text-stone-500" hidden>
+                            Barang sudah terjual, harga beli tidak dapat diubah.
+                        </p>
                         <p id="err-edit-harga_beli" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
@@ -504,10 +546,14 @@
                             <input type="number" inputmode="numeric" min="1" id="edit-harga_jual" name="harga_jual"
                                     placeholder="Contoh: 150000" autocomplete="off"
                                     data-fill="hargaJual"
+                                    data-lock-if-terjual
                                     data-label="Harga Jual" data-rules="required|numeric|min:1|gt:harga_beli"
                                     aria-describedby="err-edit-harga_jual"
                                     class="{{ $field }} pl-9">
                         </div>
+                        <p id="hint-edit-harga_jual" class="mt-1.5 text-xs text-stone-500" hidden>
+                            Barang sudah terjual, harga jual tidak dapat diubah.
+                        </p>
                         <p id="err-edit-harga_jual" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
@@ -560,18 +606,35 @@
                 </div>
 
                 <div class="overflow-y-auto py-6 space-y-5 -mt-3 bg-white rounded-t-2xl">
-                    <div class="mt-5 grid grid-cols-2 divide-x divide-brand/20 overflow-hidden rounded-lg border border-stone-300 bg-brand/5">
-                        <div class="px-3 py-2.5">
-                            <p class="text-stone-500">Harga Beli</p>
-                            <p data-detail="harga_beli" class="mt-0.5 font-medium text-stone-900"></p>
+                    <div class="mt-5 grid grid-cols-2 gap-3">
+                        <div class="rounded-xl border border-stone-300 bg-brand/5 p-4 py-3 text-left transition-all">
+                            <div class="flex items-center gap-1.5 text-stone-500">
+                                Harga Beli
+                            </div>
+                            <p data-detail="harga_beli" class="mt-1 font-medium text-stone-900"></p>
                         </div>
-                        <div class="px-3 py-2.5">
-                            <p class="text-stone-500">Harga Jual</p>
-                            <p data-detail="harga_jual" class="mt-0.5 font-medium text-stone-900"></p>
+
+                        <div class="rounded-xl border border-stone-300 bg-brand/5 p-4 py-3 text-left transition-all">
+                            <div class="flex items-center gap-1.5 text-stone-500">
+                                Harga Jual
+                            </div>
+                            <p data-detail="harga_jual" class="mt-1 font-medium text-stone-900"></p>
                         </div>
                     </div>
 
                     <div class="rounded-xl border border-stone-300 overflow-hidden divide-y divide-stone-100 shadow-sm">
+                        <div class="flex justify-between items-center px-4 py-3 bg-white">
+                            <span class="text-stone-500">Kode Pembelian</span>
+                            <a id="link-detail-pembelian"
+                            {{-- data-base-url="{{ route('pembelian.pesanan.index') }}" --}}
+                            href="#"
+                            class="inline-flex items-center gap-1 font-medium text-link hover:text-link-hover hover:underline focus:outline-none">
+                                <span data-detail="kode_pembelian"></span>
+                                <svg class="h-4 w-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        </div>
                         <div class="flex justify-between items-center px-4 py-3 bg-white">
                             <span class="text-stone-500">Kategori</span>
                             <span data-detail="kategori" class="font-medium text-stone-900"></span>
@@ -583,14 +646,6 @@
                         <div class="flex justify-between items-center px-4 py-3 bg-white">
                             <span class="text-stone-500">Panjang Baju/Celana</span>
                             <span data-detail="panjang" class="font-medium text-stone-900"></span>
-                        </div>
-                        <div class="flex justify-between items-center px-4 py-3 bg-stone-50/60">
-                            <span class="text-stone-500">Terdaftar pada</span>
-                            <span data-detail="dibuat" class="font-medium text-stone-900"></span>
-                        </div>
-                        <div class="flex justify-between items-center px-4 py-3 bg-stone-50/60">
-                            <span class="text-stone-500">Terakhir diperbarui</span>
-                            <span data-detail="diperbarui" class="font-medium text-stone-900"></span>
                         </div>
                     </div>
                 </div>
