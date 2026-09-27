@@ -73,6 +73,8 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
                             <th scope="col" class="px-4 py-3 font-medium">Nama</th>
                             <th scope="col" class="px-4 py-3 font-medium">Kategori</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Harga Beli</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Harga Jual</th>
                             <th scope="col" class="px-4 py-3 font-medium">Status</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
@@ -95,6 +97,14 @@
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
                                     {{ Str::title($b->kategori) }}
+                                </td>
+
+                                <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
+                                    Rp{{ number_format($b->harga_beli, 0, ',', '.') }}
+                                </td>
+
+                                <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
+                                    Rp{{ number_format($b->harga_jual, 0, ',', '.') }}
                                 </td>
 
                                 @php
@@ -143,10 +153,10 @@
                                                 data-nama="{{ $b->nama }}"
                                                 data-lingkar="{{ $b->lingkar }}"
                                                 data-panjang="{{ $b->panjang }}"
+                                                data-harga-beli="{{ $b->harga_beli }}"
+                                                data-harga-jual="{{ $b->harga_jual }}"
                                                 data-kategori="{{ $b->kategori }}"
                                                 data-status="{{ $b->status }}"
-                                                data-harga-beli="{{ $b->harga_beli ?? '' }}"
-                                                data-harga-jual="{{ $b->harga_jual ?? '' }}"
                                                 data-dibuat="{{ $b->created_at?->translatedFormat('d F Y') }}"
                                                 data-diperbarui="{{ $b->updated_at?->translatedFormat('d F Y') }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
@@ -164,6 +174,8 @@
                                                 data-nama="{{ $b->nama }}"
                                                 data-lingkar="{{ $b->lingkar }}"
                                                 data-panjang="{{ $b->panjang }}"
+                                                data-harga-beli="{{ $b->harga_beli }}"
+                                                data-harga-jual="{{ $b->harga_jual }}"
                                                 data-kategori="{{ $b->kategori }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -276,34 +288,6 @@
                     <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="lingkar" class="mb-1.5 block text-stone-900">
-                            <span data-ukuran-label="lingkar">Lingkar Dada/Pinggang</span>
-                            <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="number" inputmode="numeric" min="0" id="lingkar" name="lingkar"
-                                placeholder="Contoh: 90" autocomplete="off"
-                                data-label="Lingkar" data-rules="required|numeric"
-                                aria-describedby="err-lingkar"
-                                class="{{ $field }}">
-                        <p id="err-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="panjang" class="mb-1.5 block text-stone-900">
-                            <span data-ukuran-label="panjang">Panjang Baju/Celana</span>
-                            <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="number" inputmode="numeric" min="0" id="panjang" name="panjang"
-                                placeholder="Contoh: 60" autocomplete="off"
-                                data-label="Panjang" data-rules="required|numeric"
-                                aria-describedby="err-panjang"
-                                class="{{ $field }}">
-                        <p id="err-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
                 <div>
                     <label for="kategori" class="mb-1.5 block text-stone-900">
                         Kategori <span class="text-red-500" aria-hidden="true">*</span>
@@ -325,6 +309,66 @@
                         <option value="Dress">Dress</option>
                     </select>
                     <p id="err-kategori" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="lingkar" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="lingkar">Lingkar Dada/Pinggang</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="number" inputmode="numeric" min="1" id="lingkar" name="lingkar"
+                                placeholder="Contoh: 90" autocomplete="off"
+                                data-label="Lingkar" data-rules="required|numeric|min:1"
+                                aria-describedby="err-lingkar"
+                                class="{{ $field }}">
+                        <p id="err-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+
+                    <div>
+                        <label for="panjang" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="panjang">Panjang Baju/Celana</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="number" inputmode="numeric" min="1" id="panjang" name="panjang"
+                                placeholder="Contoh: 60" autocomplete="off"
+                                data-label="Panjang" data-rules="required|numeric|min:1"
+                                aria-describedby="err-panjang"
+                                class="{{ $field }}">
+                        <p id="err-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="harga_beli" class="mb-1.5 block text-stone-900">
+                            Harga Beli <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                            <input type="number" inputmode="numeric" min="1" id="harga_beli" name="harga_beli"
+                                    placeholder="Contoh: 90000" autocomplete="off"
+                                    data-label="Harga Beli" data-rules="required|numeric|min:1"
+                                    aria-describedby="err-harga_beli"
+                                    class="{{ $field }} pl-9">
+                        </div>
+                        <p id="err-harga_beli" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+
+                    <div>
+                        <label for="harga_jual" class="mb-1.5 block text-stone-900">
+                            Harga Jual <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                            <input type="number" inputmode="numeric" min="1" id="harga_jual" name="harga_jual"
+                                    placeholder="Contoh: 150000" autocomplete="off"
+                                    data-label="Harga Jual" data-rules="required|numeric|min:1|gt:harga_beli"
+                                    aria-describedby="err-harga_jual"
+                                    class="{{ $field }} pl-9">
+                        </div>
+                        <p id="err-harga_jual" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
             </div>
 
@@ -380,37 +424,6 @@
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="edit-lingkar" class="mb-1.5 block text-stone-900">
-                            <span data-ukuran-label="edit-lingkar">Lingkar Dada/Pinggang</span>
-                            <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="number" inputmode="numeric" min="0" id="edit-lingkar" name="lingkar"
-                                placeholder="Contoh: 90" autocomplete="off"
-                                data-fill="lingkar"
-                                data-label="Lingkar" data-rules="required|numeric"
-                                aria-describedby="err-edit-lingkar"
-                                class="{{ $field }}">
-                        <p id="err-edit-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="edit-panjang" class="mb-1.5 block text-stone-900">
-                            <span data-ukuran-label="edit-panjang">Panjang Baju/Celana</span>
-                            <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="number" inputmode="numeric" min="0" id="edit-panjang" name="panjang"
-                                placeholder="Contoh: 60" autocomplete="off"
-                                data-fill="panjang"
-                                data-label="Panjang" data-rules="required|numeric"
-                                aria-describedby="err-edit-panjang"
-                                class="{{ $field }}">
-                        <p id="err-edit-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
-
                 <div>
                     <label for="edit-kategori" class="mb-1.5 block text-stone-900">
                         Kategori <span class="text-red-500" aria-hidden="true">*</span>
@@ -433,6 +446,70 @@
                         <option value="Dress">Dress</option>
                     </select>
                     <p id="err-edit-kategori" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit-lingkar" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="edit-lingkar">Lingkar Dada/Pinggang</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="number" inputmode="numeric" min="1" id="edit-lingkar" name="lingkar"
+                                placeholder="Contoh: 90" autocomplete="off"
+                                data-fill="lingkar"
+                                data-label="Lingkar" data-rules="required|numeric|min:1"
+                                aria-describedby="err-edit-lingkar"
+                                class="{{ $field }}">
+                        <p id="err-edit-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+
+                    <div>
+                        <label for="edit-panjang" class="mb-1.5 block text-stone-900">
+                            <span data-ukuran-label="edit-panjang">Panjang Baju/Celana</span>
+                            <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="number" inputmode="numeric" min="1" id="edit-panjang" name="panjang"
+                                placeholder="Contoh: 60" autocomplete="off"
+                                data-fill="panjang"
+                                data-label="Panjang" data-rules="required|numeric|min:1"
+                                aria-describedby="err-edit-panjang"
+                                class="{{ $field }}">
+                        <p id="err-edit-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit-harga_beli" class="mb-1.5 block text-stone-900">
+                            Harga Beli <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                            <input type="number" inputmode="numeric" min="1" id="edit-harga_beli" name="harga_beli"
+                                    placeholder="Contoh: 90000" autocomplete="off"
+                                    data-fill="hargaBeli"
+                                    data-label="Harga Beli" data-rules="required|numeric|min:1"
+                                    aria-describedby="err-edit-harga_beli"
+                                    class="{{ $field }} pl-9">
+                        </div>
+                        <p id="err-edit-harga_beli" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+
+                    <div>
+                        <label for="edit-harga_jual" class="mb-1.5 block text-stone-900">
+                            Harga Jual <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                            <input type="number" inputmode="numeric" min="1" id="edit-harga_jual" name="harga_jual"
+                                    placeholder="Contoh: 150000" autocomplete="off"
+                                    data-fill="hargaJual"
+                                    data-label="Harga Jual" data-rules="required|numeric|min:1|gt:harga_beli"
+                                    aria-describedby="err-edit-harga_jual"
+                                    class="{{ $field }} pl-9">
+                        </div>
+                        <p id="err-edit-harga_jual" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
             </div>
 
@@ -490,7 +567,7 @@
                         </div>
                         <div class="px-3 py-2.5">
                             <p class="text-stone-500">Harga Jual</p>
-                            <p data-detail="harga_jual" class="mt-0.5 font-medium text-brand"></p>
+                            <p data-detail="harga_jual" class="mt-0.5 font-medium text-stone-900"></p>
                         </div>
                     </div>
 
