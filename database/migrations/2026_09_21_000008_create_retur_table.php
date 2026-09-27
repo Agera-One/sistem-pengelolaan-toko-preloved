@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('retur', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
             $table->char('kode', 15)->unique();
+            $table->date('tanggal');
             $table->unsignedInteger('kerugian_pengiriman');
             $table->string('alasan', 255);
             $table->string('tipe', 255);

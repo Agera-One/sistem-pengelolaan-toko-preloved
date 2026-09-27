@@ -8,21 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pembelian', function (Blueprint $table) {
+        Schema::create('penjualan', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
             $table->char('kode', 15)->unique();
+            $table->date('tanggal');
+            $table->unsignedInteger('ongkir');
             $table->unsignedInteger('total');
-            $table->string('status');
             $table->timestamps();
 
-            $table->foreignId('supplier_id')->constrained('supplier')->onDelete('restrict');;
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict');;
+            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onDelete('restrict');;
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('pembelian');
+        Schema::dropIfExists('penjualan');
     }
 };

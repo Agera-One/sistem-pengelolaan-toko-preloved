@@ -15,8 +15,12 @@ return new class extends Migration
             $table->unsignedInteger('lingkar');
             $table->unsignedInteger('panjang');
             $table->string('kategori');
+            $table->unsignedInteger('harga_beli');
+            $table->unsignedInteger('harga_jual');
             $table->string('status');
             $table->timestamps();
+
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');;
         });
     }
 

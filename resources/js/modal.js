@@ -92,6 +92,38 @@
     });
 
     /* ------------------------------------------------------------------
+     * Pemblokiran Karakter Non-Angka pada Input Tipe Number
+     * ---------------------------------------------------------------- */
+    document.addEventListener('keydown', function (e) {
+        var input = e.target;
+
+        if (input.tagName === 'INPUT' && input.type === 'number') {
+            // Izinkan kombinasi shortcut keyboard (Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X, dll)
+            if (e.ctrlKey || e.metaKey) return;
+
+            // Daftar tombol kontrol navigasi yang diizinkan
+            var allowedKeys = ['Backspace', 'Tab', 'Enter', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (allowedKeys.includes(e.key)) return;
+
+            // Blokir jika tombol yang ditekan bukan angka 0-9
+            if (!/^[0-9]$/.test(e.key)) {
+                e.preventDefault();
+            }
+        }
+    });
+
+    document.addEventListener('input', function (e) {
+        var input = e.target;
+
+        // Bersihkan karakter non-angka secara otomatis (misal saat paste)
+        if (input.tagName === 'INPUT' && input.type === 'number') {
+            if (input.value && !/^\d*$/.test(input.value)) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+        }
+    });
+
+    /* ------------------------------------------------------------------
      * Validasi form di sisi klien
      *
      * Cara pakai di Blade, pada setiap input:
@@ -103,11 +135,36 @@
         required: function (value) {
             return value.trim() !== '';
         },
-        min: function (value, n) {
+        numeric: function (value) {
+            if (value.trim() === '') return true; // Biarkan 'required' yang menangani jika kosong
+            return !isNaN(value) && !isNaN(parseFloat(value));
+        },
+        string: function () {
+            return true;
+        },
+        min: function (value, n, field) {
+            if (value.trim() === '') return true;
+            if (field && field.type === 'number') {
+                return Number(value) >= Number(n);
+            }
             return value.trim().length >= Number(n);
         },
-        max: function (value, n) {
+        max: function (value, n, field) {
+            if (value.trim() === '') return true;
+            if (field && field.type === 'number') {
+                return Number(value) <= Number(n);
+            }
             return value.length <= Number(n);
+        },
+        gt: function (value, targetName, field) {
+            if (value.trim() === '') return true;
+            var form = field ? field.form : null;
+            if (!form) return true;
+
+            var targetField = form.querySelector('[name="' + targetName + '"]');
+            if (!targetField || targetField.value.trim() === '') return true;
+
+            return Number(value) > Number(targetField.value);
         }
     };
 
@@ -115,11 +172,34 @@
         required: function (label) {
             return label + ' wajib diisi.';
         },
-        min: function (label, n) {
+        numeric: function (label) {
+            return label + ' harus berupa angka.';
+        },
+        string: function (label) {
+            return label + ' harus berupa teks.';
+        },
+        min: function (label, n, field) {
+            if (field && field.type === 'number') {
+                return label + ' minimal bernilai ' + n + '.';
+            }
             return label + ' minimal ' + n + ' karakter.';
         },
-        max: function (label, n) {
+        max: function (label, n, field) {
+            if (field && field.type === 'number') {
+                return label + ' maksimal bernilai ' + n + '.';
+            }
             return label + ' maksimal ' + n + ' karakter.';
+        },
+        gt: function (label, targetName, field) {
+            var form = field ? field.form : null;
+            var targetLabel = targetName;
+            if (form) {
+                var targetField = form.querySelector('[name="' + targetName + '"]');
+                if (targetField && targetField.dataset.label) {
+                    targetLabel = targetField.dataset.label;
+                }
+            }
+            return label + ' harus lebih besar dari ' + targetLabel + '.';
         }
     };
 
@@ -148,8 +228,8 @@
             var name = parts[0];
             var param = parts[1];
 
-            if (ruleTests[name] && !ruleTests[name](field.value, param)) {
-                message = ruleMessages[name](label, param);
+            if (ruleTests[name] && !ruleTests[name](field.value, param, field)) {
+                message = ruleMessages[name](label, param, field);
                 break;
             }
         }
@@ -247,13 +327,67 @@
                 dot.className = 'h-1.5 w-1.5 rounded-full ' + style.dot;
             }
 
+            var linkPembelian = dialog.querySelector('#link-detail-pembelian');
+            if (linkPembelian) {
+                var kodePembelian = (btn.dataset.kodePembelian || '').trim();
+                var baseUrl = linkPembelian.dataset.baseUrl || '/pembelian';
+
+                if (kodePembelian && kodePembelian !== '-') {
+                    linkPembelian.href = baseUrl + '?open_detail=' + encodeURIComponent(kodePembelian);
+                    linkPembelian.classList.remove('pointer-events-none', 'opacity-50');
+                } else {
+                    linkPembelian.href = '#';
+                    linkPembelian.classList.add('pointer-events-none', 'opacity-50');
+                }
+            }
+
             openModal(dialog);
         });
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var openKode = urlParams.get('open_detail');
+
+        if (openKode) {
+            var targetBtn = document.querySelector('[data-detail-open="modal-detail"][data-kode="' + openKode + '"]');
+
+            if (targetBtn) {
+                targetBtn.click();
+
+                var cleanUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+    });
+
+    function setLockedFields(dialog, locked) {
+        dialog.querySelectorAll('[data-lock-if-terjual]').forEach(function (field) {
+            if (field.tagName === 'SELECT') {
+                field.tabIndex = locked ? -1 : 0;
+                field.style.pointerEvents = locked ? 'none' : '';
+                field.setAttribute('aria-disabled', locked ? 'true' : 'false');
+            } else {
+                field.readOnly = locked;
+            }
+
+            if (locked) {
+                field.classList.remove('bg-white', 'text-stone-900');
+                field.classList.add('bg-stone-100', 'text-stone-500', 'cursor-not-allowed');
+            } else {
+                field.classList.remove('bg-stone-100', 'text-stone-500', 'cursor-not-allowed');
+                field.classList.add('bg-white', 'text-stone-900');
+            }
+
+            var hint = document.getElementById('hint-' + field.id);
+            if (hint) hint.hidden = !locked;
+        });
+    }
+
     /* Modal ubah: isi form dari data-* tombol, lalu arahkan action ke rute update.
      *   data-edit-open="{id dialog}"
      *   data-action="{url update}"
+     *   data-status="{status barang}" -> kunci field harga & pembelian jika "Terjual"
      *   data-{nama}="..." -> diisi ke input yang punya data-fill="{nama}"
      */
     document.querySelectorAll('[data-edit-open]').forEach(function (btn) {
@@ -266,6 +400,9 @@
             form.querySelectorAll('[data-fill]').forEach(function (field) {
                 field.value = btn.dataset[field.dataset.fill] || '';
             });
+
+            var isTerjual = (btn.dataset.status || '').trim().toLowerCase() === 'terjual';
+            setLockedFields(dialog, isTerjual);
 
             openModal(dialog);
         });
@@ -291,6 +428,7 @@
 
             form.reset();
             clearErrors(form);
+            setLockedFields(dialog, false);
 
             var submit = form.querySelector('[type="submit"]');
             if (submit) submit.disabled = false;

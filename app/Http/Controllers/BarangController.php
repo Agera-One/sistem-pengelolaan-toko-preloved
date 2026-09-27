@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Pembelian;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
 use Illuminate\Support\Facades\Validator;
@@ -34,16 +35,21 @@ class BarangController extends Controller
             'BRG'
         );
 
-        return view('pages.barang', compact('barang', 'kode'));
+        $pembelian = Pembelian::latest('id')->get();
+
+        return view('pages.barang', compact('barang', 'kode', 'pembelian'));
     }
 
     public function store(Request $request, CodeGeneratorService $codeGenerator)
     {
         $validator = Validator::make($request->all(), [
-            'nama'       => 'required|string|max:255',
-            'lingkar'    => 'required|numeric',
-            'panjang'    => 'required|numeric',
-            'kategori'   => 'required|string|max:255',
+            'nama'          => 'required|string|max:255',
+            'lingkar'       => 'required|numeric|min:1',
+            'panjang'       => 'required|numeric|min:1',
+            'kategori'      => 'required|string|max:255',
+            'harga_beli'    => 'required|numeric|min:1',
+            'harga_jual'    => 'required|numeric|min:1|gt:harga_beli',
+            'pembelian_id'  => 'required|exists:pembelian,id',
         ]);
 
         if ($validator->fails()) {
@@ -54,13 +60,15 @@ class BarangController extends Controller
 
         try {
             Barang::create([
-                'kode'       => $kode,
-                'nama'       => $request->nama,
-                'lingkar'    => $request->lingkar,
-                'panjang'    => $request->panjang,
-                'harga_jual' => $request->harga_jual,
-                'kategori'   => $request->kategori,
-                'status'     => 'Draft',
+                'kode'          => $kode,
+                'nama'          => $request->nama,
+                'lingkar'       => $request->lingkar,
+                'panjang'       => $request->panjang,
+                'kategori'      => $request->kategori,
+                'harga_beli'    => $request->harga_beli,
+                'harga_jual'    => $request->harga_jual,
+                'status'        => 'Draft',
+                'pembelian_id'  => $request->pembelian_id,
             ]);
 
             return redirect()->route('barang.index');
@@ -77,19 +85,28 @@ class BarangController extends Controller
         $barang = Barang::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'nama'       => 'required|string|max:255',
-            'lingkar'    => 'required|numeric',
-            'panjang'    => 'required|numeric',
-            'kategori'   => 'required|string|max:255',
+            'nama'          => 'required|string|max:255',
+            'lingkar'       => 'required|numeric|min:1',
+            'panjang'       => 'required|numeric|min:1',
+            'kategori'      => 'required|string|max:255',
+            'harga_beli'    => 'required|numeric|min:1',
+            'harga_jual'    => 'required|numeric|min:1|gt:harga_beli',
+            'pembelian_id'  => 'required|exists:pembelian,id'
         ], [
-            'nama.required'     => 'Nama barang wajib diisi.',
-            'nama.max'          => 'Nama barang maksimal 255 karakter.',
-            'lingkar.required'  => 'Lingkar wajib diisi.',
-            'lingkar.numeric'   => 'Lingkar harus berbentuk angka.',
-            'panjang.required'  => 'Panjang wajib diisi.',
-            'panjang.numeric'   => 'Panjang harus berbentuk angka.',
-            'kategori.required' => 'Kategori wajib diisi.',
-            'kategori.max'      => 'Kategori barang maksimal 255 karakter.',
+            'nama.required'         => 'Nama barang wajib diisi.',
+            'nama.max'              => 'Nama barang maksimal 255 karakter.',
+            'lingkar.required'      => 'Lingkar wajib diisi.',
+            'lingkar.numeric'       => 'Lingkar harus berbentuk angka.',
+            'panjang.required'      => 'Panjang wajib diisi.',
+            'panjang.numeric'       => 'Panjang harus berbentuk angka.',
+            'kategori.required'     => 'Kategori wajib diisi.',
+            'kategori.max'          => 'Kategori barang maksimal 255 karakter.',
+            'harga_beli.required'   => 'Harga beli wajib diisi.',
+            'harga_beli.numeric'    => 'Harga beli harus berbentuk angka.',
+            'harga_jual.required'   => 'Harga jual wajib diisi.',
+            'harga_jual.numeric'    => 'Harga jual harus berbentuk angka.',
+            'pembelian_id.required' => 'Pembelian wajib dipilih.',
+            'pembelian_id.exists'   => 'Pembelian tidak valid.',
         ]);
 
         if ($validator->fails()) {
@@ -99,11 +116,13 @@ class BarangController extends Controller
 
         try {
             $barang->update([
-                'nama'       => $request->nama,
-                'lingkar'    => $request->lingkar,
-                'panjang'    => $request->panjang,
-                'harga_jual' => $request->harga_jual,
-                'kategori'   => $request->kategori,
+                'nama'          => $request->nama,
+                'lingkar'       => $request->lingkar,
+                'panjang'       => $request->panjang,
+                'kategori'      => $request->kategori,
+                'harga_beli'    => $request->harga_beli,
+                'harga_jual'    => $request->harga_jual,
+                'pembelian_id'  => $request->pembelian_id,
             ]);
 
             return redirect()->route('barang.index');
