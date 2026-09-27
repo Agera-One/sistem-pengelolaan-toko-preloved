@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Barang extends Model
 {
@@ -19,20 +20,14 @@ class Barang extends Model
         'status',
     ];
 
-    public function detailPembelian(): HasMany
-    {
-        return $this->hasMany(DetailPembelian::class, 'barang_id');
-    }
-
     public function detailPenjualan(): HasMany
     {
         return $this->hasMany(DetailPenjualan::class, 'barang_id');
     }
 
-    public function pembelian(): BelongsToMany
+    public function pembelian(): BelongsTo
     {
-        return $this->belongsToMany(Pembelian::class, 'detail_pembelian', 'barang_id', 'pembelian_id')
-            ->withPivot('harga_beli');
+        return $this->belongsTo(Pembelian::class, 'pembelian_id');
     }
 
     public function penjualan(): BelongsToMany
