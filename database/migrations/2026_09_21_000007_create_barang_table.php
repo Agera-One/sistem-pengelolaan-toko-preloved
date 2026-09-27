@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('kategori');
             $table->string('status');
             $table->timestamps();
+
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');;
         });
     }
 
