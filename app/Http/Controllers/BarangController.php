@@ -40,46 +40,6 @@ class BarangController extends Controller
         return view('pages.barang', compact('barang', 'kode', 'pembelian'));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
-    {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'lingkar'       => 'required|numeric|min:1',
-            'panjang'       => 'required|numeric|min:1',
-            'kategori'      => 'required|string|max:255',
-            'harga_beli'    => 'required|numeric|min:1',
-            'harga_jual'    => 'required|numeric|min:1|gt:harga_beli',
-            'pembelian_id'  => 'required|exists:pembelian,id',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('barang.index');
-        }
-
-        $kode = $codeGenerator->generate(new barang(), 'kode', 'BRG');
-
-        try {
-            Barang::create([
-                'kode'          => $kode,
-                'nama'          => $request->nama,
-                'lingkar'       => $request->lingkar,
-                'panjang'       => $request->panjang,
-                'kategori'      => $request->kategori,
-                'harga_beli'    => $request->harga_beli,
-                'harga_jual'    => $request->harga_jual,
-                'status'        => 'Draft',
-                'pembelian_id'  => $request->pembelian_id,
-            ]);
-
-            return redirect()->route('barang.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('barang.index')
-                ->with('error', 'Gagal memperbarui data barang.');
-        }
-    }
-
     public function update(Request $request, string $id)
     {
         $barang = Barang::findOrFail($id);
@@ -89,9 +49,7 @@ class BarangController extends Controller
             'lingkar'       => 'required|numeric|min:1',
             'panjang'       => 'required|numeric|min:1',
             'kategori'      => 'required|string|max:255',
-            'harga_beli'    => 'required|numeric|min:1',
             'harga_jual'    => 'required|numeric|min:1|gt:harga_beli',
-            'pembelian_id'  => 'required|exists:pembelian,id'
         ], [
             'nama.required'         => 'Nama barang wajib diisi.',
             'nama.max'              => 'Nama barang maksimal 255 karakter.',
@@ -101,12 +59,8 @@ class BarangController extends Controller
             'panjang.numeric'       => 'Panjang harus berbentuk angka.',
             'kategori.required'     => 'Kategori wajib diisi.',
             'kategori.max'          => 'Kategori barang maksimal 255 karakter.',
-            'harga_beli.required'   => 'Harga beli wajib diisi.',
-            'harga_beli.numeric'    => 'Harga beli harus berbentuk angka.',
             'harga_jual.required'   => 'Harga jual wajib diisi.',
             'harga_jual.numeric'    => 'Harga jual harus berbentuk angka.',
-            'pembelian_id.required' => 'Pembelian wajib dipilih.',
-            'pembelian_id.exists'   => 'Pembelian tidak valid.',
         ]);
 
         if ($validator->fails()) {
@@ -120,9 +74,7 @@ class BarangController extends Controller
                 'lingkar'       => $request->lingkar,
                 'panjang'       => $request->panjang,
                 'kategori'      => $request->kategori,
-                'harga_beli'    => $request->harga_beli,
                 'harga_jual'    => $request->harga_jual,
-                'pembelian_id'  => $request->pembelian_id,
             ]);
 
             return redirect()->route('barang.index');
