@@ -20,6 +20,11 @@ class Pembelian extends Model
         'user_id',
     ];
 
+    public function barang(): HasMany
+    {
+        return $this->hasMany(Barang::class, 'barang_id');
+    }
+
     protected function casts(): array
     {
         return [
@@ -35,16 +40,5 @@ class Pembelian extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function detailPembelian(): HasMany
-    {
-        return $this->hasMany(DetailPembelian::class, 'pembelian_id');
-    }
-
-    public function barang(): BelongsToMany
-    {
-        return $this->belongsToMany(Barang::class, 'detail_pembelian', 'pembelian_id', 'barang_id')
-            ->withPivot('harga_beli');
     }
 }
