@@ -163,18 +163,11 @@
                                                 data-tanggal="{{ $p->tanggal->translatedFormat('d F Y') }}"
                                                 data-status="{{ $p->status }}"
                                                 data-total="Rp{{ number_format($p->total, 0, ',', '.') }}"
-                                                data-suppliernama="{{ $p->supplier->nama ?? '-' }}"
-                                                data-suppliertelepon="{{ $p->supplier->nomor_telepon ?? '-' }}"
-                                                data-supplierkota="{{ $p->supplier->kota ?? '-' }}"
-                                                data-usernama="{{ $p->user->name ?? '-' }}"
-                                                data-useremail="{{ $p->user->email ?? '-' }}"
-                                                data-dibuat="{{ $p->created_at?->translatedFormat('d F Y, H:i') }}"
-                                                data-diperbarui="{{ $p->updated_at?->translatedFormat('d F Y, H:i') }}"
-                                                data-items="{{ $p->detailPembelian->map(fn ($d) => [
-                                                    'nama' => $d->barang->nama ?? '-',
-                                                    'harga_beli' => (int) $d->harga_beli,
-                                                    'harga_jual' => (int) $d->harga_jual,
-                                                ])->toJson() }}"
+                                                data-suppliernama="{{ $p->supplier->nama }}"
+                                                data-suppliertelepon="{{ $p->supplier->nomor_telepon }}"
+                                                data-supplierkota="{{ $p->supplier->kota }}"
+                                                data-usernama="{{ $p->user->name }}"
+                                                data-useremail="{{ $p->user->email }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
@@ -183,20 +176,22 @@
                                             Detail
                                         </button>
 
-                                        <button type="button" role="menuitem"
-                                                data-edit-open="modal-ubah"
-                                                data-action="{{ route('pembelian.pesanan.update', $p) }}"
-                                                data-kode="{{ $p->kode }}"
-                                                data-nama="{{ $p->nama }}"
-                                                data-telepon="{{ $p->nomor_telepon }}"
-                                                data-alamat="{{ $p->alamat }}"
-                                                class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M12 20h9" />
-                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                            </svg>
-                                            Ubah
-                                        </button>
+                                        @if ($p->status === 'Belum Bayar')
+                                            <button type="button" role="menuitem"
+                                                    data-edit-open="modal-ubah"
+                                                    data-action="{{ route('pembelian.pesanan.update', $p) }}"
+                                                    data-kode="{{ $p->kode }}"
+                                                    data-tanggal="{{ $p->tanggal->format('Y-m-d') }}"
+                                                    data-total="{{ $p->total }}"
+                                                    data-supplierid="{{ $p->supplier_id }}"
+                                                    class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M12 20h9" />
+                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                                </svg>
+                                                Ubah
+                                            </button>
+                                        @endif
 
                                         <form action="{{ route('pembelian.pesanan.destroy', $p) }}" method="POST"
                                               data-confirm="Hapus pesanan pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
@@ -264,12 +259,12 @@
 
     <dialog id="modal-tambah"
             aria-labelledby="modal-tambah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-3xl overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        <form method="POST" action="{{ route('pembelian.pesanan.store') }}" id="form-tambah-pesanan" class="flex max-h-[90vh] flex-col" novalidate>
+            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
+        <form method="POST" action="{{ route('pembelian.pesanan.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
             @csrf
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Pesanan Pembelian</h2>
+                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Pesanan</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -279,13 +274,13 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div class="grid gap-4 sm:grid-cols-3">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="kode" class="mb-1.5 block text-stone-900">Kode pembelian</label>
-                        <input type="text" id="kode" value="{{ $kode }}"
+                        <label for="kode" class="mb-1.5 block text-stone-900">Kode Pesanan</label>
+                        <input name="kode" type="text" id="kode" value="{{ $kode }}"
                                 readonly aria-describedby="hint-kode"
                                 class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
-                        <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi otomatis saat disimpan.</p>
+                        <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
                     </div>
 
                     <div>
@@ -298,82 +293,37 @@
                                 class="{{ $field }}">
                         <p id="err-tanggal" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
-
-                    <div>
-                        <label for="supplier_id" class="mb-1.5 block text-stone-900">
-                            Supplier <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <select id="supplier_id" name="supplier_id"
-                                data-label="Supplier" data-rules="required"
-                                aria-describedby="err-supplier_id"
-                                class="{{ $field }}">
-                            <option value="">Pilih supplier</option>
-                            @foreach ($supplier as $s)
-                                <option value="{{ $s->id }}">{{ $s->nama }}</option>
-                            @endforeach
-                        </select>
-                        <p id="err-supplier_id" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
                 </div>
 
                 <div>
-                    <div class="mb-2 flex items-center justify-between">
-                        <label class="block text-stone-900">
-                            Daftar Barang <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <button type="button" id="btn-tambah-barang"
-                                class="inline-flex items-center gap-1.5 rounded-lg border border-brand px-3 py-1.5 text-sm font-medium text-brand transition hover:bg-brand/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M12 5v14M5 12h14" />
-                            </svg>
-                            Tambah Barang
-                        </button>
-                    </div>
-
-                    <div id="item-rows" class="space-y-3">
-                        <div class="item-row grid grid-cols-1 gap-3 rounded-lg border border-stone-200 p-3 sm:grid-cols-[1fr_140px_140px_auto] sm:items-start" data-item-row>
-                            <div>
-                                <label class="sr-only">Barang</label>
-                                <select name="barang_id[]" class="item-barang {{ $field }}">
-                                    <option value="">Pilih barang</option>
-                                    @foreach ($barang as $b)
-                                        <option value="{{ $b->id }}"
-                                                data-harga-beli="{{ $b->harga_beli ?? '' }}"
-                                                data-harga-jual="{{ $b->harga_jual ?? '' }}">
-                                            {{ $b->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label class="sr-only">Harga beli</label>
-                                <input type="number" min="0" step="1" name="harga_beli[]" placeholder="Harga beli"
-                                        class="item-harga-beli {{ $field }}">
-                            </div>
-                            <div>
-                                <label class="sr-only">Harga jual</label>
-                                <input type="number" min="0" step="1" name="harga_jual[]" placeholder="Harga jual"
-                                        class="item-harga-jual {{ $field }}">
-                            </div>
-                            <div class="flex items-start justify-end sm:justify-center">
-                                <button type="button"
-                                        class="btn-hapus-item rounded-md p-2 text-stone-400 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                                        aria-label="Hapus barang ini">
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M3 6h18" />
-                                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                                        <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <p id="err-items" class="mt-1.5 text-xs text-red-600" hidden>Lengkapi barang, harga beli, dan harga jual pada setiap baris.</p>
+                    <label for="supplier_id" class="mb-1.5 block text-stone-900">
+                        Nama Supplier <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <select id="supplier_id" name="supplier_id"
+                            data-label="Supplier" data-rules="required"
+                            aria-describedby="err-supplier_id"
+                            class="{{ $field }}">
+                        <option value="">Pilih supplier</option>
+                        @foreach ($supplier as $s)
+                            <option value="{{ $s->id }}">{{ $s->nama }}</option>
+                        @endforeach
+                    </select>
+                    <p id="err-supplier_id" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 border-t border-stone-200 pt-4">
-                    <span class="text-stone-500">Total</span>
-                    <span id="total-display" class="text-lg font-semibold text-stone-900">Rp0</span>
+                <div>
+                    <label for="total" class="mb-1.5 block text-stone-900">
+                        Total Harga <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                        <input type="number" inputmode="numeric" min="1" id="total" name="total"
+                                placeholder="Contoh: 100000" autocomplete="off"
+                                data-label="Total" data-rules="required|numeric|min:1"
+                                aria-describedby="err-total"
+                                class="{{ $field }} pl-9">
+                    </div>
+                    <p id="err-total" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -384,50 +334,11 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan pembelian
+                    Simpan
                 </button>
             </div>
         </form>
     </dialog>
-
-    <template id="item-row-template">
-        <div class="item-row grid grid-cols-1 gap-3 rounded-lg border border-stone-200 p-3 sm:grid-cols-[1fr_140px_140px_auto] sm:items-start" data-item-row>
-            <div>
-                <label class="sr-only">Barang</label>
-                <select name="barang_id[]" class="item-barang {{ $field }}">
-                    <option value="">Pilih barang</option>
-                    @foreach ($barang as $b)
-                        <option value="{{ $b->id }}"
-                                data-harga-beli="{{ $b->harga_beli ?? '' }}"
-                                data-harga-jual="{{ $b->harga_jual ?? '' }}">
-                            {{ $b->nama }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="sr-only">Harga beli</label>
-                <input type="number" min="0" step="1" name="harga_beli[]" placeholder="Harga beli"
-                        class="item-harga-beli {{ $field }}">
-            </div>
-            <div>
-                <label class="sr-only">Harga jual</label>
-                <input type="number" min="0" step="1" name="harga_jual[]" placeholder="Harga jual"
-                        class="item-harga-jual {{ $field }}">
-            </div>
-            <div class="flex items-start justify-end sm:justify-center">
-                <button type="button"
-                        class="btn-hapus-item rounded-md p-2 text-stone-400 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                        aria-label="Hapus barang ini">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M3 6h18" />
-                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                        <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </template>
 
     <dialog id="modal-ubah"
             aria-labelledby="modal-ubah-title"
@@ -437,7 +348,7 @@
             @method('PUT')
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah pembelian</h2>
+                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Pesanan</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -449,7 +360,7 @@
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode pembelian</label>
+                        <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode Pesanan</label>
                         <input type="text" id="edit-kode" data-fill="kode"
                                 readonly aria-describedby="hint-edit-kode"
                                 class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
@@ -457,43 +368,50 @@
                     </div>
 
                     <div>
-                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="edit-tanggal" class="mb-1.5 block text-stone-900">
+                            Tanggal <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-fill="telepon"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-edit-nomor_telepon"
+                        <input type="date" inputmode="date" id="edit-tanggal" name="tanggal"
+                                autocomplete="off"
+                                data-fill="tanggal"
+                                data-label="Tanggal" data-rules="required|date"
+                                aria-describedby="err-edit-tanggal"
                                 class="{{ $field }}">
-                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-edit-tanggal" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
 
                 <div>
-                    <label for="edit-nama" class="mb-1.5 block text-stone-900">
-                        Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                    <label for="edit-supplier_id" class="mb-1.5 block text-stone-900">
+                        Nama Supplier <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
-                    <input type="text" id="edit-nama" name="nama"
-                            autocomplete="off" autofocus
-                            data-fill="nama"
-                            data-label="Nama lengkap" data-rules="required|string|max:255"
-                            aria-describedby="err-edit-nama"
+                    <select id="edit-supplier_id" name="supplier_id"
+                            data-fill="supplierid"
+                            data-label="Nama Supplier" data-rules="required"
+                            aria-describedby="err-edit-supplier_id"
                             class="{{ $field }}">
-                    <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <option value="">Pilih Supplier</option>
+                        @foreach ($supplier as $s)
+                            <option value="{{ $s->id }}">{{ $s->nama }}</option>
+                        @endforeach
+                    </select>
+                    <p id="err-edit-supplier_id" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
                 <div>
-                    <label for="edit-alamat" class="mb-1.5 block text-stone-900">
-                        Alamat lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                    <label for="edit-total" class="mb-1.5 block text-stone-900">
+                        Total Harga <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
-                    <textarea id="edit-alamat" name="alamat" rows="3"
-                                placeholder="Jalan, nomor, kelurahan, kota"
-                                data-fill="alamat"
-                                data-label="Alamat lengkap" data-rules="required"
-                                aria-describedby="err-edit-alamat"
-                                class="{{ $field }}"></textarea>
-                    <p id="err-edit-alamat" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                        <input type="number" inputmode="numeric" min="1" id="edit-total" name="total"
+                            placeholder="Contoh: 100000" autocomplete="off"
+                            data-fill="total"
+                            data-label="Harga Beli" data-rules="required|numeric|min:1"
+                            aria-describedby="err-edit-total"
+                            class="{{ $field }} pl-9">
+                    </div>
+                    <p id="err-edit-total" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -504,7 +422,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan perubahan
+                    Simpan
                 </button>
             </div>
         </form>
@@ -512,14 +430,11 @@
 
     <dialog id="modal-detail"
         aria-labelledby="modal-detail-title"
-        class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
+        class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
         <div class="flex max-h-[90vh] flex-col">
 
-            <div class="flex items-start justify-between border-b border-stone-300 px-6 py-4">
-                <div>
-                    <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Pesanan Pembelian</h2>
-                    <p data-detail="kode" class="mt-0.5 text-stone-500"></p>
-                </div>
+            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
+                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Pelanggan</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -528,76 +443,34 @@
                 </button>
             </div>
 
-            <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div class="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-stone-50 px-4 py-3">
-                    <span id="detail-status-badge" class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium">
-                        <span id="detail-status-dot" class="h-1.5 w-1.5 rounded-full"></span>
-                        <span data-detail="status"></span>
-                    </span>
-                    <p class="flex items-center gap-1.5 text-stone-500">
-                        <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="3" y="4" width="18" height="18" rx="2" />
-                            <path d="M16 2v4M8 2v4M3 10h18" />
-                        </svg>
-                        <span data-detail="tanggal" class="font-medium text-stone-900"></span>
-                    </p>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div class="rounded-lg border border-stone-200 p-4">
-                        <p class="mb-3 text-xs font-medium uppercase tracking-wide text-stone-400">Supplier</p>
-                        <div class="flex items-start gap-3">
-                            <span id="detail-supplier-initial" aria-hidden="true"
-                                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-sm font-semibold text-brand"></span>
-                            <div class="min-w-0">
-                                <p data-detail="suppliernama" class="truncate font-medium text-stone-900"></p>
-                                <p class="mt-1.5 flex items-center gap-1.5 text-stone-500">
-                                    <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                                    </svg>
-                                    <span data-detail="suppliertelepon"></span>
-                                </p>
-                                <p class="mt-0.5 flex items-center gap-1.5 text-stone-500">
-                                    <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                    <span data-detail="supplierkota"></span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="rounded-lg border border-stone-200 p-4">
-                        <p class="mb-3 text-xs font-medium uppercase tracking-wide text-stone-400">Dibuat oleh</p>
-                        <div class="flex items-start gap-3">
-                            <span id="detail-user-initial" aria-hidden="true"
-                                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-sm font-semibold text-brand"></span>
-                            <div class="min-w-0">
-                                <p data-detail="usernama" class="truncate font-medium text-stone-900"></p>
-                                <p class="mt-1.5 flex items-center gap-1.5 text-stone-500">
-                                    <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <rect x="2" y="4" width="20" height="16" rx="2" />
-                                        <path d="m2 7 10 6 10-6" />
-                                    </svg>
-                                    <span data-detail="useremail" class="truncate"></span>
-                                </p>
-                            </div>
-                        </div>
+            <div class="overflow-y-auto px-6 py-5">
+                <div class="flex items-center gap-4">
+                    <span data-detail-initial aria-hidden="true"
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xl font-semibold text-brand"></span>
+                    <div class="min-w-0">
+                        <p data-detail="nama" class="break-words text-lg font-semibold text-stone-900"></p>
+                        <p data-detail="kode" class="mt-0.5 text-stone-500"></p>
                     </div>
                 </div>
 
-                <div>
-                    <p class="mb-2 text-xs font-medium uppercase tracking-wide text-stone-400">Daftar Barang</p>
-                    <div id="detail-items-body" class="divide-y divide-stone-200 rounded-lg border border-stone-200"></div>
-                </div>
-
-                <div class="rounded-lg bg-stone-50 p-4">
-                    <div class="flex items-center justify-between text-base font-semibold text-stone-900">
-                        <dt>Total</dt>
-                        <dd data-detail="total"></dd>
+                <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Nomor telepon</dt>
+                        <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
-                </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Alamat</dt>
+                        <dd data-detail="alamat" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Terdaftar pada</dt>
+                        <dd data-detail="dibuat" class="text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Terakhir diperbarui</dt>
+                        <dd data-detail="diperbarui" class="text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                </dl>
             </div>
 
             <div class="flex items-center justify-end border-t border-stone-300 bg-stone-50 px-6 py-4">
@@ -608,8 +481,4 @@
             </div>
         </div>
     </dialog>
-
-    @push('scripts')
-        <script src="{{ asset('js/pesanan.js') }}"></script>
-    @endpush
 @endsection
