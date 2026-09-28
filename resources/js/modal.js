@@ -327,69 +327,10 @@
                 dot.className = 'h-1.5 w-1.5 rounded-full ' + style.dot;
             }
 
-            var linkPembelian = dialog.querySelector('#link-detail-pembelian');
-            if (linkPembelian) {
-                var kodePembelian = (btn.dataset.kodePembelian || '').trim();
-                var baseUrl = linkPembelian.dataset.baseUrl || '/pembelian';
-
-                if (kodePembelian && kodePembelian !== '-') {
-                    linkPembelian.href = baseUrl + '?open_detail=' + encodeURIComponent(kodePembelian);
-                    linkPembelian.classList.remove('pointer-events-none', 'opacity-50');
-                } else {
-                    linkPembelian.href = '#';
-                    linkPembelian.classList.add('pointer-events-none', 'opacity-50');
-                }
-            }
-
             openModal(dialog);
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var urlParams = new URLSearchParams(window.location.search);
-        var openKode = urlParams.get('open_detail');
-
-        if (openKode) {
-            var targetBtn = document.querySelector('[data-detail-open="modal-detail"][data-kode="' + openKode + '"]');
-
-            if (targetBtn) {
-                targetBtn.click();
-
-                var cleanUrl = window.location.pathname;
-                window.history.replaceState({}, document.title, cleanUrl);
-            }
-        }
-    });
-
-    function setLockedFields(dialog, locked) {
-        dialog.querySelectorAll('[data-lock-if-terjual]').forEach(function (field) {
-            if (field.tagName === 'SELECT') {
-                field.tabIndex = locked ? -1 : 0;
-                field.style.pointerEvents = locked ? 'none' : '';
-                field.setAttribute('aria-disabled', locked ? 'true' : 'false');
-            } else {
-                field.readOnly = locked;
-            }
-
-            if (locked) {
-                field.classList.remove('bg-white', 'text-stone-900');
-                field.classList.add('bg-stone-100', 'text-stone-500', 'cursor-not-allowed');
-            } else {
-                field.classList.remove('bg-stone-100', 'text-stone-500', 'cursor-not-allowed');
-                field.classList.add('bg-white', 'text-stone-900');
-            }
-
-            var hint = document.getElementById('hint-' + field.id);
-            if (hint) hint.hidden = !locked;
-        });
-    }
-
-    /* Modal ubah: isi form dari data-* tombol, lalu arahkan action ke rute update.
-     *   data-edit-open="{id dialog}"
-     *   data-action="{url update}"
-     *   data-status="{status barang}" -> kunci field harga & pembelian jika "Terjual"
-     *   data-{nama}="..." -> diisi ke input yang punya data-fill="{nama}"
-     */
     document.querySelectorAll('[data-edit-open]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var dialog = document.getElementById(btn.dataset.editOpen);
@@ -400,9 +341,6 @@
             form.querySelectorAll('[data-fill]').forEach(function (field) {
                 field.value = btn.dataset[field.dataset.fill] || '';
             });
-
-            var isTerjual = (btn.dataset.status || '').trim().toLowerCase() === 'terjual';
-            setLockedFields(dialog, isTerjual);
 
             openModal(dialog);
         });
