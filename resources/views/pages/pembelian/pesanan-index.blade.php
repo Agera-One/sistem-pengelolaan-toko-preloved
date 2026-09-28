@@ -73,13 +73,15 @@
                     </div>
                 </form>
 
-                <button type="button" data-modal-open="modal-tambah"
-                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    Tambah Pesanan
-                </button>
+                <a href="{{ route('pembelian.pesanan.create') }}">
+                    <button type="button"
+                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Tambah Pesanan
+                    </button>
+                </a>
             </div>
 
             <div class="overflow-x-auto">
@@ -157,24 +159,14 @@
                                          role="menu"
                                          hidden
                                          class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
-                                        <button type="button" role="menuitem"
-                                                data-detail-open="modal-detail"
-                                                data-kode="{{ $p->kode }}"
-                                                data-tanggal="{{ $p->tanggal->translatedFormat('d F Y') }}"
-                                                data-status="{{ $p->status }}"
-                                                data-total="Rp{{ number_format($p->total, 0, ',', '.') }}"
-                                                data-suppliernama="{{ $p->supplier->nama }}"
-                                                data-suppliertelepon="{{ $p->supplier->nomor_telepon }}"
-                                                data-supplierkota="{{ $p->supplier->kota }}"
-                                                data-usernama="{{ $p->user->name }}"
-                                                data-useremail="{{ $p->user->email }}"
-                                                class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                        <a href="{{ route('pembelian.pesanan.show', $p) }}" role="menuitem"
+                                           class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
                                                 <circle cx="12" cy="12" r="3" />
                                             </svg>
                                             Detail
-                                        </button>
+                                        </a>
 
                                         @if ($p->status === 'Belum Bayar')
                                             <button type="button" role="menuitem"
@@ -257,7 +249,7 @@
         $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
     @endphp
 
-    <dialog id="modal-tambah"
+    {{-- <dialog id="modal-tambah"
             aria-labelledby="modal-tambah-title"
             class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
         <form method="POST" action="{{ route('pembelian.pesanan.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
@@ -338,7 +330,7 @@
                 </button>
             </div>
         </form>
-    </dialog>
+    </dialog> --}}
 
     <dialog id="modal-ubah"
             aria-labelledby="modal-ubah-title"
@@ -426,59 +418,5 @@
                 </button>
             </div>
         </form>
-    </dialog>
-
-    <dialog id="modal-detail"
-        aria-labelledby="modal-detail-title"
-        class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        <div class="flex max-h-[90vh] flex-col">
-
-            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Pelanggan</h2>
-                <button type="button" data-modal-close aria-label="Tutup"
-                        class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 6 6 18M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="overflow-y-auto px-6 py-5">
-                <div class="flex items-center gap-4">
-                    <span data-detail-initial aria-hidden="true"
-                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xl font-semibold text-brand"></span>
-                    <div class="min-w-0">
-                        <p data-detail="nama" class="break-words text-lg font-semibold text-stone-900"></p>
-                        <p data-detail="kode" class="mt-0.5 text-stone-500"></p>
-                    </div>
-                </div>
-
-                <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Nomor telepon</dt>
-                        <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Alamat</dt>
-                        <dd data-detail="alamat" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terdaftar pada</dt>
-                        <dd data-detail="dibuat" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terakhir diperbarui</dt>
-                        <dd data-detail="diperbarui" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                </dl>
-            </div>
-
-            <div class="flex items-center justify-end border-t border-stone-300 bg-stone-50 px-6 py-4">
-                <button type="button" data-modal-close
-                        class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    Tutup
-                </button>
-            </div>
-        </div>
     </dialog>
 @endsection
