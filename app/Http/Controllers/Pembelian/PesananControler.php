@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\CodeGeneratorService;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Barang;
 use App\Models\Pembelian;
 use App\Models\Supplier;
+use App\Services\CodeGeneratorService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class PesananControler extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function index(Request $request)
     {
         $keyword = trim((string) $request->query('q', ''));
         $tanggalMulai = $request->query('tanggal_mulai');
@@ -44,54 +46,100 @@ class PesananControler extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kode = $codeGenerator->generate(
-        new Pembelian(),
-            'kode',
-            'BEL'
-        );
+        $supplier = Supplier::orderBy('nama')->get();
+
+        return view('pages.pembelian.pesanan-index', compact('pembelian', 'supplier'));
+    }
+
+    public function create(CodeGeneratorService $codeGenerator)
+    {
+        $kode = $codeGenerator->generate(new Pembelian(), 'kode', 'BEL');
+        $kodeBarang = $codeGenerator->generate(new Barang(), 'kode', 'BRG');
 
         $supplier = Supplier::orderBy('nama')->get();
 
-        return view('pages.pembelian.pesanan', compact('pembelian', 'kode', 'supplier'));
+        return view('pages.pembelian.pesanan-create', compact('kode', 'kodeBarang', 'supplier'));
+    }
+
+    public function show(string $id)
+    {
+        $pembelian = Pembelian::with(['supplier', 'user', 'barang'])->findOrFail($id);
+
+        return view('pages.pembelian.pesanan-detail', compact('pembelian'));
     }
 
     public function store(Request $request, CodeGeneratorService $codeGenerator)
     {
-        $validator =  Validator::make($request->all(),[
-            'tanggal'      => 'required|date',
-            'total'        => 'required|numeric|min:1',
-            'supplier_id'  => 'required|exists:supplier,id',
-        ], [
-            'tanggal.required'      => 'Tanggal wajib diisi.',
-            'total.required'        => 'Harga beli wajib diisi.',
-            'total.numeric'         => 'Harga beli harus berupa angka.',
-            'total.min'             => 'Total harga minimal 1.',
-            'supplier_id.required'  => 'Supplier wajib dipilih.',
-            'supplier_id.exists'    => 'Supplier tidak valid.',
+        $items = collect($request->input('items', []))
+            ->filter(fn ($row) => is_array($row) && collect($row)->contains(fn ($v) => filled($v)))
+            ->map(function (array $row) {
+                foreach (['harga_beli', 'harga_jual'] as $field) {
+                    $row[$field] = isset($row[$field]) ? preg_replace('/\D/', '', (string) $row[$field]) : null;
+                }
+                return $row;
+            });
+
+        $request->merge(['items' => $items->all()]);
+
+        $validator = Validator::make($request->all(), [
+            'tanggal'            => 'required|date',
+            'supplier_id'        => 'required|exists:supplier,id',
+            'items'              => 'required|array|min:1',
+            'items.*.nama'       => 'required|string|max:255',
+            'items.*.kategori'   => 'required|string|max:255',
+            'items.*.lingkar'    => 'required|numeric|min:0',
+            'items.*.panjang'    => 'required|numeric|min:0',
+            'items.*.harga_beli' => 'required|numeric|min:1',
+            'items.*.harga_jual' => 'required|numeric|min:1',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('pembelian.pesanan.index');
+            return redirect()->route('pembelian.pesanan.create')
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        $kode = $codeGenerator->generate(new Pembelian(), 'kode', 'BEL');
+        $rows = $items->values();
 
         try {
-            Pembelian::create([
-                'kode'          => $kode,
-                'tanggal'       => $request->tanggal,
-                'total'         => $request->total,
-                'status'        => 'Belum Bayar',
-                'supplier_id'   => $request->supplier_id,
-                'user_id'       => auth()->id(),
-            ]);
+            $pembelian = DB::transaction(function () use ($request, $rows, $codeGenerator) {
+                $kodePo = $codeGenerator->generate(new Pembelian(), 'kode', 'BEL');
+                $kodeBarang = $codeGenerator->generateBatch(new Barang(), 'kode', 'BRG', $rows->count());
 
-            return redirect()->route('pembelian.pesanan.index');
-        } catch (\Exception $e) {
-            report($e);
+                $pembelian = Pembelian::create([
+                    'kode'        => $kodePo,
+                    'tanggal'     => $request->tanggal,
+                    'total'       => $rows->sum(fn ($r) => (int) $r['harga_beli']),
+                    'status'      => 'Belum Bayar',
+                    'supplier_id' => $request->supplier_id,
+                    'user_id'     => auth()->id(),
+                ]);
+
+                foreach ($rows as $i => $row) {
+                    Barang::create([
+                        'kode'         => $kodeBarang[$i],
+                        'nama'         => $row['nama'],
+                        'kategori'     => $row['kategori'],
+                        'lingkar'      => $row['lingkar'],
+                        'panjang'      => $row['panjang'],
+                        'harga_beli'   => $row['harga_beli'],
+                        'harga_jual'   => $row['harga_jual'],
+                        'status'       => 'Tersedia',
+                        'pembelian_id' => $pembelian->id,
+                    ]);
+                }
+
+                return $pembelian;
+            });
 
             return redirect()->route('pembelian.pesanan.index')
-                ->with('error', 'Gagal memperbarui data pesanan.');
+                ->with('success', "Pesanan {$pembelian->kode} berhasil disimpan dengan {$rows->count()} barang.");
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('pembelian.pesanan.create')
+                ->withInput()
+                ->with('error', 'Gagal menyimpan pesanan: ' . $e->getMessage());
         }
     }
 
@@ -99,17 +147,17 @@ class PesananControler extends Controller
     {
         $pembelian = Pembelian::findOrFail($id);
 
-        $validator =  Validator::make($request->all(),[
-            'tanggal'      => 'required|date',
-            'total'        => 'required|numeric|min:1',
-            'supplier_id'  => 'required|exists:supplier,id',
+        $validator = Validator::make($request->all(), [
+            'tanggal'     => 'required|date',
+            'total'       => 'required|numeric|min:1',
+            'supplier_id' => 'required|exists:supplier,id',
         ], [
-            'tanggal.required'      => 'Tanggal wajib diisi.',
-            'total.required'        => 'Harga beli wajib diisi.',
-            'total.numeric'         => 'Harga beli harus berupa angka.',
-            'total.min'             => 'Total harga minimal 1.',
-            'supplier_id.required'  => 'Supplier wajib dipilih.',
-            'supplier_id.exists'    => 'Supplier tidak valid.',
+            'tanggal.required'     => 'Tanggal wajib diisi.',
+            'total.required'       => 'Harga beli wajib diisi.',
+            'total.numeric'        => 'Harga beli harus berupa angka.',
+            'total.min'            => 'Total harga minimal 1.',
+            'supplier_id.required' => 'Supplier wajib dipilih.',
+            'supplier_id.exists'   => 'Supplier tidak valid.',
         ]);
 
         if ($validator->fails()) {
@@ -119,9 +167,9 @@ class PesananControler extends Controller
 
         try {
             $pembelian->update([
-                'tanggal'       => $request->tanggal,
-                'total'         => $request->total,
-                'supplier_id'   => $request->supplier_id,
+                'tanggal'     => $request->tanggal,
+                'total'       => $request->total,
+                'supplier_id' => $request->supplier_id,
             ]);
 
             return redirect()->route('pembelian.pesanan.index');
@@ -137,6 +185,7 @@ class PesananControler extends Controller
     {
         $pembelian = Pembelian::findOrFail($id);
         $pembelian->delete();
+
         return redirect()->route('pembelian.pesanan.index');
     }
 }
