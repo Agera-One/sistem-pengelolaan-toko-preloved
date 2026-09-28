@@ -22,7 +22,7 @@ class Pembelian extends Model
 
     public function barang(): HasMany
     {
-        return $this->hasMany(Barang::class, 'barang_id');
+        return $this->hasMany(Barang::class, 'pembelian_id');
     }
 
     protected function casts(): array
