@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             BarangSeeder::class,
             PelangganSeeder::class,
             SupplierSeeder::class,
+            PembelianSeeder::class,
         ]);
     }
 }

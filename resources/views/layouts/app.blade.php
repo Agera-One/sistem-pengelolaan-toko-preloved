@@ -12,6 +12,8 @@
         'resources/css/app.css',
         'resources/js/sidebar.js',
         'resources/js/modal.js',
+        'resources/js/daterange.js',
+        'resources/js/pembelian.js',
     ])
 </head>
 

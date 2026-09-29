@@ -12,12 +12,18 @@ class Pembelian extends Model
     protected $table = 'pembelian';
 
     protected $fillable = [
-        'tanggal',
         'kode',
+        'tanggal',
         'total',
-        'pemasok_id',
+        'status',
+        'supplier_id',
         'user_id',
     ];
+
+    public function barang(): HasMany
+    {
+        return $this->hasMany(Barang::class, 'pembelian_id');
+    }
 
     protected function casts(): array
     {
@@ -26,24 +32,13 @@ class Pembelian extends Model
         ];
     }
 
-    public function pemasok(): BelongsTo
+    public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Pemasok::class, 'pemasok_id');
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function detailPembelian(): HasMany
-    {
-        return $this->hasMany(DetailPembelian::class, 'pembelian_id');
-    }
-
-    public function barang(): BelongsToMany
-    {
-        return $this->belongsToMany(Barang::class, 'detail_pembelian', 'pembelian_id', 'barang_id')
-            ->withPivot('harga_beli');
     }
 }
