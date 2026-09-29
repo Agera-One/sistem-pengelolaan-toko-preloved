@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Pembelian;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\Pembelian;
 use App\Models\Supplier;
 use App\Services\CodeGeneratorService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class PesananControler extends Controller
+class PembelianControler extends Controller
 {
     public function index(Request $request)
     {
@@ -48,7 +48,7 @@ class PesananControler extends Controller
 
         $supplier = Supplier::orderBy('nama')->get();
 
-        return view('pages.pembelian.pesanan-index', compact('pembelian', 'supplier'));
+        return view('pages.pembelian.index', compact('pembelian', 'supplier'));
     }
 
     public function create(CodeGeneratorService $codeGenerator)
@@ -58,14 +58,14 @@ class PesananControler extends Controller
 
         $supplier = Supplier::orderBy('nama')->get();
 
-        return view('pages.pembelian.pesanan-create', compact('kode', 'kodeBarang', 'supplier'));
+        return view('pages.pembelian.create', compact('kode', 'kodeBarang', 'supplier'));
     }
 
     public function show(string $id)
     {
         $pembelian = Pembelian::with(['supplier', 'user', 'barang'])->findOrFail($id);
 
-        return view('pages.pembelian.pesanan-detail', compact('pembelian'));
+        return view('pages.pembelian.detail', compact('pembelian'));
     }
 
     public function store(Request $request, CodeGeneratorService $codeGenerator)
@@ -143,41 +143,115 @@ class PesananControler extends Controller
         }
     }
 
+    public function edit(string $id)
+    {
+        $pembelian = Pembelian::with('barang')->findOrFail($id);
+        $supplier = Supplier::orderBy('nama')->get();
+
+        return view('pages.pembelian.edit', compact('pembelian', 'supplier'));
+    }
+
     public function update(Request $request, string $id)
     {
         $pembelian = Pembelian::findOrFail($id);
 
+        $lockedBarang = $pembelian->barang()->where('status', '!=', 'Tersedia')->get()->keyBy('id');
+        $lockedIds = $lockedBarang->keys()->all();
+
+        $items = collect($request->input('items', []))
+            ->filter(fn ($row) => is_array($row)
+                && collect($row)->except('id')->contains(fn ($v) => filled($v)))
+            ->map(function (array $row) use ($lockedBarang) {
+                foreach (['harga_beli', 'harga_jual'] as $field) {
+                    $row[$field] = isset($row[$field]) ? preg_replace('/\D/', '', (string) $row[$field]) : null;
+                }
+
+                $locked = $lockedBarang->get((int) ($row['id'] ?? 0));
+                if ($locked) {
+                    $row['harga_beli'] = (string) (int) $locked->harga_beli;
+                }
+
+                return $row;
+            })
+            ->values();
+
+        $request->merge(['items' => $items->all()]);
+
         $validator = Validator::make($request->all(), [
-            'tanggal'     => 'required|date',
-            'total'       => 'required|numeric|min:1',
-            'supplier_id' => 'required|exists:supplier,id',
-        ], [
-            'tanggal.required'     => 'Tanggal wajib diisi.',
-            'total.required'       => 'Harga beli wajib diisi.',
-            'total.numeric'        => 'Harga beli harus berupa angka.',
-            'total.min'            => 'Total harga minimal 1.',
-            'supplier_id.required' => 'Supplier wajib dipilih.',
-            'supplier_id.exists'   => 'Supplier tidak valid.',
+            'tanggal'            => 'required|date',
+            'supplier_id'        => 'required|exists:supplier,id',
+            'items'              => $lockedIds ? 'nullable|array' : 'required|array|min:1',
+            'items.*.id'         => 'nullable|integer',
+            'items.*.nama'       => 'required|string|max:255',
+            'items.*.kategori'   => 'required|string|max:255',
+            'items.*.lingkar'    => 'required|numeric|min:0',
+            'items.*.panjang'    => 'required|numeric|min:0',
+            'items.*.harga_beli' => 'required|numeric|min:1',
+            'items.*.harga_jual' => 'required|numeric|min:1',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('pembelian.pesanan.index')
-                ->with('error', $validator->errors()->first());
+            return redirect()->route('pembelian.pesanan.edit', $pembelian->id)
+                ->withErrors($validator)
+                ->withInput();
         }
 
         try {
-            $pembelian->update([
-                'tanggal'     => $request->tanggal,
-                'total'       => $request->total,
-                'supplier_id' => $request->supplier_id,
-            ]);
+            DB::transaction(function () use ($request, $items, $pembelian, $lockedBarang) {
+                $editable = $pembelian->barang()->where('status', 'Tersedia')->get()->keyBy('id');
 
-            return redirect()->route('pembelian.pesanan.index');
-        } catch (\Exception $e) {
-            report($e);
+                $baru = $items->filter(fn ($r) => blank($r['id'] ?? null));
+                $kodeBaru = $baru->isNotEmpty()
+                    ? app(CodeGeneratorService::class)->generateBatch(new Barang(), 'kode', 'BRG', $baru->count())
+                    : [];
+                $n = 0;
+
+                $keptIds = [];
+
+                foreach ($items as $row) {
+                    $data = Arr::only($row, ['nama', 'kategori', 'lingkar', 'panjang', 'harga_beli', 'harga_jual']);
+
+                    if (filled($row['id'] ?? null)) {
+                        $id = (int) $row['id'];
+
+                        if ($locked = $lockedBarang->get($id)) {
+                            $locked->update(Arr::except($data, ['harga_beli']));
+                            continue;
+                        }
+
+                        $barang = $editable->get($id);
+                        if (!$barang) {
+                            throw new \RuntimeException('Barang tidak valid.');
+                        }
+                        $barang->update($data);
+                        $keptIds[] = $barang->id;
+                    } else {
+                        $barang = Barang::create($data + [
+                            'kode'         => $kodeBaru[$n++],
+                            'status'       => 'Tersedia',
+                            'pembelian_id' => $pembelian->id,
+                        ]);
+                        $keptIds[] = $barang->id;
+                    }
+                }
+
+                $editable->except($keptIds)->each->delete();
+
+                $pembelian->update([
+                    'tanggal'     => $request->tanggal,
+                    'supplier_id' => $request->supplier_id,
+                    'total'       => $pembelian->barang()->sum('harga_beli'),
+                ]);
+            });
 
             return redirect()->route('pembelian.pesanan.index')
-                ->with('error', 'Gagal memperbarui data pembelian.');
+                ->with('success', "Pesanan {$pembelian->kode} berhasil diperbarui.");
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('pembelian.pesanan.edit', $pembelian->id)
+                ->withInput()
+                ->with('error', 'Gagal memperbarui pesanan: ' . $e->getMessage());
         }
     }
 

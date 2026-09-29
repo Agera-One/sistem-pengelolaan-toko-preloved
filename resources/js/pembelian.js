@@ -1,19 +1,8 @@
-/**
- * pesanan.js (gabungan pesanan.js + pesanan-create.js)
- *
- * Tiap bagian diberi guard sendiri, jadi aman dimuat di halaman mana pun:
- *  - initPesananIndex()  -> aktif jika ada #modal-tambah (halaman daftar pesanan)
- *  - initPesananCreate() -> aktif jika ada #form-pesanan (halaman buat pesanan)
- */
-
-/* ==========================================================================
- * Halaman daftar pesanan: modal tambah + modal detail
- * ========================================================================== */
-function initPesananIndex() {
+function initPembelianIndex() {
     const dialog = document.getElementById('modal-tambah');
     if (!dialog) return;
 
-    const form = document.getElementById('form-tambah-pesanan');
+    const form = document.getElementById('form-tambah-pembelian');
     const rowsContainer = document.getElementById('item-rows');
     const template = document.getElementById('item-row-template');
     const btnTambahBarang = document.getElementById('btn-tambah-barang');
@@ -163,8 +152,6 @@ function initPesananIndex() {
         }
     });
 
-    // --- Modal Detail: item list + status badge -------------------------
-
     const formatRupiahFull = (value) => 'Rp' + (Number(value) || 0).toLocaleString('id-ID');
 
     const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
@@ -242,11 +229,8 @@ function initPesananIndex() {
     });
 }
 
-/* ==========================================================================
- * Halaman buat pesanan: tabel input barang
- * ========================================================================== */
-function initPesananCreate() {
-    const form = document.getElementById('form-pesanan');
+function initPembelianCreate() {
+    const form = document.getElementById('form-pembelian');
     if (!form) return;
 
     const body = form.querySelector('#item-rows');
@@ -295,7 +279,6 @@ function initPesananCreate() {
         return row;
     }
 
-    // Format nominal awal
     body.querySelectorAll('[data-money]').forEach((el) => (el.value = formatMoney(el.value)));
     refresh();
 
@@ -316,7 +299,6 @@ function initPesananCreate() {
 
     body.addEventListener('change', refresh);
 
-    // Enter pindah kolom / tambah baris
     body.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter' || !e.target.matches('[data-cell]')) return;
         e.preventDefault();
@@ -325,9 +307,13 @@ function initPesananCreate() {
         const pos = CELLS.indexOf(e.target.dataset.cell);
 
         if (pos < CELLS.length - 1) {
-            const nextCell = cell(row, CELLS[pos + 1]);
-            if (nextCell) nextCell.focus();
-            return;
+            for (let k = pos + 1; k < CELLS.length; k++) {
+                const nextCell = cell(row, CELLS[k]);
+                if (nextCell && !nextCell.readOnly) {
+                    nextCell.focus();
+                    return;
+                }
+            }
         }
 
         const nextRow = row.nextElementSibling ?? addRow();
@@ -399,7 +385,6 @@ function initPesananCreate() {
             return;
         }
 
-        // Disable baris kosong & bersihkan format money sebelum dikirim
         rows().forEach((row) => {
             if (!isFilled(row)) {
                 row.querySelectorAll('input, select').forEach((el) => (el.disabled = true));
@@ -418,10 +403,7 @@ function initPesananCreate() {
     });
 }
 
-/* ==========================================================================
- * Entry point
- * ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
-    initPesananIndex();
-    initPesananCreate();
+    initPembelianIndex();
+    initPembelianCreate();
 });

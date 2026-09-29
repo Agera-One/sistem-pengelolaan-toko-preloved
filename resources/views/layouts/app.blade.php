@@ -13,8 +13,7 @@
         'resources/js/sidebar.js',
         'resources/js/modal.js',
         'resources/js/daterange.js',
-        'resources/js/pesanan.js',
-        // 'resources/js/pesanan-create.js',
+        'resources/js/pembelian.js',
     ])
 </head>
 

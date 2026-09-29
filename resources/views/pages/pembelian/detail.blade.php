@@ -29,12 +29,12 @@
 
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <a href="{{ route('pembelian.pesanan.index') }}"
+            <a href="{{ route('pembelian.index') }}"
                class="inline-flex items-center gap-1.5 text-stone-500 transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m15 18-6-6 6-6" />
                 </svg>
-                Kembali ke daftar pesanan
+                Kembali ke daftar pembelian
             </a>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
@@ -57,13 +57,13 @@
                         <svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                     </li>
                     <li>
-                        <a href="{{ route('pembelian.pesanan.index') }}"
-                           class="rounded transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">Daftar Pesanan</a>
+                        <a href="{{ route('pembelian.index') }}"
+                           class="rounded transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">Daftar Pembelian</a>
                     </li>
                     <li aria-hidden="true">
                         <svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                     </li>
-                    <li class="font-medium text-stone-900" aria-current="page">Detail Pesanan</li>
+                    <li class="font-medium text-stone-900" aria-current="page">Detail Pembelian</li>
                 </ol>
             </nav>
         </div>

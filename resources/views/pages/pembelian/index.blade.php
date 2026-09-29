@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Pesanan')
+@section('title', 'Daftar Pembelian')
 
 @section('content')
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold text-stone-900">Daftar Pesanan</h1>
+                <h1 class="text-2xl font-semibold text-stone-900">Daftar Pembelian</h1>
             </div>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
@@ -32,7 +32,7 @@
                             <path d="m9 18 6-6-6-6" />
                         </svg>
                     </li>
-                    <li class="font-medium text-stone-900" aria-current="page">Daftar Pesanan</li>
+                    <li class="font-medium text-stone-900" aria-current="page">Daftar Pembelian</li>
                 </ol>
             </nav>
         </div>
@@ -45,7 +45,7 @@
 
         <div class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <form method="GET" action="{{ route('pembelian.pesanan.index') }}"
+                <form method="GET" action="{{ route('pembelian.index') }}"
                       class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative w-full sm:max-w-sm">
                         <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -66,20 +66,20 @@
                     />
 
                     <div class="flex items-center gap-2">
-                        <a href="{{ route('pembelian.pesanan.index') }}"
+                        <a href="{{ route('pembelian.index') }}"
                             class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                             Reset
                         </a>
                     </div>
                 </form>
 
-                <a href="{{ route('pembelian.pesanan.create') }}">
+                <a href="{{ route('pembelian.create') }}">
                     <button type="button"
                             class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
-                        Tambah Pesanan
+                        Tambah Pembelian
                     </button>
                 </a>
             </div>
@@ -155,12 +155,8 @@
                                         </svg>
                                     </button>
 
-                                    <div id="menu-pembelian-{{ $p->getKey() }}"
-                                         role="menu"
-                                         hidden
-                                         class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
-                                        <a href="{{ route('pembelian.pesanan.show', $p) }}" role="menuitem"
-                                           class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                    <div id="menu-pembelian-{{ $p->getKey() }}" role="menu" hidden class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
+                                        <a href="{{ route('pembelian.show', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
                                                 <circle cx="12" cy="12" r="3" />
@@ -169,24 +165,17 @@
                                         </a>
 
                                         @if ($p->status === 'Belum Bayar')
-                                            <button type="button" role="menuitem"
-                                                    data-edit-open="modal-ubah"
-                                                    data-action="{{ route('pembelian.pesanan.update', $p) }}"
-                                                    data-kode="{{ $p->kode }}"
-                                                    data-tanggal="{{ $p->tanggal->format('Y-m-d') }}"
-                                                    data-total="{{ $p->total }}"
-                                                    data-supplierid="{{ $p->supplier_id }}"
-                                                    class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                            <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 20h9" />
                                                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                                                 </svg>
                                                 Ubah
-                                            </button>
+                                            </a>
                                         @endif
 
-                                        <form action="{{ route('pembelian.pesanan.destroy', $p) }}" method="POST"
-                                              data-confirm="Hapus pesanan pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
+                                        <form action="{{ route('pembelian.destroy', $p) }}" method="POST"
+                                              data-confirm="Hapus pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -215,22 +204,22 @@
                                         </span>
 
                                         @if (request()->filled('q'))
-                                            <p class="mt-4 font-medium text-stone-900">Pesanan tidak ditemukan</p>
+                                            <p class="mt-4 font-medium text-stone-900">Pembelian tidak ditemukan</p>
                                             <p class="mt-1 text-stone-500">
                                                 Tidak ada hasil untuk "{{ request('q') }}". Coba kata kunci lain.
                                             </p>
-                                            <a href="{{ route('pembelian.pesanan.index') }}"
+                                            <a href="{{ route('pembelian.index') }}"
                                                class="mt-4 font-medium text-link hover:text-link-hover hover:underline">
-                                                Tampilkan semua pesanan
+                                                Tampilkan semua pembelian
                                             </a>
                                         @else
-                                            <p class="mt-4 font-medium text-stone-900">Belum ada pesanan</p>
+                                            <p class="mt-4 font-medium text-stone-900">Belum ada pembelian</p>
                                             <p class="mt-1 text-stone-500">
-                                                Tambahkan pesanan pertama Anda untuk mulai mencatat pembelian.
+                                                Tambahkan pembelian pertama Anda untuk mulai mencatat pembelian.
                                             </p>
                                             <button type="button" data-modal-open="modal-tambah"
                                                     class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                Tambah Pesanan
+                                                Tambah Pembelian
                                             </button>
                                         @endif
                                     </div>
@@ -244,179 +233,4 @@
             <x-pagination :paginator="$pembelian" />
         </div>
     </div>
-
-    @php
-        $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-    @endphp
-
-    {{-- <dialog id="modal-tambah"
-            aria-labelledby="modal-tambah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        <form method="POST" action="{{ route('pembelian.pesanan.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
-            @csrf
-
-            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Pesanan</h2>
-                <button type="button" data-modal-close aria-label="Tutup"
-                        class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 6 6 18M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="kode" class="mb-1.5 block text-stone-900">Kode Pesanan</label>
-                        <input name="kode" type="text" id="kode" value="{{ $kode }}"
-                                readonly aria-describedby="hint-kode"
-                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
-                        <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
-                    </div>
-
-                    <div>
-                        <label for="tanggal" class="mb-1.5 block text-stone-900">
-                            Tanggal <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="date" id="tanggal" name="tanggal" value="{{ now()->format('Y-m-d') }}"
-                                data-label="Tanggal" data-rules="required|date"
-                                aria-describedby="err-tanggal"
-                                class="{{ $field }}">
-                        <p id="err-tanggal" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="supplier_id" class="mb-1.5 block text-stone-900">
-                        Nama Supplier <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <select id="supplier_id" name="supplier_id"
-                            data-label="Supplier" data-rules="required"
-                            aria-describedby="err-supplier_id"
-                            class="{{ $field }}">
-                        <option value="">Pilih supplier</option>
-                        @foreach ($supplier as $s)
-                            <option value="{{ $s->id }}">{{ $s->nama }}</option>
-                        @endforeach
-                    </select>
-                    <p id="err-supplier_id" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div>
-                    <label for="total" class="mb-1.5 block text-stone-900">
-                        Total Harga <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <div class="relative">
-                        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                        <input type="number" inputmode="numeric" min="1" id="total" name="total"
-                                placeholder="Contoh: 100000" autocomplete="off"
-                                data-label="Total" data-rules="required|numeric|min:1"
-                                aria-describedby="err-total"
-                                class="{{ $field }} pl-9">
-                    </div>
-                    <p id="err-total" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end gap-2 border-t border-stone-300 bg-stone-50 px-6 py-4">
-                <button type="button" data-modal-close
-                        class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    Batal
-                </button>
-                <button type="submit"
-                        class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan
-                </button>
-            </div>
-        </form>
-    </dialog> --}}
-
-    <dialog id="modal-ubah"
-            aria-labelledby="modal-ubah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        <form method="POST" class="flex max-h-[90vh] flex-col" novalidate>
-            @csrf
-            @method('PUT')
-
-            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Pesanan</h2>
-                <button type="button" data-modal-close aria-label="Tutup"
-                        class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 6 6 18M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode Pesanan</label>
-                        <input type="text" id="edit-kode" data-fill="kode"
-                                readonly aria-describedby="hint-edit-kode"
-                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
-                        <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
-                    </div>
-
-                    <div>
-                        <label for="edit-tanggal" class="mb-1.5 block text-stone-900">
-                            Tanggal <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="date" inputmode="date" id="edit-tanggal" name="tanggal"
-                                autocomplete="off"
-                                data-fill="tanggal"
-                                data-label="Tanggal" data-rules="required|date"
-                                aria-describedby="err-edit-tanggal"
-                                class="{{ $field }}">
-                        <p id="err-edit-tanggal" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="edit-supplier_id" class="mb-1.5 block text-stone-900">
-                        Nama Supplier <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <select id="edit-supplier_id" name="supplier_id"
-                            data-fill="supplierid"
-                            data-label="Nama Supplier" data-rules="required"
-                            aria-describedby="err-edit-supplier_id"
-                            class="{{ $field }}">
-                        <option value="">Pilih Supplier</option>
-                        @foreach ($supplier as $s)
-                            <option value="{{ $s->id }}">{{ $s->nama }}</option>
-                        @endforeach
-                    </select>
-                    <p id="err-edit-supplier_id" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div>
-                    <label for="edit-total" class="mb-1.5 block text-stone-900">
-                        Total Harga <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <div class="relative">
-                        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                        <input type="number" inputmode="numeric" min="1" id="edit-total" name="total"
-                            placeholder="Contoh: 100000" autocomplete="off"
-                            data-fill="total"
-                            data-label="Harga Beli" data-rules="required|numeric|min:1"
-                            aria-describedby="err-edit-total"
-                            class="{{ $field }} pl-9">
-                    </div>
-                    <p id="err-edit-total" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end gap-2 border-t border-stone-300 bg-stone-50 px-6 py-4">
-                <button type="button" data-modal-close
-                        class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    Batal
-                </button>
-                <button type="submit"
-                        class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan
-                </button>
-            </div>
-        </form>
-    </dialog>
 @endsection

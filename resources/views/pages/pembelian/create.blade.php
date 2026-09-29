@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Pesanan')
+@section('title', 'Tambah Pembelian')
 
 @section('content')
     @php
@@ -12,10 +12,10 @@
 
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <a href="{{ route('pembelian.pesanan.index') }}"
+            <a href="{{ route('pembelian.index') }}"
             class="inline-flex items-center gap-1.5 rounded text-stone-500 transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-                Kembali ke daftar pesanan
+                Kembali ke daftar pembelian
             </a>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
@@ -38,18 +38,18 @@
                         <svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                     </li>
                     <li>
-                        <a href="{{ route('pembelian.pesanan.index') }}"
-                           class="rounded transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">Daftar Pesanan</a>
+                        <a href="{{ route('pembelian.index') }}"
+                           class="rounded transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">Daftar Pembelian</a>
                     </li>
                     <li aria-hidden="true">
                         <svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                     </li>
-                    <li class="font-medium text-stone-900" aria-current="page">Tambah Pesanan</li>
+                    <li class="font-medium text-stone-900" aria-current="page">Tambah Pembelian</li>
                 </ol>
             </nav>
         </div>
 
-        <h1 class="mt-4 text-2xl font-semibold text-stone-900">Tambah Pesanan</h1>
+        <h1 class="mt-4 text-2xl font-semibold text-stone-900">Tambah Pembelian</h1>
 
         @if (session('error') || $errors->any())
             <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800" role="alert">
@@ -67,19 +67,18 @@
             </div>
         @endif
 
-        <form id="form-pesanan" method="POST" action="{{ route('pembelian.pesanan.store') }}" novalidate class="mt-6 space-y-6">
+        <form id="form-pembelian" method="POST" action="{{ route('pembelian.store') }}" novalidate class="mt-6 space-y-6">
             @csrf
 
-            {{-- 1. Informasi Pesanan --}}
             <section class="overflow-hidden rounded-xl border border-stone-300 bg-white">
                 <header class="flex items-center gap-3 border-b border-stone-300 px-4 py-4">
                     <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-semibold text-white">1</span>
-                    <h2 class="font-semibold text-stone-900">Informasi Pesanan</h2>
+                    <h2 class="font-semibold text-stone-900">Informasi Pembelian</h2>
                 </header>
 
                 <div class="grid gap-4 p-4 sm:grid-cols-3">
                     <div>
-                        <label for="kode" class="mb-1.5 block text-stone-900">Kode Pesanan</label>
+                        <label for="kode" class="mb-1.5 block text-stone-900">Kode Pembelian</label>
                         <input type="text" id="kode" value="{{ $kode }}" readonly aria-describedby="hint-kode"
                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
                         <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Dibuat otomatis oleh sistem.</p>
@@ -87,7 +86,7 @@
 
                     <div>
                         <label for="tanggal" class="mb-1.5 block text-stone-900">
-                            Tanggal Pesanan <span class="text-red-500" aria-hidden="true">*</span>
+                            Tanggal Pembelian <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
                         <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', now()->format('Y-m-d')) }}"
                                @error('tanggal') aria-invalid="true" @enderror
@@ -110,18 +109,15 @@
                 </div>
             </section>
 
-            {{-- 2. Daftar Barang --}}
             <section class="overflow-hidden rounded-xl border border-stone-300 bg-white">
-                {{-- Header Section: Judul + Total Harga sejajar di kanan --}}
                 <header class="flex items-center justify-between border-b border-stone-300 px-4 py-3.5">
                     <div class="flex items-center gap-3">
                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-semibold text-white">2</span>
                         <h2 class="font-semibold text-stone-900">Daftar Barang</h2>
                     </div>
 
-                    {{-- Total Harga di Header --}}
                     <div class="flex items-center gap-2 rounded-lg bg-stone-100 px-3 py-1.5 text-sm">
-                        <span class="font-medium text-stone-500">Total Harga Beli:</span>
+                        <span class="font-medium text-stone-500">Total Harga:</span>
                         <span id="total-footer" class="text-base font-bold tracking-tight text-stone-900">Rp0</span>
                     </div>
                 </header>
@@ -206,7 +202,6 @@
                     </table>
                 </div>
 
-                {{-- Template JavaScript untuk Penambahan Baris --}}
                 <template id="row-template">
                     <tr data-row data-index="__INDEX__" class="align-top">
                         <td class="px-4 py-2">
@@ -264,7 +259,6 @@
                     </tr>
                 </template>
 
-                {{-- Action Bar Bawah --}}
                 <div class="flex items-center justify-between border-t border-stone-300 bg-stone-50 px-4 py-3.5">
                     <div>
                         <button type="button" id="btn-add-row"
@@ -276,13 +270,13 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <a href="{{ route('pembelian.pesanan.index') }}"
+                        <a href="{{ route('pembelian.index') }}"
                            class="rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                             Batal
                         </a>
                         <button type="submit" id="btn-submit"
-                                class="rounded-lg bg-brand px-5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                            Simpan Pesanan
+                                class="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
+                            Simpan
                         </button>
                     </div>
                 </div>
