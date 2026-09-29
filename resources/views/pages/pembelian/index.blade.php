@@ -164,32 +164,32 @@
                                             Detail
                                         </a>
 
+                                        <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M12 20h9" />
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                            </svg>
+                                            Ubah
+                                        </a>
+                                        
                                         @if ($p->status === 'Belum Bayar')
-                                            <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
-                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="M12 20h9" />
-                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                                </svg>
-                                                Ubah
-                                            </a>
+                                            <form action="{{ route('pembelian.destroy', $p) }}" method="POST"
+                                                data-confirm="Hapus pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        role="menuitem"
+                                                        class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-red-600 transition hover:bg-red-50 focus:bg-red-50 focus:outline-none">
+                                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M3 6h18" />
+                                                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                                                        <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
+                                                        <path d="M10 11v6M14 11v6" />
+                                                    </svg>
+                                                    Hapus
+                                                </button>
+                                            </form>
                                         @endif
-
-                                        <form action="{{ route('pembelian.destroy', $p) }}" method="POST"
-                                              data-confirm="Hapus pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                    role="menuitem"
-                                                    class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-red-600 transition hover:bg-red-50 focus:bg-red-50 focus:outline-none">
-                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="M3 6h18" />
-                                                    <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                                                    <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                                                    <path d="M10 11v6M14 11v6" />
-                                                </svg>
-                                                Hapus
-                                            </button>
-                                        </form>
                                     </div>
                                 </td>
                             </tr>
