@@ -39,7 +39,7 @@
                 [
                     'label'  => 'Daftar Pembelian',
                     'route'  => 'pembelian.index',
-                    'active' => 'pembelian.index',
+                    'active' => 'pembelian.*',
                 ],
                 [
                     'label'  => 'Pembayaran',
