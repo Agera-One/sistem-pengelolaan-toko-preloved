@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
-            $table->unsignedInteger('jumlah');
+            $table->unsignedInteger('nominal');
             $table->string('metode_pembayaran');
             $table->timestamps();
 
