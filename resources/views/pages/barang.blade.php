@@ -65,14 +65,6 @@
                         </a>
                     </div>
                 </form>
-
-                <button type="button" data-modal-open="modal-tambah"
-                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    Tambah barang
-                </button>
             </div>
 
             <div class="overflow-x-auto">
@@ -196,22 +188,24 @@
                                             Ubah
                                         </button>
 
-                                        <form action="{{ route('barang.destroy', $b) }}" method="POST"
-                                              data-confirm="Hapus barang {{ $b->nama }}? Data yang dihapus tidak bisa dikembalikan.">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                    role="menuitem"
-                                                    class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-red-600 transition hover:bg-red-50 focus:bg-red-50 focus:outline-none">
-                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="M3 6h18" />
-                                                    <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                                                    <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                                                    <path d="M10 11v6M14 11v6" />
-                                                </svg>
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        @if ($b->status === 'Tersedia')
+                                            <form action="{{ route('barang.destroy', $b) }}" method="POST"
+                                                data-confirm="Hapus barang {{ $b->nama }}? Data yang dihapus tidak bisa dikembalikan.">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        role="menuitem"
+                                                        class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-red-600 transition hover:bg-red-50 focus:bg-red-50 focus:outline-none">
+                                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M3 6h18" />
+                                                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                                                        <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
+                                                        <path d="M10 11v6M14 11v6" />
+                                                    </svg>
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -239,12 +233,13 @@
                                         @else
                                             <p class="mt-4 font-medium text-stone-900">Belum ada barang</p>
                                             <p class="mt-1 text-stone-500">
-                                                Tambahkan barang pertama Anda untuk mulai mencatat penjualan.
+                                                Beli barang pertama Anda untuk mulai mencatat penjualan.
                                             </p>
-                                            <button type="button" data-modal-open="modal-tambah"
-                                                    class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                Tambah barang
-                                            </button>
+                                            <a href="{{ route('pembelian.pesanan.create') }}">
+                                                <button type="button" class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
+                                                    Beli Barang
+                                                </button>
+                                            </a>
                                         @endif
                                     </div>
                                 </td>
@@ -261,156 +256,6 @@
     @php
         $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
     @endphp
-
-    <dialog id="modal-tambah"
-            aria-labelledby="modal-tambah-title"
-            class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
-        <form method="POST" action="{{ route('barang.store') }}" class="flex max-h-[90vh] flex-col" novalidate>
-            @csrf
-
-            <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-tambah-title" class="text-lg font-semibold">Tambah Barang</h2>
-                <button type="button" data-modal-close aria-label="Tutup"
-                        class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 6 6 18M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div>
-                    <label for="kode" class="mb-1.5 block text-stone-900">Kode Barang</label>
-                    <input name="kode" type="text" id="kode" value="{{ $kode }}"
-                            readonly aria-describedby="hint-kode"
-                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
-                    <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
-                </div>
-
-                <div>
-                    <label for="pembelian_id" class="mb-1.5 block text-stone-900">
-                        Pembelian <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <select id="pembelian_id" name="pembelian_id"
-                            data-label="Pembelian" data-rules="required"
-                            aria-describedby="err-pembelian_id"
-                            class="{{ $field }}">
-                        <option value="">Pilih pembelian</option>
-                        @foreach ($pembelian as $p)
-                            <option value="{{ $p->id }}">{{ $p->kode }}</option>
-                        @endforeach
-                    </select>
-                    <p id="err-pembelian_id" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div>
-                    <label for="nama" class="mb-1.5 block text-stone-900">
-                        Nama <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <input type="text" id="nama" name="nama"
-                            autocomplete="off" autofocus
-                            data-label="Nama" data-rules="required|string|max:255"
-                            aria-describedby="err-nama"
-                            class="{{ $field }}">
-                    <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div>
-                    <label for="kategori" class="mb-1.5 block text-stone-900">
-                        Kategori <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <select id="kategori" name="kategori"
-                            data-label="Kategori" data-rules="required|string|max:255"
-                            aria-describedby="err-kategori"
-                            class="{{ $field }}">
-                        <option value="" disabled selected>Pilih kategori</option>
-                        <option value="Blouse">Blouse</option>
-                        <option value="Kemeja">Kemeja</option>
-                        <option value="Rok">Rok</option>
-                        <option value="Celana">Celana</option>
-                        <option value="Overall">Overall</option>
-                        <option value="Outher">Outher</option>
-                        <option value="Jaket">Jaket</option>
-                        <option value="Vest">Vest</option>
-                        <option value="Gamis">Gamis</option>
-                        <option value="Dress">Dress</option>
-                    </select>
-                    <p id="err-kategori" class="mt-1.5 text-xs text-red-600" hidden></p>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="lingkar" class="mb-1.5 block text-stone-900">
-                            <span data-ukuran-label="lingkar">Lingkar Dada/Pinggang</span>
-                            <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="number" inputmode="numeric" min="1" id="lingkar" name="lingkar"
-                                placeholder="Contoh: 90" autocomplete="off"
-                                data-label="Lingkar" data-rules="required|numeric|min:1"
-                                aria-describedby="err-lingkar"
-                                class="{{ $field }}">
-                        <p id="err-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="panjang" class="mb-1.5 block text-stone-900">
-                            <span data-ukuran-label="panjang">Panjang Baju/Celana</span>
-                            <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="number" inputmode="numeric" min="1" id="panjang" name="panjang"
-                                placeholder="Contoh: 60" autocomplete="off"
-                                data-label="Panjang" data-rules="required|numeric|min:1"
-                                aria-describedby="err-panjang"
-                                class="{{ $field }}">
-                        <p id="err-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="harga_beli" class="mb-1.5 block text-stone-900">
-                            Harga Beli <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <div class="relative">
-                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                            <input type="number" inputmode="numeric" min="1" id="harga_beli" name="harga_beli"
-                                    placeholder="Contoh: 90000" autocomplete="off"
-                                    data-label="Harga Beli" data-rules="required|numeric|min:1"
-                                    aria-describedby="err-harga_beli"
-                                    class="{{ $field }} pl-9">
-                        </div>
-                        <p id="err-harga_beli" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="harga_jual" class="mb-1.5 block text-stone-900">
-                            Harga Jual <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <div class="relative">
-                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                            <input type="number" inputmode="numeric" min="1" id="harga_jual" name="harga_jual"
-                                    placeholder="Contoh: 150000" autocomplete="off"
-                                    data-label="Harga Jual" data-rules="required|numeric|min:1|gt:harga_beli"
-                                    aria-describedby="err-harga_jual"
-                                    class="{{ $field }} pl-9">
-                        </div>
-                        <p id="err-harga_jual" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end gap-2 border-t border-stone-300 bg-stone-50 px-6 py-4">
-                <button type="button" data-modal-close
-                        class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    Batal
-                </button>
-                <button type="submit"
-                        class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan barang
-                </button>
-            </div>
-        </form>
-    </dialog>
 
     <dialog id="modal-ubah"
         aria-labelledby="modal-ubah-title"
@@ -436,27 +281,6 @@
                             readonly aria-describedby="hint-edit-kode"
                             class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
                     <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
-                </div>
-
-                <div>
-                    <label for="edit-pembelian_id" class="mb-1.5 block text-stone-900">
-                        Pembelian <span class="text-red-500" aria-hidden="true">*</span>
-                    </label>
-                    <select id="edit-pembelian_id" name="pembelian_id"
-                            data-fill="pembelianId"
-                            data-lock-if-terjual
-                            data-label="Pembelian" data-rules="required"
-                            aria-describedby="err-edit-pembelian_id"
-                            class="{{ $field }}">
-                        <option value="">Pilih pembelian</option>
-                        @foreach ($pembelian as $p)
-                            <option value="{{ $p->id }}">{{ $p->kode }}</option>
-                        @endforeach
-                    </select>
-                    <p id="hint-edit-pembelian_id" class="mt-1.5 text-xs text-stone-500" hidden>
-                        Barang sudah terjual, pembelian tidak dapat diubah.
-                    </p>
-                    <p id="err-edit-pembelian_id" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
                 <div>
@@ -529,22 +353,18 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <label for="edit-harga_beli" class="mb-1.5 block text-stone-900">
-                            Harga Beli <span class="text-red-500" aria-hidden="true">*</span>
+                            Harga Beli
                         </label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                            <input type="number" inputmode="numeric" min="1" id="edit-harga_beli" name="harga_beli"
-                                    placeholder="Contoh: 90000" autocomplete="off"
-                                    data-fill="hargaBeli"
-                                    data-lock-if-terjual
-                                    data-label="Harga Beli" data-rules="required|numeric|min:1"
-                                    aria-describedby="err-edit-harga_beli"
-                                    class="{{ $field }} pl-9">
+                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">Rp</span>
+                            <input type="number" id="edit-harga_beli" name="harga_beli"
+                                data-fill="hargaBeli" readonly
+                                aria-describedby="hint-edit-harga_beli"
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 pl-9 pr-3 py-2 text-stone-500 focus:outline-none">
                         </div>
-                        <p id="hint-edit-harga_beli" class="mt-1.5 text-xs text-stone-500" hidden>
-                            Barang sudah terjual, harga beli tidak dapat diubah.
+                        <p id="hint-edit-harga_beli" class="mt-1.5 text-xs text-stone-500">
+                            Harga beli ditentukan saat pembelian.
                         </p>
-                        <p id="err-edit-harga_beli" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
                     <div>
@@ -556,14 +376,10 @@
                             <input type="number" inputmode="numeric" min="1" id="edit-harga_jual" name="harga_jual"
                                     placeholder="Contoh: 150000" autocomplete="off"
                                     data-fill="hargaJual"
-                                    data-lock-if-terjual
                                     data-label="Harga Jual" data-rules="required|numeric|min:1|gt:harga_beli"
                                     aria-describedby="err-edit-harga_jual"
                                     class="{{ $field }} pl-9">
                         </div>
-                        <p id="hint-edit-harga_jual" class="mt-1.5 text-xs text-stone-500" hidden>
-                            Barang sudah terjual, harga jual tidak dapat diubah.
-                        </p>
                         <p id="err-edit-harga_jual" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
@@ -576,7 +392,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan perubahan
+                    Simpan
                 </button>
             </div>
         </form>
@@ -635,15 +451,7 @@
                     <div class="rounded-xl border border-stone-300 overflow-hidden divide-y divide-stone-100 shadow-sm">
                         <div class="flex justify-between items-center px-4 py-3 bg-white">
                             <span class="text-stone-500">Kode Pembelian</span>
-                            <a id="link-detail-pembelian"
-                            {{-- data-base-url="{{ route('pembelian.pesanan.index') }}" --}}
-                            href="#"
-                            class="inline-flex items-center gap-1 font-medium text-link hover:text-link-hover hover:underline focus:outline-none">
-                                <span data-detail="kode_pembelian"></span>
-                                <svg class="h-4 w-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                            </a>
+                            <span data-detail="kode_pembelian" class="font-medium text-stone-900"></span>
                         </div>
                         <div class="flex justify-between items-center px-4 py-3 bg-white">
                             <span class="text-stone-500">Kategori</span>
