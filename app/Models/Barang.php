@@ -17,7 +17,10 @@ class Barang extends Model
         'lingkar',
         'panjang',
         'kategori',
+        'harga_beli',
+        'harga_jual',
         'status',
+        'pembelian_id',
     ];
 
     public function detailPenjualan(): HasMany
