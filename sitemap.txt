@@ -15,11 +15,11 @@ Sistem Manajemen Toko Preloved
 │   └── Pelanggan
 │
 ├── Pembelian
-│   ├── Pesanan Pembelian
+│   ├── Daftar Pembelian
 │   └── Pembayaran Pembelian
 │
 ├── Penjualan
-│   ├── Pesanan Penjualan
+│   ├── Daftar Penjualan
 │   ├── Retur Penjualan
 │   └── Pembayaran Penjualan
 │
