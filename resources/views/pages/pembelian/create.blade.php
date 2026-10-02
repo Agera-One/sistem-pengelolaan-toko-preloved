@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="flex items-center gap-2 rounded-lg bg-stone-100 px-3 py-1.5 text-sm">
-                        <span class="font-medium text-stone-500">Total Harga:</span>
+                        <span class="font-medium text-stone-500">Total Harga Beli:</span>
                         <span id="total-footer" class="text-base font-bold tracking-tight text-stone-900">Rp0</span>
                     </div>
                 </header>
