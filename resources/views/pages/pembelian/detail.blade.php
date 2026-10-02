@@ -209,7 +209,7 @@
                             <th scope="col" class="px-4 py-3 font-medium">Panjang</th>
                             <th scope="col" class="px-4 py-3 font-medium">Harga Beli</th>
                             <th scope="col" class="px-4 py-3 font-medium">Harga Jual</th>
-                            <th scope="col" class="px-4 py-3 font-medium text-center">Status</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Status</th>
                         </tr>
                     </thead>
 
@@ -248,7 +248,7 @@
                                     {{ $rupiah($barang->harga_jual) }}
                                 </td>
 
-                                <td class="px-4 py-4 text-center">
+                                <td class="px-4 py-4">
                                     <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBarang['badge'] }}">
                                         <span class="h-1.5 w-1.5 rounded-full {{ $statusBarang['dot'] }}"></span>
                                         {{ $barang->status }}
