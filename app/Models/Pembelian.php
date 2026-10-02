@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pembelian extends Model
 {
@@ -20,17 +20,23 @@ class Pembelian extends Model
         'user_id',
     ];
 
-    public function barang(): HasMany
-    {
-        return $this->hasMany(Barang::class, 'pembelian_id');
-    }
-
     protected function casts(): array
     {
         return [
             'tanggal' => 'date',
         ];
     }
+
+    public function pembayaran(): HasOne
+    {
+        return $this->hasOne(PembayaranPembelian::class, 'pembelian_id');
+    }
+
+    public function barang(): HasMany
+    {
+        return $this->hasMany(Barang::class, 'pembelian_id');
+    }
+
 
     public function supplier(): BelongsTo
     {

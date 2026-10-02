@@ -21,10 +21,8 @@ class PembelianControler extends Controller
 
         $isValidDate = fn ($value) => is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
 
-        if (!$isValidDate($tanggalMulai) || !$isValidDate($tanggalSelesai)) {
-            $tanggalMulai = null;
-            $tanggalSelesai = null;
-        }
+        $tanggalMulai   = $isValidDate($tanggalMulai) ? $tanggalMulai : null;
+        $tanggalSelesai = $isValidDate($tanggalSelesai) ? $tanggalSelesai : null;
 
         $pembelian = Pembelian::query()
             ->when($keyword !== '', function ($query) use ($keyword) {
@@ -32,15 +30,12 @@ class PembelianControler extends Controller
 
                 $query->where(function ($q) use ($like) {
                     $q->where('kode', 'like', $like)
-                      ->orWhere('status', 'like', $like);
+                    ->orWhere('status', 'like', $like)
+                    ->orWhereHas('supplier', fn ($s) => $s->where('nama', 'like', $like));
                 });
             })
-            ->when($tanggalMulai && $tanggalSelesai, function ($query) use ($tanggalMulai, $tanggalSelesai) {
-                $query->whereBetween('tanggal', [
-                    $tanggalMulai . ' 00:00:00',
-                    $tanggalSelesai . ' 23:59:59',
-                ]);
-            })
+            ->when($tanggalMulai, fn ($q) => $q->where('tanggal', '>=', $tanggalMulai . ' 00:00:00'))
+            ->when($tanggalSelesai, fn ($q) => $q->where('tanggal', '<=', $tanggalSelesai . ' 23:59:59'))
             ->with(['supplier', 'user'])
             ->latest('id')
             ->paginate(10)
