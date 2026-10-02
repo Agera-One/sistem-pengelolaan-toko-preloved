@@ -45,33 +45,37 @@
 
         <div class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <form method="GET" action="{{ route('pembelian.index') }}"
-                      class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-                    <div class="relative w-full sm:max-w-sm">
+                <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+                    <form method="GET" action="{{ route('pembelian.index') }}" class="relative w-full sm:max-w-sm">
+                        <input type="hidden" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
+                        <input type="hidden" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}">
+
                         <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="11" cy="11" r="7" />
                             <path d="m20 20-3.5-3.5" />
                         </svg>
                         <label for="q" class="sr-only">Cari pembelian</label>
                         <input type="search" id="q" name="q" value="{{ request('q') }}"
-                               placeholder="Cari kode, supplier, atau status"
-                               class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                    </div>
+                            placeholder="Cari kode, supplier, atau status"
+                            class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                    </form>
 
-                    <x-daterange
-                        name-start="tanggal_mulai"
-                        name-end="tanggal_selesai"
-                        :start="request('tanggal_mulai')"
-                        :end="request('tanggal_selesai')"
-                    />
+                    <form method="GET" action="{{ route('pembelian.index') }}">
+                        <input type="hidden" name="q" value="{{ request('q') }}">
 
-                    <div class="flex items-center gap-2">
-                        <a href="{{ route('pembelian.index') }}"
-                            class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                            Reset
-                        </a>
-                    </div>
-                </form>
+                        <x-daterange
+                            name-start="tanggal_mulai"
+                            name-end="tanggal_selesai"
+                            :start="request('tanggal_mulai')"
+                            :end="request('tanggal_selesai')"
+                        />
+                    </form>
+
+                    <a href="{{ route('pembelian.index') }}"
+                    class="rounded-lg border border-stone-300 bg-white px-4 py-2 text-center font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                        Reset
+                    </a>
+                </div>
 
                 <a href="{{ route('pembelian.create') }}">
                     <button type="button"
@@ -171,7 +175,7 @@
                                             </svg>
                                             Ubah
                                         </a>
-                                        
+
                                         @if ($p->status === 'Belum Bayar')
                                             <form action="{{ route('pembelian.destroy', $p) }}" method="POST"
                                                 data-confirm="Hapus pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
@@ -203,15 +207,11 @@
                                             </svg>
                                         </span>
 
-                                        @if (request()->filled('q'))
+                                        @if (request()->filled('q') || request()->filled('tanggal_mulai'))
                                             <p class="mt-4 font-medium text-stone-900">Pembelian tidak ditemukan</p>
                                             <p class="mt-1 text-stone-500">
-                                                Tidak ada hasil untuk "{{ request('q') }}". Coba kata kunci lain.
+                                                Tidak ada hasil untuk filter yang dipilih. Coba ubah kata kunci atau rentang tanggal.
                                             </p>
-                                            <a href="{{ route('pembelian.index') }}"
-                                               class="mt-4 font-medium text-link hover:text-link-hover hover:underline">
-                                                Tampilkan semua pembelian
-                                            </a>
                                         @else
                                             <p class="mt-4 font-medium text-stone-900">Belum ada pembelian</p>
                                             <p class="mt-1 text-stone-500">
