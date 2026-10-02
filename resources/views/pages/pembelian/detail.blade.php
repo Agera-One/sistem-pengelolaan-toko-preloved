@@ -4,17 +4,22 @@
 
 @section('content')
     @php
-        $statusKey = strtolower($pembelian->status);
-        $statusBadge = match ($statusKey) {
-            'belum bayar' => 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-300',
-            'sudah bayar' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
-            default => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
+        $statusStyle = fn (?string $status) => match (strtolower(trim((string) $status))) {
+            'belum bayar' => [
+                'badge' => 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-300',
+                'dot'   => 'bg-red-500',
+            ],
+            'sudah bayar', 'tersedia' => [
+                'badge' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
+                'dot'   => 'bg-emerald-500',
+            ],
+            'terjual' => [
+                'badge' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-300',
+                'dot'   => 'bg-blue-500',
+            ]
         };
-        $statusDot = match ($statusKey) {
-            'belum bayar' => 'bg-red-500',
-            'sudah bayar' => 'bg-emerald-500',
-            default => 'bg-stone-400',
-        };
+
+        $statusPembelian = $statusStyle($pembelian->status);
 
         $inisial = fn (?string $nama) => \Illuminate\Support\Str::of($nama ?? '?')
             ->trim()->explode(' ')->filter()->take(2)
@@ -84,8 +89,8 @@
         <div class="mt-6">
             <div class="mt-1 flex flex-wrap items-center gap-3">
                 <h1 class="text-2xl font-semibold text-stone-900">{{ $pembelian->kode }}</h1>
-                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
-                    <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
+                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusPembelian['badge'] }}">
+                    <span class="h-1.5 w-1.5 rounded-full {{ $statusPembelian['dot'] }}"></span>
                     {{ $pembelian->status }}
                 </span>
             </div>
@@ -110,7 +115,7 @@
             <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-supplier">
                 <div class="flex items-center justify-between border-b border-stone-200 pb-3">
                     <h2 id="judul-supplier" class="text-lg font-semibold text-stone-900">Supplier</h2>
-                    <span class="rounded-full bg-stone-100 px-2.5 py-1 text-xs text-stone-600 ring-1 ring-inset ring-stone-300">Pengirim</span>
+                    <span class="inline-flex rounded-md bg-stone-100 px-2 py-1 text-xs font-medium text-stone-700 ring-1 ring-inset ring-stone-300">Pengirim</span>
                 </div>
 
                 <div class="mt-4 flex items-center gap-4">
@@ -148,7 +153,7 @@
             <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-pembuat">
                 <div class="flex items-center justify-between border-b border-stone-200 pb-3">
                     <h2 id="judul-pembuat" class="text-lg font-semibold text-stone-900">Dibuat Oleh</h2>
-                    <span class="rounded-full bg-stone-100 px-2.5 py-1 text-xs text-stone-600 ring-1 ring-inset ring-stone-300">Penerima</span>
+                    <span class="inline-flex rounded-md bg-stone-100 px-2 py-1 text-xs font-medium text-stone-700 ring-1 ring-inset ring-stone-300">Penerima</span>
                 </div>
 
                 <div class="mt-4 flex items-center gap-4">
@@ -204,11 +209,14 @@
                             <th scope="col" class="px-4 py-3 font-medium">Panjang</th>
                             <th scope="col" class="px-4 py-3 font-medium">Harga Beli</th>
                             <th scope="col" class="px-4 py-3 font-medium">Harga Jual</th>
+                            <th scope="col" class="px-4 py-3 font-medium text-center">Status</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-stone-300">
                         @foreach ($pembelian->barang as $barang)
+                            @php $statusBarang = $statusStyle($barang->status); @endphp
+
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">{{ $loop->iteration }}</td>
 
@@ -239,6 +247,13 @@
                                 <td class="px-4 py-3.5">
                                     {{ $rupiah($barang->harga_jual) }}
                                 </td>
+
+                                <td class="px-4 py-4 text-center">
+                                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBarang['badge'] }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusBarang['dot'] }}"></span>
+                                        {{ $barang->status }}
+                                    </span>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -246,7 +261,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-6 border-t border-stone-300 bg-stone-50 px-4 py-4">
-                <span>Total Harga</span>
+                <span>Total Harga Beli</span>
                 <span class="text-xl font-semibold">{{ $rupiah($pembelian->total) }}</span>
             </div>
         </section>
