@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class PembayaranPembelianControler extends Controller
 {
-     public function index(Request $request)
+    public function index(Request $request)
     {
         $keyword = trim((string) $request->query('q', ''));
+        $metode = $request->query('metode');
         $tanggalMulai = $request->query('tanggal_mulai');
         $tanggalSelesai = $request->query('tanggal_selesai');
 
@@ -24,9 +25,11 @@ class PembayaranPembelianControler extends Controller
 
                 $query->where(function ($q) use ($like) {
                     $q->where('kode', 'like', $like)
-                    ->orWhere('metode_pembayaran', 'like', $like)
                     ->orWhereHas('pembelian', fn ($s) => $s->where('kode', 'like', $like));
                 });
+            })
+            ->when($metode, function ($query) use ($metode) {
+                $query->where('metode_pembayaran', $metode);
             })
             ->when($tanggalMulai, fn ($q) => $q->where('tanggal', '>=', $tanggalMulai . ' 00:00:00'))
             ->when($tanggalSelesai, fn ($q) => $q->where('tanggal', '<=', $tanggalSelesai . ' 23:59:59'))
