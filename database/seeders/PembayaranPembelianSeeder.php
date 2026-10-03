@@ -41,7 +41,7 @@ class PembayaranPembelianSeeder extends Seeder
 
             $ym = date('Ym', strtotime($pembayaran['tanggal']));
 
-            $kode = 'BYE-' . $ym . '-' . str_pad($i, 4, '0', STR_PAD_LEFT);
+            $kode = 'KLR-' . $ym . '-' . str_pad($i, 4, '0', STR_PAD_LEFT);
 
             $data[] = [
                 'kode'              => $kode,
