@@ -139,22 +139,8 @@
                                     Rp{{ number_format($p->nominal, 0, ',', '.') }}
                                 </td>
 
-                                @php
-                                    $statusKey = strtolower($p->metode_pembayaran);
-                                    $statusBadge = match ($statusKey) {
-                                        'tunai' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
-                                        'transfer' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-300',
-                                    };
-                                    $statusDot = match ($statusKey) {
-                                        'tunai' => 'bg-emerald-500',
-                                        'transfer' => 'bg-blue-500',
-                                    };
-                                @endphp
-                                <td class="whitespace-nowrap px-4 py-3.5">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
-                                        {{ $p->metode_pembayaran }}
-                                    </span>
+                                <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
+                                    {{ $p->metode_pembayaran }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
