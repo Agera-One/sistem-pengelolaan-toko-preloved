@@ -9,7 +9,7 @@ class PembayaranPembelianSeeder extends Seeder
 {
     public function run(): void
     {
-        $metodePembayaran = ['tunai', 'transfer bank'];
+        $metodePembayaran = ['Tunai', 'Transfer'];
 
         $pembayarans = [
             ['pembelian_id' => 1,  'tanggal' => '2026-09-01', 'nominal' => 1500000],
