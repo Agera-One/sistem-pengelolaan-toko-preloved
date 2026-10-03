@@ -47,17 +47,23 @@
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <form method="GET" action="{{ route('pembelian.index') }}" class="relative w-full sm:max-w-sm">
-                        <input type="hidden" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
-                        <input type="hidden" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}">
-
                         <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="11" cy="11" r="7" />
                             <path d="m20 20-3.5-3.5" />
                         </svg>
                         <label for="q" class="sr-only">Cari pembelian</label>
                         <input type="search" id="q" name="q" value="{{ request('q') }}"
-                            placeholder="Cari kode, supplier, atau status"
+                            placeholder="Cari kode, atau supplier"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                    </form>
+
+                    <form method="GET" action="{{ route('pembelian.index') }}" class="w-full sm:w-48">
+                        <select name="status" onchange="this.form.submit()"
+                            class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                            <option value="">Semua Status</option>
+                            <option value="Sudah Bayar" {{ request('status') === 'Sudah Bayar' ? 'selected' : '' }}>Sudah Bayar</option>
+                            <option value="Belum Bayar" {{ request('status') === 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
+                        </select>
                     </form>
 
                     <form method="GET" action="{{ route('pembelian.index') }}">
