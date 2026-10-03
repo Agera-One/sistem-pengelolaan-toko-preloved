@@ -45,26 +45,50 @@
 
         <div class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <form method="GET" action="{{ route('barang.index') }}"
-                      class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-                    <div class="relative w-full sm:max-w-sm">
+                <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+                    <form method="GET" action="{{ route('barang.index') }}" class="relative w-full sm:max-w-xs">
+                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+                        <input type="hidden" name="status" value="{{ request('status') }}">
+
                         <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="11" cy="11" r="7" />
                             <path d="m20 20-3.5-3.5" />
                         </svg>
-                        <label for="q" class="sr-only">Cari barang</label>
                         <input type="search" id="q" name="q" value="{{ request('q') }}"
-                               placeholder="Cari kode, nama, kategori, atau status"
-                               class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                    </div>
+                            placeholder="Cari kode, atau nama"
+                            class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                    </form>
 
-                    <div class="flex items-center gap-2">
-                        <a href="{{ route('barang.index') }}"
-                            class="rounded-lg border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                            Reset
-                        </a>
-                    </div>
-                </form>
+                    <form method="GET" action="{{ route('barang.index') }}" class="w-full sm:w-48">
+                        <input type="hidden" name="q" value="{{ request('q') }}">
+                        <input type="hidden" name="status" value="{{ request('status') }}">
+
+                        <select name="kategori" onchange="this.form.submit()"
+                            class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                            <option value="">Semua Kategori</option>
+                            @foreach (['Blouse', 'Kemeja', 'Rok', 'Celana', 'Overall', 'Outher', 'Jaket', 'Vest', 'Gamis', 'Dress'] as $kat)
+                                <option value="{{ $kat }}" {{ request('kategori') === $kat ? 'selected' : '' }}>{{ $kat }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+
+                    <form method="GET" action="{{ route('barang.index') }}" class="w-full sm:w-48">
+                        <input type="hidden" name="q" value="{{ request('q') }}">
+                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+
+                        <select name="status" onchange="this.form.submit()"
+                            class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                            <option value="">Semua Status</option>
+                            <option value="Tersedia" {{ request('status') === 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
+                            <option value="Terjual" {{ request('status') === 'Terjual' ? 'selected' : '' }}>Terjual</option>
+                        </select>
+                    </form>
+
+                    <a href="{{ route('barang.index') }}"
+                    class="rounded-lg border border-stone-300 bg-white px-4 py-2 text-center font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                        Reset
+                    </a>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
@@ -235,7 +259,7 @@
                                             <p class="mt-1 text-stone-500">
                                                 Beli barang pertama Anda untuk mulai mencatat penjualan.
                                             </p>
-                                            <a href="{{ route('pembelian.pesanan.create') }}">
+                                            <a href="{{ route('pembelian.create') }}">
                                                 <button type="button" class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
                                                     Beli Barang
                                                 </button>

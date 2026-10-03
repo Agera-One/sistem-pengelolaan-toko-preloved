@@ -12,25 +12,34 @@ class BarangController extends Controller
 {
     public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
-        $keyword = trim((string) $request->query('q', ''));
+        $keyword  = trim((string) $request->query('q', ''));
+        $kategori = $request->query('kategori');
+        $status   = $request->query('status');
 
         $barang = Barang::query()
+            // Filter Pencarian Teks (Kode atau Nama)
             ->when($keyword !== '', function ($query) use ($keyword) {
                 $like = '%' . addcslashes($keyword, '%_\\') . '%';
 
                 $query->where(function ($q) use ($like) {
                     $q->where('kode', 'like', $like)
-                      ->orWhere('nama', 'like', $like)
-                      ->orWhere('kategori', 'like', $like)
-                      ->orWhere('status', 'like', $like);
+                    ->orWhere('nama', 'like', $like);
                 });
+            })
+            // Filter Dropdown Kategori
+            ->when($kategori, function ($query) use ($kategori) {
+                $query->where('kategori', $kategori);
+            })
+            // Filter Dropdown Status
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
             })
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
 
         $kode = $codeGenerator->generate(
-        new barang(),
+            new Barang(),
             'kode',
             'BRG'
         );
