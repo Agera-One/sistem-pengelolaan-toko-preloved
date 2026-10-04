@@ -14,6 +14,7 @@
         'resources/js/modal.js',
         'resources/js/daterange.js',
         'resources/js/pembelian.js',
+        'resources/js/pembayaran.js',
     ])
 </head>
 
