@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
 use Illuminate\Http\Request;
+use App\Services\CodeGeneratorService;
 
 class PembayaranPembelianControler extends Controller
 {
-    public function index(Request $request)
+    private const STATUS_SUDAH_BAYAR = 'Sudah Bayar';
+    private const STATUS_BELUM_BAYAR = 'Belum Bayar';
+
+    public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
         $keyword = trim((string) $request->query('q', ''));
         $metode = $request->query('metode');
@@ -33,41 +38,75 @@ class PembayaranPembelianControler extends Controller
             })
             ->when($tanggalMulai, fn ($q) => $q->where('tanggal', '>=', $tanggalMulai . ' 00:00:00'))
             ->when($tanggalSelesai, fn ($q) => $q->where('tanggal', '<=', $tanggalSelesai . ' 23:59:59'))
-            ->with('pembelian')
+            ->with('pembelian.supplier')
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
 
-        return view('pages.pembayaran-pembelian', compact('pembayaran'));
+        $pembelian = Pembelian::where('status', self::STATUS_BELUM_BAYAR)->with('supplier')->latest('id')->get();
+
+        $kodeBayar = $codeGenerator->generate(new PembayaranPembelian(), 'kode', 'KLR');
+
+        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kodeBayar'));
     }
 
-    public function create()
+    public function store(Request $request, CodeGeneratorService $codeGenerator)
     {
-        //
-    }
+        $data = $this->validasi($request);
+        $data['kode'] = $codeGenerator->generate(new PembayaranPembelian(), 'kode', 'KLR');
 
-    public function store(Request $request)
-    {
-        //
-    }
+        $pembayaran = PembayaranPembelian::create($data);
+        $this->sinkronStatus($pembayaran->pembelian_id);
 
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        //
+        return response()->json(['ok' => true]);
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        $pembayaran = PembayaranPembelian::findOrFail($id);
+        $data = $this->validasi($request, $pembayaran);
+        $pembelianLamaId = $pembayaran->pembelian_id;
+
+        $pembayaran->update($data);
+
+        $this->sinkronStatus($pembelianLamaId);
+        $this->sinkronStatus($pembayaran->pembelian_id);
+
+        return response()->json(['ok' => true]);
+    }
+
+    private function validasi(Request $request, ?PembayaranPembelian $pembayaran = null): array
+    {
+        $data = $request->validate([
+            'pembelian_id' => ['required', 'exists:pembelian,id'],
+            'tanggal' => ['required', 'date'],
+            'metode_pembayaran' => ['required', 'in:Tunai,Transfer'],
+        ], [
+            'pembelian_id.required' => 'Pilih pembelian yang dibayar.',
+            'tanggal.required' => 'Tanggal bayar wajib diisi.',
+            'metode_pembayaran.required' => 'Pilih metode pembayaran.',
+        ]);
+
+        $pembelian = Pembelian::findOrFail($data['pembelian_id']);
+        $data['nominal'] = $pembelian->total;
+
+        return $data;
+    }
+
+    private function sinkronStatus(int|string $pembelianId): void
+    {
+        $sudah_bayar = PembayaranPembelian::where('pembelian_id', $pembelianId)->exists();
+
+        Pembelian::whereKey($pembelianId)->update([
+            'status' => $sudah_bayar ? self::STATUS_SUDAH_BAYAR : self::STATUS_BELUM_BAYAR,
+        ]);
     }
 
     public function destroy(string $id)
     {
-        //
+        $pembelian = PembayaranPembelian::findOrFail($id);
+        $pembelian->delete();
+
+        return redirect()->route('pembayaran-pembelian.index');
     }
 }
