@@ -1,4 +1,4 @@
-const rupiah = (n) => 'Rp ' + new Intl.NumberFormat('id-ID').format(n);
+const rupiah = (n) => 'Rp' + new Intl.NumberFormat('id-ID').format(n);
 
 const tanggalIndo = (iso) =>
     iso
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = $('form-pembayaran');
     const select = $('pembelian_id');
     const btnSimpan = $('btn-simpan');
-    let dataDetail = null;
 
     const tutupMenu = () => {
         document.querySelectorAll('[role="menu"]').forEach((menu) => (menu.hidden = true));
@@ -122,20 +121,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function bukaDetail(data) {
-        const o = opsi(data.pembelian_id);
-        dataDetail = data;
+        const p = data.pembelian;
 
         $('d-nominal').textContent = rupiah(data.nominal);
         $('d-sub').textContent = `${data.kode_bayar} · ${tanggalIndo(data.tanggal)}`;
         $('d-kode-bayar').textContent = data.kode_bayar;
         $('d-tanggal').textContent = tanggalIndo(data.tanggal);
         $('d-metode').textContent = data.metode_pembayaran;
-        $('d-dicatat').textContent = data.create_time || '-';
 
-        $('d-supplier').textContent = o ? o.dataset.supplier : '-';
-        $('d-kode-beli').textContent = o ? o.dataset.kodeBeli : '-';
-        $('d-tgl-beli').textContent = o ? tanggalIndo(o.dataset.tanggal) : '-';
-        $('d-total').textContent = o ? rupiah(o.dataset.total) : '-';
+        $('d-supplier').textContent = p ? p.supplier : '-';
+        $('d-kode-beli').textContent = p ? p.kode : '-';
 
         buka(modalDetail);
     }
@@ -174,11 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') tutupSemua();
-    });
-
-    $('d-ubah').addEventListener('click', () => {
-        tutup(modalDetail);
-        bukaForm(dataDetail);
     });
 
     select.addEventListener('change', () => {
