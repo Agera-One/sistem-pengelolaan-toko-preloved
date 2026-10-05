@@ -9,9 +9,6 @@ use App\Services\CodeGeneratorService;
 
 class PembayaranPembelianControler extends Controller
 {
-    private const STATUS_SUDAH_BAYAR = 'Sudah Bayar';
-    private const STATUS_BELUM_BAYAR = 'Belum Bayar';
-
     public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
         $keyword = trim((string) $request->query('q', ''));
@@ -43,7 +40,7 @@ class PembayaranPembelianControler extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $pembelian = Pembelian::where('status', self::STATUS_BELUM_BAYAR)->with('supplier')->latest('id')->get();
+        $pembelian = Pembelian::where('status', 'Belum Bayar')->with('supplier')->latest('id')->get();
 
         $kodeBayar = $codeGenerator->generate(new PembayaranPembelian(), 'kode', 'KLR');
 
@@ -55,8 +52,7 @@ class PembayaranPembelianControler extends Controller
         $data = $this->validasi($request);
         $data['kode'] = $codeGenerator->generate(new PembayaranPembelian(), 'kode', 'KLR');
 
-        $pembayaran = PembayaranPembelian::create($data);
-        $this->sinkronStatus($pembayaran->pembelian_id);
+        PembayaranPembelian::create($data);
 
         return response()->json(['ok' => true]);
     }
@@ -65,12 +61,8 @@ class PembayaranPembelianControler extends Controller
     {
         $pembayaran = PembayaranPembelian::findOrFail($id);
         $data = $this->validasi($request, $pembayaran);
-        $pembelianLamaId = $pembayaran->pembelian_id;
 
         $pembayaran->update($data);
-
-        $this->sinkronStatus($pembelianLamaId);
-        $this->sinkronStatus($pembayaran->pembelian_id);
 
         return response()->json(['ok' => true]);
     }
@@ -78,28 +70,19 @@ class PembayaranPembelianControler extends Controller
     private function validasi(Request $request, ?PembayaranPembelian $pembayaran = null): array
     {
         $data = $request->validate([
-            'pembelian_id' => ['required', 'exists:pembelian,id'],
-            'tanggal' => ['required', 'date'],
-            'metode_pembayaran' => ['required', 'in:Tunai,Transfer'],
+            'pembelian_id'          => 'required|exists:pembelian,id',
+            'tanggal'               => 'required|date',
+            'metode_pembayaran'     => 'required|in:Tunai,Transfer',
         ], [
-            'pembelian_id.required' => 'Pilih pembelian yang dibayar.',
-            'tanggal.required' => 'Tanggal bayar wajib diisi.',
-            'metode_pembayaran.required' => 'Pilih metode pembayaran.',
+            'pembelian_id.required'         => 'Pilih pembelian yang dibayar.',
+            'tanggal.required'              => 'Tanggal bayar wajib diisi.',
+            'metode_pembayaran.required'    => 'Pilih metode pembayaran.',
         ]);
 
         $pembelian = Pembelian::findOrFail($data['pembelian_id']);
         $data['nominal'] = $pembelian->total;
 
         return $data;
-    }
-
-    private function sinkronStatus(int|string $pembelianId): void
-    {
-        $sudah_bayar = PembayaranPembelian::where('pembelian_id', $pembelianId)->exists();
-
-        Pembelian::whereKey($pembelianId)->update([
-            'status' => $sudah_bayar ? self::STATUS_SUDAH_BAYAR : self::STATUS_BELUM_BAYAR,
-        ]);
     }
 
     public function destroy(string $id)
