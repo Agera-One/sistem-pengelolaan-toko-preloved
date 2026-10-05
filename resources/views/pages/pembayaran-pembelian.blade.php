@@ -280,7 +280,7 @@
 
             return "-webkit-mask:{$nilai};mask:{$nilai};";
         };
-        
+
         $takikBawah = $takik(['kiri-bawah', 'kanan-bawah']);
         $takikAtas = $takik(['kiri-atas', 'kanan-atas']);
         $takikAtasBawah = $takik(['kiri-atas', 'kanan-atas', 'kiri-bawah', 'kanan-bawah']);
@@ -333,17 +333,17 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-stone-500">Kode pembelian</p>
+                                    <p class="text-sm text-stone-500">Kode Pembelian</p>
                                     <p id="f-kode-beli" class="font-medium text-stone-900"></p>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-stone-500">Tanggal pembelian</p>
+                                    <p class="text-sm text-stone-500">Tanggal Pembelian</p>
                                     <p id="f-tgl-beli" class="font-medium text-stone-900"></p>
                                 </div>
                             </div>
                             <div class="{{ $perf }}"></div>
                             <div class="flex items-end justify-between gap-3 px-5 pb-5 pt-4">
-                                <p class="text-sm text-stone-500">Total tagihan</p>
+                                <p class="text-sm text-stone-500">Total Tagihan</p>
                                 <p id="f-total" class="text-xl font-semibold leading-none text-brand"></p>
                             </div>
                         </div>
