@@ -109,7 +109,7 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kode Pembelian</th>
                             <th scope="col" class="px-4 py-3 font-medium">Tanggal</th>
                             <th scope="col" class="px-4 py-3 font-medium">Nominal</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Metode Pembayaran</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Metode</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
                     </thead>
