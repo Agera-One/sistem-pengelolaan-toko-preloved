@@ -183,15 +183,15 @@
                                             Detail
                                         </a>
 
-                                        <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M12 20h9" />
-                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                            </svg>
-                                            Ubah
-                                        </a>
-
                                         @if ($p->status === 'Belum Bayar')
+                                            <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M12 20h9" />
+                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                                </svg>
+                                                Ubah
+                                            </a>
+
                                             <form action="{{ route('pembelian.destroy', $p) }}" method="POST"
                                                 data-confirm="Hapus pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
                                                 @csrf
