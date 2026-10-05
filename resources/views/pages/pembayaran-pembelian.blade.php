@@ -127,6 +127,13 @@
                                     'nominal' => $p->nominal,
                                     'metode_pembayaran' => $p->metode_pembayaran,
                                     'pembelian_id' => $p->pembelian_id,
+                                    'pembelian' => [
+                                        'id' => $p->pembelian->id,
+                                        'kode' => $p->pembelian->kode,
+                                        'tanggal' => \Carbon\Carbon::parse($p->pembelian->tanggal)->toDateString(),
+                                        'total' => $p->pembelian->total,
+                                        'supplier' => $p->pembelian->supplier->nama,
+                                    ],
                                     'create_time' => (string) $p->create_time,
                                     'url_update' => route('pembayaran-pembelian.update', $p),
                                 ]);
@@ -248,12 +255,35 @@
     </div>
 
     @php
-        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25';
+        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25';
         $label = 'mb-1.5 block font-medium text-stone-700';
         $error = 'mt-1 hidden text-xs text-red-600';
         $metode = ['Tunai', 'Transfer'];
         $perf = 'relative mx-4 border-t-2 border-dashed border-stone-300 before:absolute before:-left-[27px] before:-top-[11px] before:size-5 before:rounded-full before:bg-white after:absolute after:-right-[27px] after:-top-[11px] after:size-5 after:rounded-full after:bg-white';
         $tutupIkon = '<svg class="size-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3 6.7a1 1 0 0 1 0-1.4Z"/></svg>';
+
+        $takik = function (array $sudut) {
+            $peta = [
+                'kiri-atas' => ['0 0', 'left top'],
+                'kanan-atas' => ['100% 0', 'right top'],
+                'kiri-bawah' => ['0 100%', 'left bottom'],
+                'kanan-bawah' => ['100% 100%', 'right bottom'],
+            ];
+            $lapis = [];
+            foreach ($peta as $nama => [$posisi, $tempat]) {
+                $isi = in_array($nama, $sudut, true)
+                    ? "radial-gradient(circle 11px at {$posisi}, transparent 97%, #000)"
+                    : 'linear-gradient(#000, #000)';
+                $lapis[] = "{$isi} {$tempat} / 51% 51% no-repeat";
+            }
+            $nilai = implode(',', $lapis);
+
+            return "-webkit-mask:{$nilai};mask:{$nilai};";
+        };
+        
+        $takikBawah = $takik(['kiri-bawah', 'kanan-bawah']);
+        $takikAtas = $takik(['kiri-atas', 'kanan-atas']);
+        $takikAtasBawah = $takik(['kiri-atas', 'kanan-atas', 'kiri-bawah', 'kanan-bawah']);
     @endphp
 
     <div id="modal-pembayaran" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
@@ -298,23 +328,23 @@
                                 <div class="col-span-2 flex items-center gap-3">
                                     <div id="f-inisial" class="flex size-10 items-center justify-center rounded-full bg-brand/10 text-sm font-semibold text-brand"></div>
                                     <div>
-                                        <p class="text-xs text-stone-500">Supplier</p>
+                                        <p class="text-sm text-stone-500">Supplier</p>
                                         <p id="f-supplier" class="font-medium text-stone-900"></p>
                                     </div>
                                 </div>
                                 <div>
-                                    <p class="text-xs text-stone-500">Kode pembelian</p>
-                                    <p id="f-kode-beli" class="font-mono text-[13px] font-medium text-stone-900"></p>
+                                    <p class="text-sm text-stone-500">Kode pembelian</p>
+                                    <p id="f-kode-beli" class="font-medium text-stone-900"></p>
                                 </div>
                                 <div>
-                                    <p class="text-xs text-stone-500">Tanggal pembelian</p>
+                                    <p class="text-sm text-stone-500">Tanggal pembelian</p>
                                     <p id="f-tgl-beli" class="font-medium text-stone-900"></p>
                                 </div>
                             </div>
                             <div class="{{ $perf }}"></div>
                             <div class="flex items-end justify-between gap-3 px-5 pb-5 pt-4">
-                                <p class="text-xs text-stone-500">Total tagihan</p>
-                                <p id="f-total" class="text-3xl font-semibold leading-none text-brand"></p>
+                                <p class="text-sm text-stone-500">Total tagihan</p>
+                                <p id="f-total" class="text-xl font-semibold leading-none text-brand"></p>
                             </div>
                         </div>
                     </section>
@@ -324,8 +354,7 @@
                             <label for="nominal" class="{{ $label }}">Nominal Bayar</label>
                             <div class="relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-stone-500">Rp</span>
-                                <input id="nominal" type="text" readonly placeholder="0"
-                                    class="{{ $input }} bg-stone-50 pl-10 font-semibold text-stone-700">
+                                <input id="nominal" type="text" readonly placeholder="0" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 py-2.5 pl-8 pr-3 text-stone-500 placeholder:text-stone-400 focus:outline-none">
                             </div>
                             <p class="mt-1 text-xs text-stone-500">Sesuai total tagihan, tidak bisa diubah.</p>
                         </div>
@@ -333,7 +362,8 @@
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label for="kode-bayar" class="{{ $label }}">Kode Pembayaran</label>
-                                <input id="kode-bayar" type="text" readonly class="{{ $input }} bg-stone-50 text-stone-500">
+                                <input id="kode-bayar" type="text" readonly aria-describedby="hint-kode-bayar" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                                <p class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
                             </div>
                             <div>
                                 <label for="tanggal" class="{{ $label }}">Tanggal Bayar</label>
@@ -370,44 +400,30 @@
     </div>
 
     <div id="modal-detail-pembayaran" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
-        role="dialog" aria-modal="true" aria-labelledby="modal-detail-judul">
-        <div class="flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
-            <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
-                <h2 id="modal-detail-judul" class="text-lg font-semibold text-stone-900">Detail pembayaran</h2>
+        role="dialog" aria-modal="true" aria-label="Bukti pembayaran">
+        <div class="max-h-[92vh] w-full max-w-md overflow-y-auto">
+            <div class="relative rounded-t-2xl bg-white px-6 pb-6 pt-8 text-center" style="{{ $takikBawah }}">
                 <button type="button" data-modal-tutup aria-label="Tutup"
-                    class="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100">{!! $tutupIkon !!}</button>
+                    class="absolute right-3 top-3 rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">{!! $tutupIkon !!}</button>
+                <p id="d-nominal" class="text-4xl font-semibold leading-tight text-stone-900"></p>
+                <p id="d-sub" class="mt-2 text-sm text-stone-900"></p>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-6 py-6">
-                <div class="rounded-xl border border-stone-200 bg-brand/5">
-                    <div class="px-6 py-5 text-center">
-                        <p id="d-nominal" class="text-4xl font-semibold leading-tight"></p>
-                        <p id="d-sub" class="mt-2 text-sm text-stone-500"></p>
-                    </div>
-
-                    <div class="{{ $perf }}"></div>
-                    <dl class="divide-y divide-stone-200/70 px-6 py-3 text-sm">
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Kode pembayaran</dt><dd id="d-kode-bayar" class="font-medium text-stone-900"></dd></div>
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Tanggal bayar</dt><dd id="d-tanggal" class="font-medium text-stone-900"></dd></div>
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Metode</dt><dd id="d-metode" class="font-medium text-stone-900"></dd></div>
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Dicatat</dt><dd id="d-dicatat" class="font-medium text-stone-900"></dd></div>
-                    </dl>
-
-                    <div class="{{ $perf }}"></div>
-                    <dl class="divide-y divide-stone-200/70 px-6 py-3 text-sm">
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Supplier</dt><dd id="d-supplier" class="text-right font-medium text-stone-900"></dd></div>
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Kode pembelian</dt><dd id="d-kode-beli" class="font-mono text-[13px] font-medium text-stone-900"></dd></div>
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Tanggal pembelian</dt><dd id="d-tgl-beli" class="font-medium text-stone-900"></dd></div>
-                        <div class="flex justify-between gap-4 py-2"><dt class="text-stone-500">Total tagihan</dt><dd id="d-total" class="font-medium text-stone-900"></dd></div>
-                    </dl>
-                </div>
+            <div class="relative bg-white px-6 py-3" style="{{ $takikAtasBawah }}">
+                <div class="absolute inset-x-6 top-0 border-t-2 border-dashed border-stone-300"></div>
+                <dl class="text-sm">
+                    <div class="flex justify-between gap-4 py-2.5"><dt class="text-stone-500">Kode Pembayaran</dt><dd id="d-kode-bayar" class="text-right font-medium text-stone-900"></dd></div>
+                    <div class="flex justify-between gap-4 py-2.5"><dt class="text-stone-500">Tanggal</dt><dd id="d-tanggal" class="text-right font-medium text-stone-900"></dd></div>
+                    <div class="flex justify-between gap-4 py-2.5"><dt class="text-stone-500">Metode Pembayaran</dt><dd id="d-metode" class="text-right font-medium text-stone-900"></dd></div>
+                    <div class="flex justify-between gap-4 py-2.5"><dt class="text-stone-500">Nama Supplier</dt><dd id="d-supplier" class="text-right font-medium text-stone-900"></dd></div>
+                    <div class="flex justify-between gap-4 py-2.5"><dt class="text-stone-500">Kode Pembelian</dt><dd id="d-kode-beli" class="text-right font-medium text-stone-900"></dd></div>
+                </dl>
             </div>
 
-            <div class="flex justify-end gap-3 border-t border-stone-200 px-6 py-4 bg-stone-50">
-                <button type="button" data-modal-tutup
-                    class="rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50">
-                    Tutup
-                </button>
+            <div class="relative rounded-b-2xl bg-white px-6 pb-6 pt-6 text-center" style="{{ $takikAtas }}">
+                <div class="absolute inset-x-6 top-0 border-t-2 border-dashed border-stone-300"></div>
+                <p class="text-stone-500">Simpan resi ini sebagai bukti pembayaran</p>
+                <p class="mt-3 font-bold text-stone-900">TRISTANTI STORE</p>
             </div>
         </div>
     </div>
