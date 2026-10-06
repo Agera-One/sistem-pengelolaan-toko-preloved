@@ -58,7 +58,3 @@
         </div>
     </div>
 </div>
-
-@once
-    <script src="{{ asset('js/daterange-picker.js') }}"></script>
-@endonce
