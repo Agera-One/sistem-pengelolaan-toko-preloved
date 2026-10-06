@@ -57,13 +57,10 @@ class PembayaranPembelianControler extends Controller
         return response()->json(['ok' => true]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, PembayaranPembelian $pembayaranPembelian)
     {
-        $pembayaran = PembayaranPembelian::findOrFail($id);
-        $data = $this->validasi($request, $pembayaran);
-
-        $pembayaran->update($data);
-
+        $data = $this->validasi($request, $pembayaranPembelian);
+        $pembayaranPembelian->update($data);
         return response()->json(['ok' => true]);
     }
 
@@ -85,11 +82,9 @@ class PembayaranPembelianControler extends Controller
         return $data;
     }
 
-    public function destroy(string $id)
+    public function destroy(PembayaranPembelian $pembayaranPembelian)
     {
-        $pembelian = PembayaranPembelian::findOrFail($id);
-        $pembelian->delete();
-
+        $pembayaranPembelian->delete();
         return redirect()->route('pembayaran-pembelian.index');
     }
 }
