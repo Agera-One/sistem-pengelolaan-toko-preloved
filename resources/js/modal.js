@@ -91,21 +91,15 @@
         }
     });
 
-    /* ------------------------------------------------------------------
-     * Pemblokiran Karakter Non-Angka pada Input Tipe Number
-     * ---------------------------------------------------------------- */
     document.addEventListener('keydown', function (e) {
         var input = e.target;
 
         if (input.tagName === 'INPUT' && input.type === 'number') {
-            // Izinkan kombinasi shortcut keyboard (Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X, dll)
             if (e.ctrlKey || e.metaKey) return;
 
-            // Daftar tombol kontrol navigasi yang diizinkan
             var allowedKeys = ['Backspace', 'Tab', 'Enter', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
             if (allowedKeys.includes(e.key)) return;
 
-            // Blokir jika tombol yang ditekan bukan angka 0-9
             if (!/^[0-9]$/.test(e.key)) {
                 e.preventDefault();
             }
@@ -115,7 +109,6 @@
     document.addEventListener('input', function (e) {
         var input = e.target;
 
-        // Bersihkan karakter non-angka secara otomatis (misal saat paste)
         if (input.tagName === 'INPUT' && input.type === 'number') {
             if (input.value && !/^\d*$/.test(input.value)) {
                 input.value = input.value.replace(/[^0-9]/g, '');
@@ -123,20 +116,12 @@
         }
     });
 
-    /* ------------------------------------------------------------------
-     * Validasi form di sisi klien
-     *
-     * Cara pakai di Blade, pada setiap input:
-     *   data-label="Nama lengkap"      -> nama field di pesan error
-     *   data-rules="required|max:15"   -> aturan, dipisah tanda |
-     * Dan sediakan elemen pesan dengan id "err-{id input}".
-     * ---------------------------------------------------------------- */
     var ruleTests = {
         required: function (value) {
             return value.trim() !== '';
         },
         numeric: function (value) {
-            if (value.trim() === '') return true; // Biarkan 'required' yang menangani jika kosong
+            if (value.trim() === '') return true;
             return !isNaN(value) && !isNaN(parseFloat(value));
         },
         string: function () {
