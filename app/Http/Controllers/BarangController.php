@@ -12,7 +12,9 @@ class BarangController extends Controller
 {
     public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
-        $keyword = trim((string) $request->query('q', ''));
+        $keyword  = trim((string) $request->query('q', ''));
+        $kategori = $request->query('kategori');
+        $status   = $request->query('status');
 
         $barang = Barang::query()
             ->when($keyword !== '', function ($query) use ($keyword) {
@@ -20,17 +22,21 @@ class BarangController extends Controller
 
                 $query->where(function ($q) use ($like) {
                     $q->where('kode', 'like', $like)
-                      ->orWhere('nama', 'like', $like)
-                      ->orWhere('kategori', 'like', $like)
-                      ->orWhere('status', 'like', $like);
+                    ->orWhere('nama', 'like', $like);
                 });
+            })
+            ->when($kategori, function ($query) use ($kategori) {
+                $query->where('kategori', $kategori);
+            })
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
             })
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
 
         $kode = $codeGenerator->generate(
-        new barang(),
+            new Barang(),
             'kode',
             'BRG'
         );
@@ -40,10 +46,8 @@ class BarangController extends Controller
         return view('pages.barang', compact('barang', 'kode', 'pembelian'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Barang $barang)
     {
-        $barang = Barang::findOrFail($id);
-
         $validator = Validator::make($request->all(), [
             'nama'          => 'required|string|max:255',
             'lingkar'       => 'required|numeric|min:1',
@@ -86,9 +90,8 @@ class BarangController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Barang $barang)
     {
-        $barang = barang::findOrFail($id);
         $barang->delete();
         return redirect()->route('barang.index');
     }
