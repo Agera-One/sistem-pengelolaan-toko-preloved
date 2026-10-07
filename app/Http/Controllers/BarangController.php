@@ -17,7 +17,6 @@ class BarangController extends Controller
         $status   = $request->query('status');
 
         $barang = Barang::query()
-            // Filter Pencarian Teks (Kode atau Nama)
             ->when($keyword !== '', function ($query) use ($keyword) {
                 $like = '%' . addcslashes($keyword, '%_\\') . '%';
 
@@ -26,11 +25,9 @@ class BarangController extends Controller
                     ->orWhere('nama', 'like', $like);
                 });
             })
-            // Filter Dropdown Kategori
             ->when($kategori, function ($query) use ($kategori) {
                 $query->where('kategori', $kategori);
             })
-            // Filter Dropdown Status
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
@@ -49,10 +46,8 @@ class BarangController extends Controller
         return view('pages.barang', compact('barang', 'kode', 'pembelian'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Barang $barang)
     {
-        $barang = Barang::findOrFail($id);
-
         $validator = Validator::make($request->all(), [
             'nama'          => 'required|string|max:255',
             'lingkar'       => 'required|numeric|min:1',
@@ -95,9 +90,8 @@ class BarangController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Barang $barang)
     {
-        $barang = barang::findOrFail($id);
         $barang->delete();
         return redirect()->route('barang.index');
     }
