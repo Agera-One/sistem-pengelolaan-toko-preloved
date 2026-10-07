@@ -11,15 +11,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class PembelianControler extends Controller
+class PembelianController extends Controller
 {
     public function index(Request $request)
     {
-        $keyword = trim((string) $request->query('q', ''));
-        $tanggalMulai = $request->query('tanggal_mulai');
+        $keyword        = trim((string) $request->query('q', ''));
+        $tanggalMulai   = $request->query('tanggal_mulai');
         $tanggalSelesai = $request->query('tanggal_selesai');
-        $kategori = $request->query('kategori');
-        $status   = $request->query('status');
+        $status         = $request->query('status');
 
         $isValidDate = fn ($value) => is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
 
@@ -58,10 +57,8 @@ class PembelianControler extends Controller
         return view('pages.pembelian.create', compact('kode', 'kodeBarang', 'supplier'));
     }
 
-    public function show(string $id)
+    public function show(Pembelian $pembelian)
     {
-        $pembelian = Pembelian::with(['supplier', 'user', 'barang'])->findOrFail($id);
-
         return view('pages.pembelian.detail', compact('pembelian'));
     }
 
@@ -140,11 +137,9 @@ class PembelianControler extends Controller
         }
     }
 
-    public function edit(string $id)
+    public function edit(Pembelian $pembelian)
     {
-        $pembelian = Pembelian::with('barang')->findOrFail($id);
         $supplier = Supplier::orderBy('nama')->get();
-
         return view('pages.pembelian.edit', compact('pembelian', 'supplier'));
     }
 
