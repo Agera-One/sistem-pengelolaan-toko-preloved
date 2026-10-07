@@ -68,10 +68,8 @@ class SupplierController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Supplier $supplier)
     {
-        $supplier = Supplier::findOrFail($id);
-
         $validator = Validator::make($request->all(), [
             'nama'          => 'required|string|max:255',
             'nomor_telepon' => 'required|max:15',
@@ -106,9 +104,8 @@ class SupplierController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Supplier $supplier)
     {
-        $supplier = Supplier::findOrFail($id);
         $supplier->delete();
         return redirect()->route('supplier.index');
     }
