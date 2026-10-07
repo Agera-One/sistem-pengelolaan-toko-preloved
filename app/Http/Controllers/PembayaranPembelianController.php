@@ -7,7 +7,7 @@ use App\Models\PembayaranPembelian;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
 
-class PembayaranPembelianControler extends Controller
+class PembayaranPembelianController extends Controller
 {
     public function index(Request $request, CodeGeneratorService $codeGenerator)
     {
