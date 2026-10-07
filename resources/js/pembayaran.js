@@ -1,4 +1,4 @@
-const rupiah = (n) => 'Rp' + new Intl.NumberFormat('id-ID').format(n);
+const { rupiah, format: formatAngka } = window.MoneyInput;
 
 const tanggalIndo = (iso) =>
     iso
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('f-inisial').textContent = inisial(o.dataset.supplier);$('f-supplier').textContent = o.dataset.supplier;
         $('f-kode-beli').textContent = o.dataset.kodeBeli;
         $('f-tgl-beli').textContent = tanggalIndo(o.dataset.tanggal);
-        $('f-total').textContent = rupiah(total);$('nominal').value = new Intl.NumberFormat('id-ID').format(total);
+        $('f-total').textContent = rupiah(total);$('nominal').value = formatAngka(total);
     }
 
     function bukaForm(data) {
