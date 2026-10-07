@@ -43,8 +43,8 @@
                 ],
                 [
                     'label'  => 'Pembayaran',
-                    'route'  => 'pembelian.pembayaran.index',
-                    'active' => 'pembelian.pembayaran.*',
+                    'route'  => 'pembayaran-pembelian.index',
+                    'active' => 'pembayaran-pembelian.*',
                 ],
             ],
         ],
