@@ -68,10 +68,8 @@ class PelangganController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Pelanggan $pelanggan)
     {
-        $pelanggan = Pelanggan::findOrFail($id);
-
         $validator = Validator::make($request->all(), [
             'nama'          => 'required|string|max:255',
             'nomor_telepon' => 'required|max:15',
@@ -105,9 +103,8 @@ class PelangganController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Pelanggan $pelanggan)
     {
-        $pelanggan = Pelanggan::findOrFail($id);
         $pelanggan->delete();
         return redirect()->route('pelanggan.index');
     }
