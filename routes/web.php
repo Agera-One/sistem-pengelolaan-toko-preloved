@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('supplier', SupplierController::class)->except(['show', 'create', 'edit']);
 
     Route::resource('pembelian', PembelianController::class);
-    Route::resource('pembayaran-pembelian', PembayaranPembelianController::class)->except(['create', 'edit'])->names('pembayaran-pembelian');
+    Route::resource('pembayaran-pembelian', PembayaranPembelianController::class)->except(['show', 'create', 'edit'])->names('pembayaran-pembelian');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
