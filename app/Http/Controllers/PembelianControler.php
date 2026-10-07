@@ -91,7 +91,7 @@ class PembelianControler extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('pembelian.pesanan.create')
+            return redirect()->route('pembelian.create')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -129,12 +129,12 @@ class PembelianControler extends Controller
                 return $pembelian;
             });
 
-            return redirect()->route('pembelian.pesanan.index')
+            return redirect()->route('pembelian.index')
                 ->with('success', "Pesanan {$pembelian->kode} berhasil disimpan dengan {$rows->count()} barang.");
         } catch (\Throwable $e) {
             report($e);
 
-            return redirect()->route('pembelian.pesanan.create')
+            return redirect()->route('pembelian.create')
                 ->withInput()
                 ->with('error', 'Gagal menyimpan pesanan: ' . $e->getMessage());
         }
@@ -148,10 +148,8 @@ class PembelianControler extends Controller
         return view('pages.pembelian.edit', compact('pembelian', 'supplier'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Pembelian $pembelian)
     {
-        $pembelian = Pembelian::findOrFail($id);
-
         $lockedBarang = $pembelian->barang()->where('status', '!=', 'Tersedia')->get()->keyBy('id');
         $lockedIds = $lockedBarang->keys()->all();
 
@@ -188,7 +186,7 @@ class PembelianControler extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('pembelian.pesanan.edit', $pembelian->id)
+            return redirect()->route('pembelian.edit', $pembelian->id)
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -241,22 +239,20 @@ class PembelianControler extends Controller
                 ]);
             });
 
-            return redirect()->route('pembelian.pesanan.index')
+            return redirect()->route('pembelian.index')
                 ->with('success', "Pesanan {$pembelian->kode} berhasil diperbarui.");
         } catch (\Throwable $e) {
             report($e);
 
-            return redirect()->route('pembelian.pesanan.edit', $pembelian->id)
+            return redirect()->route('pembelian.edit', $pembelian->id)
                 ->withInput()
                 ->with('error', 'Gagal memperbarui pesanan: ' . $e->getMessage());
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Pembelian $pembelian)
     {
-        $pembelian = Pembelian::findOrFail($id);
         $pembelian->delete();
-
-        return redirect()->route('pembelian.pesanan.index');
+        return redirect()->route('pembelian.index');
     }
 }
