@@ -47,6 +47,7 @@
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <form method="GET" action="{{ route('pembelian.index') }}" class="relative w-full sm:max-w-sm">
+                        <input type="hidden" name="status" value="{{ request('status') }}">
                         <input type="hidden" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
                         <input type="hidden" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}">
 
@@ -60,8 +61,22 @@
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </form>
 
+                    <form method="GET" action="{{ route('pembelian.index') }}" class="w-full sm:w-48">
+                        <input type="hidden" name="q" value="{{ request('q') }}">
+                        <input type="hidden" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
+                        <input type="hidden" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}">
+
+                        <select name="status" onchange="this.form.submit()"
+                            class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                            <option value="">Semua Status</option>
+                            <option value="Sudah Bayar" {{ request('status') === 'Sudah Bayar' ? 'selected' : '' }}>Sudah Bayar</option>
+                            <option value="Belum Bayar" {{ request('status') === 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
+                        </select>
+                    </form>
+
                     <form method="GET" action="{{ route('pembelian.index') }}">
                         <input type="hidden" name="q" value="{{ request('q') }}">
+                        <input type="hidden" name="status" value="{{ request('status') }}">
 
                         <x-daterange
                             name-start="tanggal_mulai"
@@ -168,15 +183,15 @@
                                             Detail
                                         </a>
 
-                                        <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M12 20h9" />
-                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                            </svg>
-                                            Ubah
-                                        </a>
-
                                         @if ($p->status === 'Belum Bayar')
+                                            <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M12 20h9" />
+                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                                </svg>
+                                                Ubah
+                                            </a>
+
                                             <form action="{{ route('pembelian.destroy', $p) }}" method="POST"
                                                 data-confirm="Hapus pembelian {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
                                                 @csrf
