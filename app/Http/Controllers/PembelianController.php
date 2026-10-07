@@ -15,11 +15,10 @@ class PembelianController extends Controller
 {
     public function index(Request $request)
     {
-        $keyword = trim((string) $request->query('q', ''));
-        $tanggalMulai = $request->query('tanggal_mulai');
+        $keyword        = trim((string) $request->query('q', ''));
+        $tanggalMulai   = $request->query('tanggal_mulai');
         $tanggalSelesai = $request->query('tanggal_selesai');
-        $kategori = $request->query('kategori');
-        $status   = $request->query('status');
+        $status         = $request->query('status');
 
         $isValidDate = fn ($value) => is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
 
