@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
-use App\Services\CodeGeneratorService;
 use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function index(Request $request)
     {
         $keyword  = trim((string) $request->query('q', ''));
         $kategori = $request->query('kategori');
@@ -35,15 +34,7 @@ class BarangController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kode = $codeGenerator->generate(
-            new Barang(),
-            'kode',
-            'BRG'
-        );
-
-        $pembelian = Pembelian::latest('id')->get();
-
-        return view('pages.barang', compact('barang', 'kode', 'pembelian'));
+        return view('pages.barang', compact('barang'));
     }
 
     public function update(Request $request, Barang $barang)
