@@ -354,7 +354,7 @@
                             <label for="nominal" class="{{ $label }}">Nominal Bayar</label>
                             <div class="relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-stone-500">Rp</span>
-                                <input id="nominal" type="text" readonly placeholder="0" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 py-2.5 pl-8 pr-3 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                                <input id="nominal" type="text" readonly placeholder="0" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 py-2.5 pl-10 pr-3 text-stone-500 placeholder:text-stone-400 focus:outline-none">
                             </div>
                             <p class="mt-1 text-xs text-stone-500">Sesuai total tagihan, tidak bisa diubah.</p>
                         </div>
