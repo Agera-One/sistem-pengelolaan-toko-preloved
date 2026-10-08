@@ -117,12 +117,12 @@
                     <tbody class="divide-y divide-stone-300">
                         @forelse ($pembayaran as $p)
                             @php
-                                $kodeBayarBaris = $p->kode;
-                                $kodeBeliBaris = $p->pembelian->kode;
+                                $kodeBayar = $p->kode;
+                                $kodeBeli = $p->pembelian->kode;
 
                                 $payload = json_encode([
                                     'id' => $p->getKey(),
-                                    'kode_bayar' => $kodeBayarBaris,
+                                    'kode_bayar' => $kodeBayar,
                                     'tanggal' => \Carbon\Carbon::parse($p->tanggal)->toDateString(),
                                     'nominal' => $p->nominal,
                                     'metode_pembayaran' => $p->metode_pembayaran,
@@ -144,11 +144,11 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-700">
-                                    {{ $kodeBayarBaris }}
+                                    {{ $kodeBayar }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-900">
-                                    {{ $kodeBeliBaris }}
+                                    {{ $kodeBeli }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
@@ -168,7 +168,7 @@
                                             data-menu-toggle="menu-pembayaran-{{ $p->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ $kodeBayarBaris }}"
+                                            aria-label="Aksi untuk {{ $kodeBayar }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -195,7 +195,7 @@
                                         </button>
 
                                         <form action="{{ route('pembayaran-pembelian.destroy', $p) }}" method="POST"
-                                            data-confirm="Hapus pembayaran {{ $kodeBayarBaris }}? Data yang dihapus tidak bisa dikembalikan.">
+                                            data-confirm="Hapus pembayaran {{ $kodeBayar }}? Data yang dihapus tidak bisa dikembalikan.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -296,7 +296,7 @@
             </div>
 
             <form id="form-pembayaran" method="POST" action="{{ route('pembayaran-pembelian.store') }}"
-                data-url-store="{{ route('pembayaran-pembelian.store') }}" data-kode-bayar="{{ $kodeBayar }}"
+                data-url-store="{{ route('pembayaran-pembelian.store') }}" data-kode-bayar="{{ $kode }}"
                 novalidate class="flex min-h-0 flex-1 flex-col">
                 @csrf
                 <input type="hidden" name="_method" value="PUT" id="field-method" disabled>
