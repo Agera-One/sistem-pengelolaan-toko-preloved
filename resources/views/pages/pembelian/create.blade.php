@@ -175,7 +175,7 @@
                                     @foreach (['harga_beli', 'harga_jual'] as $money)
                                         <td class="px-2 py-2">
                                             <div class="relative">
-                                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
                                                 <input type="text" inputmode="numeric" autocomplete="off" data-money
                                                        name="items[{{ $i }}][{{ $money }}]" value="{{ $item[$money] ?? '' }}"
                                                        data-cell="{{ $money }}" placeholder="0"
@@ -236,7 +236,7 @@
                         @foreach (['harga_beli', 'harga_jual'] as $money)
                             <td class="px-2 py-2">
                                 <div class="relative">
-                                    <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                                    <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
                                     <input type="text" inputmode="numeric" autocomplete="off" data-money
                                            name="items[__INDEX__][{{ $money }}]" value=""
                                            data-cell="{{ $money }}" placeholder="0"
