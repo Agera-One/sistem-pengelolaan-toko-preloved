@@ -13,7 +13,9 @@ return new class extends Migration
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
             $table->unsignedInteger('ongkir');
+            $table->unsignedInteger('subtotal');
             $table->unsignedInteger('total');
+            $table->string('status');
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict');;

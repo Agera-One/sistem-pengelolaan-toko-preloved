@@ -15,7 +15,9 @@ class Penjualan extends Model
         'tanggal',
         'kode',
         'ongkir',
+        'subtotal',
         'total',
+        'status',
         'user_id',
         'pelanggan_id',
     ];
