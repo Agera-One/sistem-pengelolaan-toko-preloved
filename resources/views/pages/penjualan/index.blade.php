@@ -139,7 +139,7 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 text-stone-700"">
-                                    Rp{{ number_format(100000, 0, ',', '.') }}
+                                    Rp{{ number_format($p->subtotal, 0, ',', '.') }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-stone-700"">
