@@ -9,7 +9,9 @@ use App\Services\CodeGeneratorService;
 
 class PembayaranPembelianController extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function __construct(protected CodeGeneratorService $codeGenerator) {}
+
+    public function index(Request $request)
     {
         $keyword = trim((string) $request->query('q', ''));
         $metode = $request->query('metode');
@@ -42,15 +44,15 @@ class PembayaranPembelianController extends Controller
 
         $pembelian = Pembelian::where('status', 'Belum Bayar')->with('supplier')->latest('id')->get();
 
-        $kodeBayar = $codeGenerator->generate(new PembayaranPembelian(), 'kode', 'KLR');
+        $kode = $this->codeGenerator->pembayaran_pembelian();
 
-        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kodeBayar'));
+        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode'));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
+    public function store(Request $request)
     {
         $data = $this->validasi($request);
-        $data['kode'] = $codeGenerator->generate(new PembayaranPembelian(), 'kode', 'KLR');
+        $data['kode'] = $this->codeGenerator->pembayaran_pembelian();
 
         PembayaranPembelian::create($data);
 

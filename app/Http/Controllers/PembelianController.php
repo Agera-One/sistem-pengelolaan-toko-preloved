@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class PembelianController extends Controller
 {
+    public function __construct(protected CodeGeneratorService $codeGenerator) {}
+
     public function index(Request $request)
     {
         $keyword        = trim((string) $request->query('q', ''));
@@ -47,14 +49,11 @@ class PembelianController extends Controller
         return view('pages.pembelian.index', compact('pembelian', 'supplier'));
     }
 
-    public function create(CodeGeneratorService $codeGenerator)
+    public function create()
     {
-        $kode = $codeGenerator->generate(new Pembelian(), 'kode', 'BEL');
-        $kodeBarang = $codeGenerator->generate(new Barang(), 'kode', 'BRG');
-
+        $kode = $this->codeGenerator->pembelian();
         $supplier = Supplier::orderBy('nama')->get();
-
-        return view('pages.pembelian.create', compact('kode', 'kodeBarang', 'supplier'));
+        return view('pages.pembelian.create', compact('kode', 'supplier'));
     }
 
     public function show(Pembelian $pembelian)
@@ -62,7 +61,7 @@ class PembelianController extends Controller
         return view('pages.pembelian.detail', compact('pembelian'));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
+    public function store(Request $request)
     {
         $items = collect($request->input('items', []))
             ->filter(fn ($row) => is_array($row) && collect($row)->contains(fn ($v) => filled($v)))
@@ -96,9 +95,9 @@ class PembelianController extends Controller
         $rows = $items->values();
 
         try {
-            $pembelian = DB::transaction(function () use ($request, $rows, $codeGenerator) {
-                $kodePo = $codeGenerator->generate(new Pembelian(), 'kode', 'BEL');
-                $kodeBarang = $codeGenerator->generateBatch(new Barang(), 'kode', 'BRG', $rows->count());
+            $pembelian = DB::transaction(function () use ($request, $rows) {
+                $kodePo = $this->codeGenerator->pembelian();
+                $kodeBarang = $this->codeGenerator->barang($rows->count());
 
                 $pembelian = Pembelian::create([
                     'kode'        => $kodePo,
@@ -192,7 +191,7 @@ class PembelianController extends Controller
 
                 $baru = $items->filter(fn ($r) => blank($r['id'] ?? null));
                 $kodeBaru = $baru->isNotEmpty()
-                    ? app(CodeGeneratorService::class)->generateBatch(new Barang(), 'kode', 'BRG', $baru->count())
+                    ? $this->codeGenerator->barang($baru->count())
                     : [];
                 $n = 0;
 

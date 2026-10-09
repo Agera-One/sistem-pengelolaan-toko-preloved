@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function __construct(protected CodeGeneratorService $codeGenerator) {}
+
+    public function index(Request $request)
     {
         $keyword = trim((string) $request->query('q', ''));
 
@@ -28,16 +30,12 @@ class SupplierController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kode = $codeGenerator->generate(
-        new Supplier(),
-            'kode',
-            'SPL'
-        );
+        $kode = $this->codeGenerator->supplier();
 
         return view('pages.supplier', compact('supplier', 'kode'));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama'          => 'required|string|max:255',
@@ -49,7 +47,7 @@ class SupplierController extends Controller
             return redirect()->route('supplier.index');
         }
 
-        $kode = $codeGenerator->generate(new Supplier(), 'kode', 'SPL');
+        $kode = $this->codeGenerator->supplier();
 
         try {
             Supplier::create([

@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
-use App\Models\Pembelian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

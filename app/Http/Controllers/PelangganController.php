@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class PelangganController extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function __construct(protected CodeGeneratorService $codeGenerator) {}
+
+    public function index(Request $request)
     {
         $keyword = trim((string) $request->query('q', ''));
 
@@ -28,16 +30,12 @@ class PelangganController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kode = $codeGenerator->generate(
-        new Pelanggan(),
-            'kode',
-            'PLG'
-        );
+        $kode = $this->codeGenerator->pelanggan();
 
         return view('pages.pelanggan', compact('pelanggan', 'kode'));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama'          => 'required|string|max:255',
@@ -49,7 +47,7 @@ class PelangganController extends Controller
             return redirect()->route('pelanggan.index');
         }
 
-        $kode = $codeGenerator->generate(new Pelanggan(), 'kode', 'PLG');
+        $kode = $this->codeGenerator->pelanggan();
 
         try {
             Pelanggan::create([
