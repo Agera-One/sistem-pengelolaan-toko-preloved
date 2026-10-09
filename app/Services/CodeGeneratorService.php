@@ -45,8 +45,7 @@ class CodeGeneratorService
 
     public function supplier()
     {
-        return $this->generate(new Supplier(), 'kode', 'SPL'
-        );
+        return $this->generate(new Supplier(), 'kode', 'SPL');
     }
 
     public function pelanggan()
