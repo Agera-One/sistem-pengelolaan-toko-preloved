@@ -14,10 +14,6 @@ use Illuminate\Validation\ValidationException;
 
 class PenjualanController extends Controller
 {
-    private const BARANG_TERSEDIA = 'Tersedia';
-    private const BARANG_TERJUAL  = 'Terjual';
-
-
     public function index(Request $request)
     {
         $keyword        = trim((string) $request->query('q', ''));
@@ -59,7 +55,7 @@ class PenjualanController extends Controller
 
     public function create(CodeGeneratorService $codeGenerator)
     {
-        $barang = Barang::where('status', self::BARANG_TERSEDIA)
+        $barang = Barang::where('status', 'Tersedia')
             ->orderBy('kode')
             ->get(['id', 'kode', 'nama', 'kategori', 'lingkar', 'panjang', 'harga_jual']);
 
