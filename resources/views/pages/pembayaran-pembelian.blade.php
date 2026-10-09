@@ -255,7 +255,7 @@
     </div>
 
     @php
-        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25';
+        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500/25';
         $label = 'mb-1.5 block font-medium text-stone-700';
         $error = 'mt-1 hidden text-xs text-red-600';
         $metode = ['Tunai', 'Transfer'];
@@ -304,7 +304,7 @@
                 <div class="flex-1 space-y-7 overflow-y-auto px-6 py-5">
 
                     <section>
-                        <label for="pembelian_id" class="{{ $label }}">Kode Pembelian</label>
+                        <label for="pembelian_id" class="{{ $label }}">Kode Pembelian <span class="text-red-600">*</span></label>
                         <select id="pembelian_id" name="pembelian_id" class="{{ $input }}">
                             <option value="">Pilih Pembelian</option>
                             @foreach ($pembelian as $p)
@@ -354,7 +354,7 @@
                             <label for="nominal" class="{{ $label }}">Nominal Bayar</label>
                             <div class="relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-stone-500">Rp</span>
-                                <input id="nominal" type="text" readonly placeholder="0" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 py-2.5 pl-10 pr-3 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                                <input id="nominal" type="text" readonly placeholder="0" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 py-2.5 pl-8 pr-3 text-stone-500 placeholder:text-stone-400 focus:outline-none">
                             </div>
                             <p class="mt-1 text-xs text-stone-500">Sesuai total tagihan, tidak bisa diubah.</p>
                         </div>
@@ -373,12 +373,12 @@
                         </div>
 
                         <div>
-                            <span class="{{ $label }}">Metode Pembayaran</span>
-                            <div class="grid grid-cols-2 gap-2">
+                            <span class="{{ $label }}">Metode Pembayaran <span class="text-red-600">*</span></label>
+                            <div data-wrap-for="metode_pembayaran" class="grid grid-cols-2 gap-2">
                                 @foreach ($metode as $m)
                                     <label class="cursor-pointer">
                                         <input type="radio" name="metode_pembayaran" value="{{ $m }}" class="peer sr-only">
-                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25">{{ $m }}</span>
+                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25 [[aria-invalid=true]_&]:border-red-400">{{ $m }}</span>
                                     </label>
                                 @endforeach
                             </div>
