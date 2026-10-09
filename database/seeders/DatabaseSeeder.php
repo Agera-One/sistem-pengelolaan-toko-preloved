@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             PembelianSeeder::class,
             BarangSeeder::class,
             PembayaranPembelianSeeder::class,
+            PenjualanSeeder::class,
+            DetailPenjualanSeeder::class,
         ]);
     }
 }
