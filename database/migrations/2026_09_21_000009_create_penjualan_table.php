@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
+            $table->unsignedInteger('subtotal')->nullable();
             $table->unsignedInteger('ongkir');
-            $table->unsignedInteger('subtotal');
-            $table->unsignedInteger('total');
-            $table->string('status');
+            $table->unsignedInteger('total')->nullable();
+            $table->string('status')->default('Belum Bayar');
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict');;
