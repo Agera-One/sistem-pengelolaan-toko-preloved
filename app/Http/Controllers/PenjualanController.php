@@ -95,17 +95,6 @@ class PenjualanController extends Controller
         $penjualan = DB::transaction(function () use ($data, $codeGenerator) {
             $kode = $codeGenerator->generate(new Penjualan(), 'kode', 'JUA');
 
-            $ids = collect($data['items'])->pluck('barang_id')->all();
-
-            $barang = Barang::whereIn('id', $ids)->lockForUpdate()->get();
-
-            $terjual = $barang->where('status', '!=', self::BARANG_TERSEDIA);
-            if ($terjual->isNotEmpty()) {
-                throw ValidationException::withMessages([
-                    'items' => 'Barang sudah tidak tersedia: ' . $terjual->pluck('kode')->implode(', ') . '.',
-                ]);
-            }
-
             $subtotal = collect($data['items'])->sum('harga_jual');
             $ongkir   = (int) $data['ongkir'];
 
@@ -113,10 +102,9 @@ class PenjualanController extends Controller
                 'tanggal'      => $data['tanggal'],
                 'kode'         => $kode,
                 'pelanggan_id' => $data['pelanggan_id'],
-                'ongkir'       => $ongkir,
                 'subtotal'     => $subtotal,
+                'ongkir'       => $ongkir,
                 'total'        => $subtotal + $ongkir,
-                'status'       => 'Belum Bayar',
                 'user_id'      => auth()->id(),
             ]);
 
@@ -127,8 +115,6 @@ class PenjualanController extends Controller
                     'harga_jual'   => $item['harga_jual'],
                 ])->all()
             );
-
-            Barang::whereIn('id', $ids)->update(['status' => self::BARANG_TERJUAL]);
 
             return $penjualan;
         });
