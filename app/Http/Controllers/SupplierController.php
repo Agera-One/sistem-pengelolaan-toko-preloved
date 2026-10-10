@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Supplier\StoreSupplierRequest;
+use App\Http\Requests\Supplier\UpdateSupplierRequest;
 
 class SupplierController extends Controller
 {
@@ -35,76 +36,23 @@ class SupplierController extends Controller
         return view('pages.supplier', compact('supplier', 'kode'));
     }
 
-    public function store(Request $request)
+    public function store(StoreSupplierRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'kota'          => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('supplier.index');
-        }
-
-        $kode = $this->codeGenerator->supplier();
-
-        try {
-            Supplier::create([
-                'kode'          => $kode,
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'kota'          => $request->kota,
-            ]);
-
-            return redirect()->route('supplier.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('supplier.index')
-                ->with('error', 'Nomor telepon tidak boleh sama.');
-        }
+        $validated = $request->validated();
+        $validated['kode'] = $this->codeGenerator->supplier();
+        Supplier::create($validated);
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di tambahkan');
     }
 
-    public function update(Request $request, Supplier $supplier)
+    public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'kota'          => 'required|string|max:255',
-        ], [
-            'nama.required'          => 'Nama lengkap wajib diisi.',
-            'nama.max'               => 'Nama lengkap maksimal 255 karakter.',
-            'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
-            'nomor_telepon.max'      => 'Nomor telepon maksimal 15 karakter.',
-            'kota.required'          => 'kota wajib diisi.',
-            'kota.max'               => 'kota maksimal 255 karakter.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('supplier.index')
-                ->with('error', $validator->errors()->first());
-        }
-
-        try {
-            $supplier->update([
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'kota'          => $request->kota,
-            ]);
-
-            return redirect()->route('supplier.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('supplier.index')
-                ->with('error', 'Gagal memperbarui data Supplier.');
-        }
+        $supplier->update($request->validated());
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di perbarui');
     }
 
     public function destroy(Supplier $supplier)
     {
         $supplier->delete();
-        return redirect()->route('supplier.index');
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di hapus');
     }
 }
