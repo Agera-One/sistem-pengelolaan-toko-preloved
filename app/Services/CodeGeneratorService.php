@@ -14,10 +14,10 @@ class CodeGeneratorService
 {
     public function generate(Model $model, string $column, string $prefix): string
     {
-        return $this->generate_batch($model, $column, $prefix, 1)[0];
+        return $this->generateBatch($model, $column, $prefix, 1)[0];
     }
 
-    public function generate_batch(Model $model, string $column, string $prefix, int $count): array
+    public function generateBatch(Model $model, string $column, string $prefix, int $count): array
     {
         if ($count < 1) {
             return [];
@@ -40,7 +40,7 @@ class CodeGeneratorService
     }
 
     public function barang(int $count) {
-        return $this->generate_batch(new Barang(), 'kode', 'BRG', $count);
+        return $this->generateBatch(new Barang(), 'kode', 'BRG', $count);
     }
 
     public function supplier()
@@ -59,7 +59,7 @@ class CodeGeneratorService
         return $this->generate(new Pembelian(), 'kode', 'BEL');
     }
 
-    public function pembayaran_pembelian()
+    public function pembayaranPembelian()
     {
         return $this->generate(new PembayaranPembelian(), 'kode', 'KLR');
     }

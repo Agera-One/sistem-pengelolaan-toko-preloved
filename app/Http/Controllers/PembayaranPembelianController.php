@@ -44,7 +44,7 @@ class PembayaranPembelianController extends Controller
 
         $pembelian = Pembelian::where('status', 'Belum Bayar')->with('supplier')->latest('id')->get();
 
-        $kode = $this->codeGenerator->pembayaran_pembelian();
+        $kode = $this->codeGenerator->pembayaranPembelian();
 
         return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode'));
     }
@@ -52,7 +52,7 @@ class PembayaranPembelianController extends Controller
     public function store(Request $request)
     {
         $data = $this->validasi($request);
-        $data['kode'] = $this->codeGenerator->pembayaran_pembelian();
+        $data['kode'] = $this->codeGenerator->pembayaranPembelian();
 
         PembayaranPembelian::create($data);
 
