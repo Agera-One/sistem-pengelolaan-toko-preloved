@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Pelanggan\StorePelangganRequest;
+use App\Http\Requests\Pelanggan\UpdatePelangganRequest;
+
 
 class PelangganController extends Controller
 {
@@ -35,75 +37,23 @@ class PelangganController extends Controller
         return view('pages.pelanggan', compact('pelanggan', 'kode'));
     }
 
-    public function store(Request $request)
+    public function store(StorePelangganRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'alamat'        => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('pelanggan.index');
-        }
-
-        $kode = $this->codeGenerator->pelanggan();
-
-        try {
-            Pelanggan::create([
-                'kode'          => $kode,
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'alamat'        => $request->alamat,
-            ]);
-
-            return redirect()->route('pelanggan.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('pelanggan.index')
-                ->with('error', 'Nomor telepon tidak boleh sama.');
-        }
+        $validated = $request->validated();
+        $validated['kode'] = $this->codeGenerator->pelanggan();
+        Pelanggan::create($validated);
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di tambahkan');
     }
 
-    public function update(Request $request, Pelanggan $pelanggan)
+    public function update(UpdatePelangganRequest $request, Pelanggan $pelanggan)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'alamat'        => 'required',
-        ], [
-            'nama.required'          => 'Nama lengkap wajib diisi.',
-            'nama.max'               => 'Nama lengkap maksimal 255 karakter.',
-            'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
-            'nomor_telepon.max'      => 'Nomor telepon maksimal 15 karakter.',
-            'alamat.required'        => 'Alamat lengkap wajib diisi.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('pelanggan.index')
-                ->with('error', $validator->errors()->first());
-        }
-
-        try {
-            $pelanggan->update([
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'alamat'        => $request->alamat,
-            ]);
-
-            return redirect()->route('pelanggan.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('pelanggan.index')
-                ->with('error', 'Gagal memperbarui data pelanggan.');
-        }
+        $pelanggan->update($request->validated());
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di perbarui');
     }
 
     public function destroy(Pelanggan $pelanggan)
     {
         $pelanggan->delete();
-        return redirect()->route('pelanggan.index');
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di hapus');
     }
 }
