@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
-use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
+use App\Http\Requests\PembayaranPembelian\PembayaranPembelianRequest;
 
 class PembayaranPembelianController extends Controller
 {
@@ -49,39 +50,25 @@ class PembayaranPembelianController extends Controller
         return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode'));
     }
 
-    public function store(Request $request)
+    public function store(PembayaranPembelianRequest $request)
     {
-        $data = $this->validasi($request);
-        $data['kode'] = $this->codeGenerator->pembayaranPembelian();
+        $validated = $request->validated();
+        $pembelian = Pembelian::findOrFail($validated['pembelian_id']);
 
-        PembayaranPembelian::create($data);
+        $validated['kode']    = $this->codeGenerator->pembayaranPembelian();
+        $validated['nominal'] = $pembelian->total;
 
+        PembayaranPembelian::create($validated);
         return response()->json(['ok' => true]);
     }
 
-    public function update(Request $request, PembayaranPembelian $pembayaranPembelian)
+    public function update(PembayaranPembelianRequest $request, PembayaranPembelian $pembayaranPembelian)
     {
-        $data = $this->validasi($request, $pembayaranPembelian);
-        $pembayaranPembelian->update($data);
+        $validated = $request->validated();
+        $validated['nominal'] = Pembelian::findOrFail($validated['pembelian_id'])->total;
+
+        $pembayaranPembelian->update($validated);
         return response()->json(['ok' => true]);
-    }
-
-    private function validasi(Request $request, ?PembayaranPembelian $pembayaran = null): array
-    {
-        $data = $request->validate([
-            'pembelian_id'          => 'required|exists:pembelian,id',
-            'tanggal'               => 'required|date',
-            'metode_pembayaran'     => 'required|in:Tunai,Transfer',
-        ], [
-            'pembelian_id.required'         => 'Pilih pembelian yang dibayar.',
-            'tanggal.required'              => 'Tanggal bayar wajib diisi.',
-            'metode_pembayaran.required'    => 'Pilih metode pembayaran.',
-        ]);
-
-        $pembelian = Pembelian::findOrFail($data['pembelian_id']);
-        $data['nominal'] = $pembelian->total;
-
-        return $data;
     }
 
     public function destroy(PembayaranPembelian $pembayaranPembelian)
