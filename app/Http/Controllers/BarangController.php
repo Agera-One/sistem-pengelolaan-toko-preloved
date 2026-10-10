@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
-use App\Http\Requests\Barang\UpdateBarangRequest;
+use App\Http\Requests\Barang\BarangRequest;
 
 class BarangController extends Controller
 {
@@ -35,7 +35,7 @@ class BarangController extends Controller
         return view('pages.barang', compact('barang'));
     }
 
-    public function update(UpdateBarangRequest $request, Barang $barang)
+    public function update(BarangRequest $request, Barang $barang)
     {
         $barang->update($request->validated());
         return redirect()->route('barang.index')->with('success', 'Data barang berhasil di perbarui');

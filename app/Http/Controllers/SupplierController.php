@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
-use App\Http\Requests\Supplier\StoreSupplierRequest;
-use App\Http\Requests\Supplier\UpdateSupplierRequest;
+use App\Http\Requests\Supplier\SupplierRequest;
 
 class SupplierController extends Controller
 {
@@ -36,7 +35,7 @@ class SupplierController extends Controller
         return view('pages.supplier', compact('supplier', 'kode'));
     }
 
-    public function store(StoreSupplierRequest $request)
+    public function store(SupplierRequest $request)
     {
         $validated = $request->validated();
         $validated['kode'] = $this->codeGenerator->supplier();
@@ -44,7 +43,7 @@ class SupplierController extends Controller
         return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di tambahkan');
     }
 
-    public function update(UpdateSupplierRequest $request, Supplier $supplier)
+    public function update(SupplierRequest $request, Supplier $supplier)
     {
         $supplier->update($request->validated());
         return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di perbarui');
