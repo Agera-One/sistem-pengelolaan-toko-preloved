@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Barang\UpdateBarangRequest;
 
 class BarangController extends Controller
 {
@@ -35,53 +35,15 @@ class BarangController extends Controller
         return view('pages.barang', compact('barang'));
     }
 
-    public function update(Request $request, Barang $barang)
+    public function update(UpdateBarangRequest $request, Barang $barang)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'lingkar'       => 'required|numeric|min:1',
-            'panjang'       => 'required|numeric|min:1',
-            'kategori'      => 'required|string|max:255',
-            'harga_jual'    => 'required|numeric|min:1|gt:harga_beli',
-        ], [
-            'nama.required'         => 'Nama barang wajib diisi.',
-            'nama.max'              => 'Nama barang maksimal 255 karakter.',
-            'lingkar.required'      => 'Lingkar wajib diisi.',
-            'lingkar.numeric'       => 'Lingkar harus berbentuk angka.',
-            'panjang.required'      => 'Panjang wajib diisi.',
-            'panjang.numeric'       => 'Panjang harus berbentuk angka.',
-            'kategori.required'     => 'Kategori wajib diisi.',
-            'kategori.max'          => 'Kategori barang maksimal 255 karakter.',
-            'harga_jual.required'   => 'Harga jual wajib diisi.',
-            'harga_jual.numeric'    => 'Harga jual harus berbentuk angka.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('barang.index')
-                ->with('error', $validator->errors()->first());
-        }
-
-        try {
-            $barang->update([
-                'nama'          => $request->nama,
-                'lingkar'       => $request->lingkar,
-                'panjang'       => $request->panjang,
-                'kategori'      => $request->kategori,
-                'harga_jual'    => $request->harga_jual,
-            ]);
-
-            return redirect()->route('barang.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('barang.index')
-                ->with('error', 'Gagal memperbarui data barang.');
-        }
+        $barang->update($request->validated());
+        return redirect()->route('barang.index')->with('success', 'Data barang berhasil di perbarui');
     }
 
     public function destroy(Barang $barang)
     {
         $barang->delete();
-        return redirect()->route('barang.index');
+        return redirect()->route('barang.index')->with('success', 'Data barang berhasil di hapus');
     }
 }
