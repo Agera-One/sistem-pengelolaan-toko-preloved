@@ -297,7 +297,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan pelanggan
+                    Simpan
                 </button>
             </div>
         </form>
@@ -378,7 +378,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan perubahan
+                    Simpan
                 </button>
             </div>
         </form>

@@ -37,9 +37,9 @@
             </nav>
         </div>
 
-        @if (session('error'))
-            <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800" role="alert">
-                {{ session('error') }}
+        @if (session('success'))
+            <div class="mt-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800" role="alert">
+                {{ session('success') }}
             </div>
         @endif
 
@@ -300,7 +300,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan supplier
+                    Simpan
                 </button>
             </div>
         </form>
@@ -381,7 +381,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan perubahan
+                    Simpan
                 </button>
             </div>
         </form>
