@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
 use App\Services\CodeGeneratorService;
-use App\Http\Requests\PembayaranPembelian\PembayaranPembelianRequest;
+use App\Http\Requests\PembayaranPembelianRequest;
 
 class PembayaranPembelianController extends Controller
 {

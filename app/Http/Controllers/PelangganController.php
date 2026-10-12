@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
-use App\Http\Requests\Pelanggan\PelangganRequest;
+use App\Http\Requests\PelangganRequest;
 
 
 class PelangganController extends Controller

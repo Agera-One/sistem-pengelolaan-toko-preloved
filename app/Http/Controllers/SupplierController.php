@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
-use App\Http\Requests\Supplier\SupplierRequest;
+use App\Http\Requests\SupplierRequest;
 
 class SupplierController extends Controller
 {
