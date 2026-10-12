@@ -9,7 +9,6 @@ trait Filterable
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         foreach ($this->filterable ?? [] as $param => $column) {
-            // ['status'] => param & kolom sama, ['metode' => 'metode_pembayaran'] => beda nama
             $param = is_int($param) ? $column : $param;
             $value = $filters[$param] ?? null;
 
