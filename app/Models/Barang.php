@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\Searchable;
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Barang extends Model
 {
+    use Searchable, Filterable;
+
+    protected array $searchable = ['kode', 'nama'];
+    protected array $filterable = ['kategori', 'status'];
+
     protected $table = 'barang';
 
     protected $fillable = [
