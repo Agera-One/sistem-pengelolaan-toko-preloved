@@ -9,25 +9,8 @@ class BarangController extends Controller
 {
     public function index(Request $request)
     {
-        $keyword  = trim((string) $request->query('q', ''));
-        $kategori = $request->query('kategori');
-        $status   = $request->query('status');
-
-        $barang = Barang::query()
-            ->when($keyword !== '', function ($query) use ($keyword) {
-                $like = '%' . addcslashes($keyword, '%_\\') . '%';
-
-                $query->where(function ($q) use ($like) {
-                    $q->where('kode', 'like', $like)
-                    ->orWhere('nama', 'like', $like);
-                });
-            })
-            ->when($kategori, function ($query) use ($kategori) {
-                $query->where('kategori', $kategori);
-            })
-            ->when($status, function ($query) use ($status) {
-                $query->where('status', $status);
-            })
+        $barang = Barang::search($request->q)
+            ->filter($request->query())
             ->latest('id')
             ->paginate(10)
             ->withQueryString();

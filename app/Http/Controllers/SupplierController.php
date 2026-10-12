@@ -13,19 +13,7 @@ class SupplierController extends Controller
 
     public function index(Request $request)
     {
-        $keyword = trim((string) $request->query('q', ''));
-
-        $supplier = Supplier::query()
-            ->when($keyword !== '', function ($query) use ($keyword) {
-                $like = '%' . addcslashes($keyword, '%_\\') . '%';
-
-                $query->where(function ($q) use ($like) {
-                    $q->where('kode', 'like', $like)
-                      ->orWhere('nama', 'like', $like)
-                      ->orWhere('nomor_telepon', 'like', $like)
-                      ->orWhere('kota', 'like', $like);
-                });
-            })
+        $supplier = Supplier::search($request->query('q'))
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
