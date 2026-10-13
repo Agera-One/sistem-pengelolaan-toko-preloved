@@ -66,8 +66,10 @@
                         <select name="kategori" onchange="this.form.submit()"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Kategori</option>
-                            @foreach (['Blouse', 'Kemeja', 'Rok', 'Celana', 'Overall', 'Outher', 'Jaket', 'Vest', 'Gamis', 'Dress'] as $kat)
-                                <option value="{{ $kat }}" {{ request('kategori') === $kat ? 'selected' : '' }}>{{ $kat }}</option>
+                            @foreach ($kategori as $kat)
+                                <option value="{{ $kat->value }}" {{ request('kat') === $kat->value ? 'selected' : '' }}>
+                                    {{ $kat->label() }}
+                                </option>
                             @endforeach
                         </select>
                     </form>
@@ -125,7 +127,7 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ $b->kategori }}
+                                    {{ $b->kategori->label() }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
@@ -169,8 +171,10 @@
                                                 data-panjang="{{ $b->panjang }}"
                                                 data-harga-beli="{{ $b->harga_beli }}"
                                                 data-harga-jual="{{ $b->harga_jual }}"
-                                                data-kategori="{{ $b->kategori }}"
-                                                data-status="{{ $b->status }}"
+                                                data-kategori="{{ $b->kategori->label() }}"
+                                                data-status="{{ $b->status->label() }}"
+                                                data-status-badge="{{ $b->status->badgeColor() }}"
+                                                data-status-dot="{{ $b->status->dotColor() }}"
                                                 data-kode-pembelian="{{ $b->pembelian->kode }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -318,16 +322,11 @@
                             aria-describedby="err-edit-kategori"
                             class="{{ $field }}">
                         <option value="" disabled selected>Pilih kategori</option>
-                        <option value="Blouse">Blouse</option>
-                        <option value="Kemeja">Kemeja</option>
-                        <option value="Rok">Rok</option>
-                        <option value="Celana">Celana</option>
-                        <option value="Overall">Overall</option>
-                        <option value="Outher">Outher</option>
-                        <option value="Jaket">Jaket</option>
-                        <option value="Vest">Vest</option>
-                        <option value="Gamis">Gamis</option>
-                        <option value="Dress">Dress</option>
+                        @foreach ($kategori as $kat)
+                            <option value="{{ $kat->value }}" {{ request('kat') === $kat->value ? 'selected' : '' }}>
+                                {{ $kat->label() }}
+                            </option>
+                        @endforeach
                     </select>
                     <p id="err-edit-kategori" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>

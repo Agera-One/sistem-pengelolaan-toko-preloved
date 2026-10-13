@@ -255,11 +255,6 @@
         });
     });
 
-    var detailStatusStyles = {
-        draft: { badge: 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300', dot: 'bg-stone-400' },
-        tersedia: { badge: 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200', dot: 'bg-emerald-500' },
-        terjual: { badge: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200', dot: 'bg-blue-500' }
-    };
     var detailSizeFields = { lingkar: true, panjang: true };
     var detailPriceFields = { hargaBeli: true, hargaJual: true };
 
@@ -288,7 +283,7 @@
                 }
 
                 var value = rawValue;
-                if (value !== '' && detailSizeFields[key]) {
+                if (value !== '' && (key === 'lingkar' || key === 'panjang')) {
                     value += ' cm';
                 }
 
@@ -304,12 +299,9 @@
             var badge = dialog.querySelector('[data-detail-status-badge]');
             var dot = dialog.querySelector('[data-detail-status-dot]');
 
-            if (badge && dot) {
-                var statusKey = (btn.dataset.status || '').trim().toLowerCase();
-                var style = detailStatusStyles[statusKey] || detailStatusStyles.draft;
-
-                badge.className = 'mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ' + style.badge;
-                dot.className = 'h-1.5 w-1.5 rounded-full ' + style.dot;
+            if (badge && dot && btn.dataset.statusBadge) {
+                badge.className = 'mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ' + btn.dataset.statusBadge;
+                dot.className = 'h-1.5 w-1.5 rounded-full ' + btn.dataset.statusDot;
             }
 
             openModal(dialog);
