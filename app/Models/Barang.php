@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BarangStatus;
 use App\Traits\Searchable;
 use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,13 @@ class Barang extends Model
         'status',
         'pembelian_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'status' => BarangStatus::class,
+        ];
+    }
 
     public function detailPenjualan(): HasMany
     {

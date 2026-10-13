@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MetodePembayaran;
 use App\Traits\HasDateRange;
 use App\Traits\Searchable;
 use App\Traits\Filterable;
@@ -29,7 +30,8 @@ class PembayaranPembelian extends Model
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'           => 'date',
+            'metode_pembayaran' => MetodePembayaran::class,
         ];
     }
 

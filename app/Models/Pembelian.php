@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PembelianStatus;
 use App\Traits\Filterable;
 use App\Traits\Searchable;
 use App\Traits\HasDateRange;
@@ -32,7 +33,8 @@ class Pembelian extends Model
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'   => 'date',
+            'status'    => PembelianStatus::class,
         ];
     }
 

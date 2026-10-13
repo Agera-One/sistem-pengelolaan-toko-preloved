@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PenjualanStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,7 +24,8 @@ class Penjualan extends Model
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'   => 'date',
+            'status'    => PenjualanStatus::class,
         ];
     }
 
