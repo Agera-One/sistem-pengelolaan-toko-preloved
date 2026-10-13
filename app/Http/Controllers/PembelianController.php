@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PembelianStatus;
 use App\Models\Pembelian;
 use App\Models\Supplier;
 use App\Services\CodeGeneratorService;
@@ -28,8 +29,9 @@ class PembelianController extends Controller
             ->withQueryString();
 
         $supplier = Supplier::orderBy('nama')->get();
+        $statuses = PembelianStatus::cases();
 
-        return view('pages.pembelian.index', compact('pembelian', 'supplier'));
+        return view('pages.pembelian.index', compact('pembelian', 'supplier', 'statuses'));
     }
 
     public function create()
