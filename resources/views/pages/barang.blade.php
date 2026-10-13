@@ -323,7 +323,7 @@
                             class="{{ $field }}">
                         <option value="" disabled selected>Pilih kategori</option>
                         @foreach ($kategori as $kat)
-                            <option value="{{ $kat->value }}" {{ request('kat') === $kat->value ? 'selected' : '' }}>
+                            <option value="{{ $kat->value }}">
                                 {{ $kat->label() }}
                             </option>
                         @endforeach
