@@ -79,8 +79,11 @@
                         <select name="status" onchange="this.form.submit()"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Status</option>
-                            <option value="Tersedia" {{ request('status') === 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                            <option value="Terjual" {{ request('status') === 'Terjual' ? 'selected' : '' }}>Terjual</option>
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status->value }}" {{ request('status') === $status->value ? 'selected' : '' }}>
+                                    {{ $status->label() }}
+                                </option>
+                            @endforeach
                         </select>
                     </form>
 
@@ -133,25 +136,10 @@
                                     Rp{{ number_format($b->harga_jual, 0, ',', '.') }}
                                 </td>
 
-                                @php
-                                    $statusKey = strtolower($b->status);
-                                    $statusBadge = match ($statusKey) {
-                                        'draft' => 'bg-stone-100 text-stone-700 ring-1 ring-inset ring-stone-300',
-                                        'tersedia' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
-                                        'terjual' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-300',
-                                        default => 'bg-stone-100 text-stone-700 ring-1 ring-inset ring-stone-300',
-                                    };
-                                    $statusDot = match ($statusKey) {
-                                        'draft' => 'bg-stone-500',
-                                        'tersedia' => 'bg-emerald-500',
-                                        'terjual' => 'bg-blue-500',
-                                        default => 'bg-stone-500',
-                                    };
-                                @endphp
-                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ $b->status }}">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
-                                        {{ $b->status }}
+                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ $b->status->label() }}">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $b->status->badgeColor() }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $b->status->dotColor() }}"></span>
+                                        {{ $b->status->label() }}
                                     </span>
                                 </td>
 

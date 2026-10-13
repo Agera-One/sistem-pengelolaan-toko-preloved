@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use App\Http\Requests\BarangRequest;
+use App\Enums\BarangStatus;
 
 class BarangController extends Controller
 {
@@ -15,7 +16,10 @@ class BarangController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('pages.barang', compact('barang'));
+
+        $statuses = BarangStatus::cases();
+
+        return view('pages.barang', compact('barang', 'statuses'));
     }
 
     public function update(BarangRequest $request, Barang $barang)
