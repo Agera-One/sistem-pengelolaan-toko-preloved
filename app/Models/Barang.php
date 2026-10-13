@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BarangStatus;
+use App\Enums\KategoriBarang;
 use App\Traits\Searchable;
 use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +35,8 @@ class Barang extends Model
     protected function casts(): array
     {
         return [
-            'status' => BarangStatus::class,
+            'status'    => BarangStatus::class,
+            'kategori'  => KategoriBarang::class,
         ];
     }
 
