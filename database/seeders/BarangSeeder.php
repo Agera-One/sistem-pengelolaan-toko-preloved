@@ -14,7 +14,7 @@ class BarangSeeder extends Seeder
 
         $templateBarang = [
             [
-                'kategori'      => 'Blouse',
+                'kategori'      => 'blouse',
                 'nama'          => 'Casual Cotton',
                 'lingkar'       => 98,
                 'panjang'       => 65,
@@ -22,7 +22,7 @@ class BarangSeeder extends Seeder
                 'harga_jual'    => 65000
             ],
             [
-                'kategori'      => 'Kemeja',
+                'kategori'      => 'kemeja',
                 'nama'          => 'Slim Fit Polos',
                 'lingkar'       => 102,
                 'panjang'       => 72,
@@ -30,7 +30,7 @@ class BarangSeeder extends Seeder
                 'harga_jual'    => 75000
             ],
             [
-                'kategori'      => 'Rok',
+                'kategori'      => 'rok',
                 'nama'          => 'Plisket Panjang',
                 'lingkar'       => 70,
                 'panjang'       => 92,
@@ -38,7 +38,7 @@ class BarangSeeder extends Seeder
                 'harga_jual'    => 80000
             ],
             [
-                'kategori'      => 'Celana',
+                'kategori'      => 'celana',
                 'nama'          => 'Chino Reguler',
                 'lingkar'       => 82,
                 'panjang'       => 100,
@@ -46,7 +46,7 @@ class BarangSeeder extends Seeder
                 'harga_jual'    => 95000
             ],
             [
-                'kategori'      => 'Overall',
+                'kategori'      => 'overall',
                 'nama'          => 'Denim Style',
                 'lingkar'       => 96,
                 'panjang'       => 130,
