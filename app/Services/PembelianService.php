@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\BarangStatus;
 use App\Models\Pembelian;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,6 @@ class PembelianService
                 'kode'        => $this->codeGenerator->pembelian(),
                 'tanggal'     => $data['tanggal'],
                 'total'       => $items->sum(fn ($r) => (int) $r['harga_beli']),
-                'status'      => 'Belum Bayar',
                 'supplier_id' => $data['supplier_id'],
                 'user_id'     => $userId,
             ]);
@@ -31,7 +31,7 @@ class PembelianService
                 $pembelian->barang()->create(
                     Arr::only($row, self::FIELD_BARANG) + [
                         'kode'   => $kodeBarang[$i],
-                        'status' => 'Tersedia',
+                        'status' => BarangStatus::TERSEDIA,
                     ]
                 );
             }
@@ -44,8 +44,8 @@ class PembelianService
     {
         return DB::transaction(function () use ($pembelian, $data) {
             $items    = collect($data['items'] ?? []);
-            $locked   = $pembelian->barang()->where('status', '!=', 'Tersedia')->get()->keyBy('id');
-            $editable = $pembelian->barang()->where('status', 'Tersedia')->get()->keyBy('id');
+            $locked   = $pembelian->barang()->where('status', '!=', BarangStatus::TERSEDIA)->get()->keyBy('id');
+            $editable = $pembelian->barang()->where('status', BarangStatus::TERSEDIA)->get()->keyBy('id');
 
             $newCount = $items->filter(fn ($r) => blank($r['id'] ?? null))->count();
             $kodeBaru = $newCount > 0 ? $this->codeGenerator->barang($newCount) : [];
@@ -58,7 +58,7 @@ class PembelianService
                 if (blank($row['id'] ?? null)) {
                     $barang = $pembelian->barang()->create($attributes + [
                         'kode'   => $kodeBaru[$n++],
-                        'status' => 'Tersedia',
+                        'status' => BarangStatus::TERSEDIA,
                     ]);
                     $keptIds[] = $barang->id;
                     continue;
