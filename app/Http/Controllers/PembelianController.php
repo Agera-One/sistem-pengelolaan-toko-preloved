@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\KategoriBarang;
 use App\Enums\PembelianStatus;
 use App\Models\Pembelian;
 use App\Models\Supplier;
@@ -38,7 +39,8 @@ class PembelianController extends Controller
     {
         $kode = $this->codeGenerator->pembelian();
         $supplier = Supplier::orderBy('nama')->get();
-        return view('pages.pembelian.create', compact('kode', 'supplier'));
+        $kategori = KategoriBarang::cases();
+        return view('pages.pembelian.create', compact('kode', 'supplier', 'kategori'));
     }
 
     public function show(Pembelian $pembelian)
@@ -55,7 +57,8 @@ class PembelianController extends Controller
     public function edit(Pembelian $pembelian)
     {
         $supplier = Supplier::orderBy('nama')->get();
-        return view('pages.pembelian.edit', compact('pembelian', 'supplier'));
+        $kategori = KategoriBarang::cases();
+        return view('pages.pembelian.edit', compact('pembelian', 'supplier', 'kategori'));
     }
 
     public function update(UpdateRequest $request, Pembelian $pembelian)
