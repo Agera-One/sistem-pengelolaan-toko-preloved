@@ -204,7 +204,7 @@
                                             Ubah
                                         </button>
 
-                                        @if ($b->status === 'Tersedia')
+                                        @if ($b->status->value === 'tersedia')
                                             <form action="{{ route('barang.destroy', $b) }}" method="POST"
                                                 data-confirm="Hapus barang {{ $b->nama }}? Data yang dihapus tidak bisa dikembalikan.">
                                                 @csrf
