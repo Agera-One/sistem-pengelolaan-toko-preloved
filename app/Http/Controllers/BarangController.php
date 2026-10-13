@@ -5,6 +5,7 @@ use App\Models\Barang;
 use Illuminate\Http\Request;
 use App\Http\Requests\BarangRequest;
 use App\Enums\BarangStatus;
+use App\Enums\KategoriBarang;
 
 class BarangController extends Controller
 {
@@ -18,8 +19,9 @@ class BarangController extends Controller
 
 
         $statuses = BarangStatus::cases();
+        $kategori = KategoriBarang::cases();
 
-        return view('pages.barang', compact('barang', 'statuses'));
+        return view('pages.barang', compact('barang', 'statuses', 'kategori'));
     }
 
     public function update(BarangRequest $request, Barang $barang)
