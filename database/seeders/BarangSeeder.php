@@ -67,7 +67,7 @@ class BarangSeeder extends Seeder
                     'kategori'     => $tb['kategori'],
                     'harga_beli'   => $tb['harga_beli'],
                     'harga_jual'   => $tb['harga_jual'],
-                    'status'       => 'Tersedia',
+                    'status'       => 'tersedia',
                     'pembelian_id' => $pembelianId,
                     'created_at'   => now(),
                     'updated_at'   => now(),

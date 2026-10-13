@@ -29,7 +29,7 @@ class PembelianSeeder extends Seeder
                 'tanggal'     => "2026-09-{$hari}",
                 'kode'        => "BEL-202610-{$kodeNomor}",
                 'total'       => $totalHargaBeli,
-                'status'      => 'Belum Bayar',
+                'status'      => 'belum bayar',
                 'user_id'     => 1,
                 'supplier_id' => $i,
                 'created_at'  => now(),
