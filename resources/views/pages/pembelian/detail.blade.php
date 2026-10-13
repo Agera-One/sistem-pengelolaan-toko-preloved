@@ -4,23 +4,6 @@
 
 @section('content')
     @php
-        $statusStyle = fn (?string $status) => match (strtolower(trim((string) $status))) {
-            'belum bayar' => [
-                'badge' => 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-300',
-                'dot'   => 'bg-red-500',
-            ],
-            'sudah bayar', 'tersedia' => [
-                'badge' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
-                'dot'   => 'bg-emerald-500',
-            ],
-            'terjual' => [
-                'badge' => 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-300',
-                'dot'   => 'bg-blue-500',
-            ]
-        };
-
-        $statusPembelian = $statusStyle($pembelian->status);
-
         $inisial = fn (?string $nama) => \Illuminate\Support\Str::of($nama ?? '?')
             ->trim()->explode(' ')->filter()->take(2)
             ->map(fn ($kata) => \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($kata, 0, 1)))
@@ -86,9 +69,9 @@
         <div class="mt-6">
             <div class="mt-1 flex flex-wrap items-center gap-3">
                 <h1 class="text-2xl font-semibold text-stone-900">{{ $pembelian->kode }}</h1>
-                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusPembelian['badge'] }}">
-                    <span class="h-1.5 w-1.5 rounded-full {{ $statusPembelian['dot'] }}"></span>
-                    {{ $pembelian->status }}
+                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
+                    <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
+                    {{ $pembelian->status->label() }}
                 </span>
             </div>
             <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-stone-500">
@@ -212,8 +195,6 @@
 
                     <tbody class="divide-y divide-stone-300">
                         @foreach ($pembelian->barang as $barang)
-                            @php $statusBarang = $statusStyle($barang->status); @endphp
-
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">{{ $loop->iteration }}</td>
 
@@ -246,9 +227,9 @@
                                 </td>
 
                                 <td class="px-4 py-4">
-                                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBarang['badge'] }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusBarang['dot'] }}"></span>
-                                        {{ $barang->status }}
+                                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $barang->status->badgeColor() }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $barang->status->dotColor() }}"></span>
+                                        {{ $barang->status->label() }}
                                     </span>
                                 </td>
                             </tr>
