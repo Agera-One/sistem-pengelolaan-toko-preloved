@@ -207,7 +207,7 @@
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->kategori }}
+                                    {{ $barang->kategori->label() }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
