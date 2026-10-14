@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\PembayaranPembelian;
 use App\Models\PembayaranPenjualan;
-use App\Observers\StatusObserver;
+use App\Observers\PembayaranObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
         setlocale(LC_TIME, 'id_ID.utf8', 'id_ID', 'id');
 
-        PembayaranPembelian::observe(StatusObserver::class);
+        PembayaranPembelian::observe(PembayaranObserver::class);
         // PembayaranPenjualan::observe(PembayaranPenjualan::class);
     }
 }
