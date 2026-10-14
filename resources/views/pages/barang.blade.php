@@ -67,7 +67,7 @@
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Kategori</option>
                             @foreach ($kategori as $kat)
-                                <option value="{{ $kat->value }}" {{ request('kat') === $kat->value ? 'selected' : '' }}>
+                                <option value="{{ $kat->value }}" {{ request('kategori') === $kat->value ? 'selected' : '' }}>
                                     {{ $kat->label() }}
                                 </option>
                             @endforeach
