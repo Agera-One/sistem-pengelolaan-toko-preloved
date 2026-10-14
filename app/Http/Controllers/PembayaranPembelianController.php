@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MetodePembayaran;
 use Illuminate\Http\Request;
 use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
@@ -25,8 +26,9 @@ class PembayaranPembelianController extends Controller
         $pembelian = Pembelian::where('status', 'Belum Bayar')->with('supplier')->latest('id')->get();
 
         $kode = $this->codeGenerator->pembayaranPembelian();
+        $metode = MetodePembayaran::cases();
 
-        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode'));
+        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode', 'metode'));
     }
 
     public function store(PembayaranPembelianRequest $request)

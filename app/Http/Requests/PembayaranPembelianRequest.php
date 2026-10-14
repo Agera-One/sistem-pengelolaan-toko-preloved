@@ -16,7 +16,7 @@ class PembayaranPembelianRequest extends FormRequest
         return [
             'pembelian_id'          => 'required|exists:pembelian,id',
             'tanggal'               => 'required|date',
-            'metode_pembayaran'     => 'required|in:Tunai,Transfer',
+            'metode_pembayaran'     => 'required|in:tunai,transfer',
         ];
     }
 
@@ -28,7 +28,7 @@ class PembayaranPembelianRequest extends FormRequest
             'tanggal.required'           => 'Tanggal bayar wajib diisi.',
             'tanggal.date'               => 'Format tanggal tidak valid.',
             'metode_pembayaran.required' => 'Pilih metode pembayaran.',
-            'metode_pembayaran.in'       => 'Metode pembayaran harus Tunai atau Transfer.',
+            'metode_pembayaran.in'       => 'Metode pembayaran harus tunai atau transfer.',
         ];
     }
 }
