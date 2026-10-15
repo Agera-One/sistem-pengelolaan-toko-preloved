@@ -9,10 +9,11 @@ Sistem Manajemen Toko Preloved
 │   ├── Total Laba
 │   └── Barang Tersedia
 │
-├── Data Utama
-│   ├── Barang
-│   ├── Supplier
-│   └── Pelanggan
+├── Pakaian
+│
+├── Supplier
+│
+├── Pelanggan
 │
 ├── Pembelian
 │   ├── Daftar Pembelian
