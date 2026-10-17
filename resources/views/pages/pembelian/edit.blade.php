@@ -6,19 +6,19 @@
     @php
         $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
         $cell = 'w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-        $kategoriList = ['Blouse', 'Kemeja', 'Rok', 'Celana', 'Overall', 'Outher', 'Jaket', 'Vest', 'Gamis', 'Dress'];
 
         $lockedIds = $pembelian->barang->where('status', '!=', 'Tersedia')->pluck('id')->all();
 
         $rows = old('items') ?: $pembelian->barang->map(fn ($it) => [
             'id'         => $it->id,
             'nama'       => $it->nama,
-            'kategori'   => $it->kategori,
+            'kategori'   => $it->kategori->value,
             'lingkar'    => (float) $it->lingkar,
             'panjang'    => (float) $it->panjang,
             'harga_beli' => (int) $it->harga_beli,
             'harga_jual' => (int) $it->harga_jual,
         ])->all();
+
         $rows = $rows ?: [[]];
     @endphp
 
@@ -165,8 +165,10 @@
                                                 @if ($bad('kategori')) aria-invalid="true" @endif
                                                 class="{{ $cell }}">
                                             <option value="" disabled @selected(empty($item['kategori']))>Pilih</option>
-                                            @foreach ($kategoriList as $kat)
-                                                <option value="{{ $kat }}" @selected(($item['kategori'] ?? '') === $kat)>{{ $kat }}</option>
+                                            @foreach ($kategori as $kat)
+                                                <option value="{{ $kat->value }}" @selected($item['kategori'] === $kat->value)>
+                                                    {{ $kat->label() }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -185,7 +187,7 @@
                                         @php $moneyLocked = $locked && $money === 'harga_beli'; @endphp
                                         <td class="px-2 py-2">
                                             <div class="relative">
-                                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
                                                 <input type="text" inputmode="numeric" autocomplete="off" data-money
                                                        name="items[{{ $i }}][{{ $money }}]" value="{{ $item[$money] ?? '' }}"
                                                        data-cell="{{ $money }}" placeholder="0"
@@ -231,8 +233,10 @@
                         <td class="px-2 py-2">
                             <select name="items[__INDEX__][kategori]" data-cell="kategori" class="{{ $cell }}">
                                 <option value="" disabled selected>Pilih</option>
-                                @foreach ($kategoriList as $kat)
-                                    <option value="{{ $kat }}">{{ $kat }}</option>
+                                @foreach ($kategori as $kat)
+                                    <option value="{{ $kat->value }}">
+                                        {{ $kat->label() }}
+                                    </option>
                                 @endforeach
                             </select>
                         </td>
@@ -249,7 +253,7 @@
                         @foreach (['harga_beli', 'harga_jual'] as $money)
                             <td class="px-2 py-2">
                                 <div class="relative">
-                                    <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                                    <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
                                     <input type="text" inputmode="numeric" autocomplete="off" data-money
                                            name="items[__INDEX__][{{ $money }}]" value=""
                                            data-cell="{{ $money }}" placeholder="0"

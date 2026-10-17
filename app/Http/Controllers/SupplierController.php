@@ -5,108 +5,41 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\SupplierRequest;
 
 class SupplierController extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function __construct(protected CodeGeneratorService $codeGenerator) {}
+
+    public function index(Request $request)
     {
-        $keyword = trim((string) $request->query('q', ''));
-
-        $supplier = Supplier::query()
-            ->when($keyword !== '', function ($query) use ($keyword) {
-                $like = '%' . addcslashes($keyword, '%_\\') . '%';
-
-                $query->where(function ($q) use ($like) {
-                    $q->where('kode', 'like', $like)
-                      ->orWhere('nama', 'like', $like)
-                      ->orWhere('nomor_telepon', 'like', $like)
-                      ->orWhere('kota', 'like', $like);
-                });
-            })
+        $supplier = Supplier::search($request->query('q'))
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
 
-        $kode = $codeGenerator->generate(
-        new Supplier(),
-            'kode',
-            'SPL'
-        );
+        $kode = $this->codeGenerator->supplier();
 
         return view('pages.supplier', compact('supplier', 'kode'));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
+    public function store(SupplierRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'kota'          => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('supplier.index');
-        }
-
-        $kode = $codeGenerator->generate(new Supplier(), 'kode', 'SPL');
-
-        try {
-            Supplier::create([
-                'kode'          => $kode,
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'kota'          => $request->kota,
-            ]);
-
-            return redirect()->route('supplier.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('supplier.index')
-                ->with('error', 'Nomor telepon tidak boleh sama.');
-        }
+        $validated = $request->validated();
+        $validated['kode'] = $this->codeGenerator->supplier();
+        Supplier::create($validated);
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di tambahkan');
     }
 
-    public function update(Request $request, Supplier $supplier)
+    public function update(SupplierRequest $request, Supplier $supplier)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'kota'          => 'required|string|max:255',
-        ], [
-            'nama.required'          => 'Nama lengkap wajib diisi.',
-            'nama.max'               => 'Nama lengkap maksimal 255 karakter.',
-            'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
-            'nomor_telepon.max'      => 'Nomor telepon maksimal 15 karakter.',
-            'kota.required'          => 'kota wajib diisi.',
-            'kota.max'               => 'kota maksimal 255 karakter.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('supplier.index')
-                ->with('error', $validator->errors()->first());
-        }
-
-        try {
-            $supplier->update([
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'kota'          => $request->kota,
-            ]);
-
-            return redirect()->route('supplier.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('supplier.index')
-                ->with('error', 'Gagal memperbarui data Supplier.');
-        }
+        $supplier->update($request->validated());
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di perbarui');
     }
 
     public function destroy(Supplier $supplier)
     {
         $supplier->delete();
-        return redirect()->route('supplier.index');
+        return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di hapus');
     }
 }

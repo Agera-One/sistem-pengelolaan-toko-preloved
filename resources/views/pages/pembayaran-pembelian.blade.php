@@ -68,8 +68,11 @@
                         <select name="metode" onchange="this.form.submit()"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Metode</option>
-                            <option value="Tunai" {{ strtolower(request('metode')) === 'Tunai' ? 'selected' : '' }}>Tunai</option>
-                            <option value="Transfer" {{ strtolower(request('metode')) === 'Transfer' ? 'selected' : '' }}>Transfer</option>
+                            @foreach ($metode as $m)
+                                <option value="{{ $m->value }}" {{ request('metode') == $m->value ? 'selected' : '' }}>
+                                    {{ $m->label() }}
+                                </option>
+                            @endforeach
                         </select>
                     </form>
 
@@ -117,15 +120,15 @@
                     <tbody class="divide-y divide-stone-300">
                         @forelse ($pembayaran as $p)
                             @php
-                                $kodeBayarBaris = $p->kode;
-                                $kodeBeliBaris = $p->pembelian->kode;
+                                $kodeBayar = $p->kode;
+                                $kodeBeli = $p->pembelian->kode;
 
                                 $payload = json_encode([
                                     'id' => $p->getKey(),
-                                    'kode_bayar' => $kodeBayarBaris,
+                                    'kode_bayar' => $kodeBayar,
                                     'tanggal' => \Carbon\Carbon::parse($p->tanggal)->toDateString(),
                                     'nominal' => $p->nominal,
-                                    'metode_pembayaran' => $p->metode_pembayaran,
+                                    'metode_pembayaran' => $p->metode_pembayaran->value,
                                     'pembelian_id' => $p->pembelian_id,
                                     'pembelian' => [
                                         'id' => $p->pembelian->id,
@@ -144,11 +147,11 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-700">
-                                    {{ $kodeBayarBaris }}
+                                    {{ $kodeBayar }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-900">
-                                    {{ $kodeBeliBaris }}
+                                    {{ $kodeBeli }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
@@ -160,7 +163,7 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ $p->metode_pembayaran }}
+                                    {{ $p->metode_pembayaran->label() }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -168,7 +171,7 @@
                                             data-menu-toggle="menu-pembayaran-{{ $p->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ $kodeBayarBaris }}"
+                                            aria-label="Aksi untuk {{ $kodeBayar }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -195,7 +198,7 @@
                                         </button>
 
                                         <form action="{{ route('pembayaran-pembelian.destroy', $p) }}" method="POST"
-                                            data-confirm="Hapus pembayaran {{ $kodeBayarBaris }}? Data yang dihapus tidak bisa dikembalikan.">
+                                            data-confirm="Hapus pembayaran {{ $kodeBayar }}? Data yang dihapus tidak bisa dikembalikan.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -255,10 +258,9 @@
     </div>
 
     @php
-        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25';
+        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500/25';
         $label = 'mb-1.5 block font-medium text-stone-700';
         $error = 'mt-1 hidden text-xs text-red-600';
-        $metode = ['Tunai', 'Transfer'];
         $perf = 'relative mx-4 border-t-2 border-dashed border-stone-300 before:absolute before:-left-[27px] before:-top-[11px] before:size-5 before:rounded-full before:bg-white after:absolute after:-right-[27px] after:-top-[11px] after:size-5 after:rounded-full after:bg-white';
         $tutupIkon = '<svg class="size-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3 6.7a1 1 0 0 1 0-1.4Z"/></svg>';
 
@@ -296,7 +298,7 @@
             </div>
 
             <form id="form-pembayaran" method="POST" action="{{ route('pembayaran-pembelian.store') }}"
-                data-url-store="{{ route('pembayaran-pembelian.store') }}" data-kode-bayar="{{ $kodeBayar }}"
+                data-url-store="{{ route('pembayaran-pembelian.store') }}" data-kode-bayar="{{ $kode }}"
                 novalidate class="flex min-h-0 flex-1 flex-col">
                 @csrf
                 <input type="hidden" name="_method" value="PUT" id="field-method" disabled>
@@ -304,7 +306,7 @@
                 <div class="flex-1 space-y-7 overflow-y-auto px-6 py-5">
 
                     <section>
-                        <label for="pembelian_id" class="{{ $label }}">Kode Pembelian</label>
+                        <label for="pembelian_id" class="{{ $label }}">Kode Pembelian <span class="text-red-600">*</span></label>
                         <select id="pembelian_id" name="pembelian_id" class="{{ $input }}">
                             <option value="">Pilih Pembelian</option>
                             @foreach ($pembelian as $p)
@@ -373,12 +375,12 @@
                         </div>
 
                         <div>
-                            <span class="{{ $label }}">Metode Pembayaran</span>
-                            <div class="grid grid-cols-2 gap-2">
+                            <span class="{{ $label }}">Metode Pembayaran <span class="text-red-600">*</span></label>
+                            <div data-wrap-for="metode_pembayaran" class="grid grid-cols-2 gap-2">
                                 @foreach ($metode as $m)
                                     <label class="cursor-pointer">
-                                        <input type="radio" name="metode_pembayaran" value="{{ $m }}" class="peer sr-only">
-                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25">{{ $m }}</span>
+                                        <input type="radio" name="metode_pembayaran" value="{{ $m->value }}" class="peer sr-only">
+                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25">{{ $m->label() }}</span>
                                     </label>
                                 @endforeach
                             </div>

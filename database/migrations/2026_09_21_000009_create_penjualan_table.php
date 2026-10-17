@@ -15,11 +15,11 @@ return new class extends Migration
             $table->unsignedInteger('subtotal')->nullable();
             $table->unsignedInteger('ongkir');
             $table->unsignedInteger('total')->nullable();
-            $table->string('status')->default('Belum Bayar');
+            $table->string('status')->default('belum bayar');
             $table->timestamps();
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');;
-            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onDelete('restrict');;
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
+            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onDelete('restrict');
         });
     }
 

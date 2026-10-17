@@ -69,8 +69,11 @@
                         <select name="status" onchange="this.form.submit()"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Status</option>
-                            <option value="Sudah Bayar" {{ request('status') === 'Sudah Bayar' ? 'selected' : '' }}>Sudah Bayar</option>
-                            <option value="Belum Bayar" {{ request('status') === 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status->value }}" {{ request('status') === $status->value ? 'selected' : '' }}>
+                                    {{ $status->label() }}
+                                </option>
+                            @endforeach
                         </select>
                     </form>
 
@@ -140,23 +143,10 @@
                                     Rp{{ number_format($p->total, 0, ',', '.') }}
                                 </td>
 
-                                @php
-                                    $statusKey = strtolower($p->status);
-                                    $statusBadge = match ($statusKey) {
-                                        'belum bayar' => 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-300',
-                                        'sudah bayar' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
-                                        default => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
-                                    };
-                                    $statusDot = match ($statusKey) {
-                                        'belum bayar' => 'bg-red-500',
-                                        'sudah bayar' => 'bg-emerald-500',
-                                        default => 'bg-stone-400',
-                                    };
-                                @endphp
-                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ $p->status }}">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
-                                        {{ $p->status }}
+                                <td class="whitespace-nowrap px-4 py-3.5" title="{{ $p->status->label() }}">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $p->status->badgeColor() }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $p->status->dotColor() }}"></span>
+                                        {{ $p->status->label() }}
                                     </span>
                                 </td>
 
@@ -183,7 +173,7 @@
                                             Detail
                                         </a>
 
-                                        @if ($p->status === 'Belum Bayar')
+                                        @if ($p->status->value === 'belum bayar')
                                             <a href="{{ route('pembelian.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 20h9" />

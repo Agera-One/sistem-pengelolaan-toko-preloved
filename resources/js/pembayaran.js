@@ -46,11 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const opsi = (id) => select.querySelector(`option[value="${id}"]`);
 
+    function targetInvalid(nama) {
+        const wrap = form.querySelector(`[data-wrap-for="${nama}"]`);
+        return wrap || form.elements[nama];
+    }
+
+    function setInvalid(nama, invalid) {
+        const el = targetInvalid(nama);
+        if (!el) return;
+        if (invalid) {
+            el.setAttribute('aria-invalid', 'true');
+        } else {
+            el.removeAttribute('aria-invalid');
+        }
+    }
+
     function resetError() {
         form.querySelectorAll('[data-error]').forEach((p) => {
             p.textContent = '';
             p.classList.add('hidden');
         });
+        ['pembelian_id', 'tanggal', 'metode_pembayaran'].forEach((nama) => setInvalid(nama, false));
     }
 
     function tampilError(nama, pesan) {
@@ -58,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!p) return;
         p.textContent = pesan;
         p.classList.remove('hidden');
+        setInvalid(nama, true);
     }
 
     function bersihkanOpsiTemporary() {
@@ -178,6 +195,27 @@ document.addEventListener('DOMContentLoaded', () => {
             galat.textContent = '';
             galat.classList.add('hidden');
         }
+        setInvalid('pembelian_id', false);
+    });
+
+    $('tanggal').addEventListener('input', () => {
+        const galat = form.querySelector('[data-error="tanggal"]');
+        if (galat) {
+            galat.textContent = '';
+            galat.classList.add('hidden');
+        }
+        setInvalid('tanggal', false);
+    });
+
+    form.querySelectorAll('[name="metode_pembayaran"]').forEach((radio) => {
+        radio.addEventListener('change', () => {
+            const galat = form.querySelector('[data-error="metode_pembayaran"]');
+            if (galat) {
+                galat.textContent = '';
+                galat.classList.add('hidden');
+            }
+            setInvalid('metode_pembayaran', false);
+        });
     });
 
     form.addEventListener('submit', async (e) => {
@@ -185,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resetError();
 
         const wajib = [
-            ['pembelian_id', 'Pilih pembelian yang dibayar.'],
+            ['pembelian_id', 'Pembelian wajib diisi.'],
             ['tanggal', 'Tanggal bayar wajib diisi.'],
             ['metode_pembayaran', 'Pilih metode pembayaran.'],
         ];

@@ -13,11 +13,11 @@ return new class extends Migration
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
             $table->unsignedInteger('total');
-            $table->string('status');
+            $table->string('status')->default('belum bayar');
             $table->timestamps();
 
-            $table->foreignId('supplier_id')->constrained('supplier')->onDelete('restrict');;
-            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');;
+            $table->foreignId('supplier_id')->constrained('supplier')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
         });
     }
 

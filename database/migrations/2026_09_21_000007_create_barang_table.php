@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('kategori');
             $table->unsignedInteger('harga_beli');
             $table->unsignedInteger('harga_jual');
-            $table->string('status');
+            $table->string('status')->default('tersedia');
             $table->timestamps();
 
-            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');;
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');
         });
     }
 
