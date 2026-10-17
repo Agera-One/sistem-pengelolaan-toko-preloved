@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\PembelianStatus;
+use App\Traits\Filterable;
+use App\Traits\Searchable;
+use App\Traits\HasDateRange;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pembelian extends Model
 {
+    use Searchable, Filterable, HasDateRange;
+
+    protected array $searchable = ['kode'];
+    protected array $searchableRelations = ['supplier' => 'nama'];
+    protected array $filterable = ['status'];
+
     protected $table = 'pembelian';
 
     protected $fillable = [
@@ -23,7 +33,8 @@ class Pembelian extends Model
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'   => 'date',
+            'status'    => PembelianStatus::class,
         ];
     }
 

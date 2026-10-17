@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MetodePembayaran;
+use Illuminate\Http\Request;
 use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
-use Illuminate\Http\Request;
 use App\Services\CodeGeneratorService;
+use App\Http\Requests\PembayaranPembelianRequest;
 
 class PembayaranPembelianController extends Controller
 {
@@ -13,30 +15,9 @@ class PembayaranPembelianController extends Controller
 
     public function index(Request $request)
     {
-        $keyword = trim((string) $request->query('q', ''));
-        $metode = $request->query('metode');
-        $tanggalMulai = $request->query('tanggal_mulai');
-        $tanggalSelesai = $request->query('tanggal_selesai');
-
-        $isValidDate = fn ($value) => is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
-
-        $tanggalMulai   = $isValidDate($tanggalMulai) ? $tanggalMulai : null;
-        $tanggalSelesai = $isValidDate($tanggalSelesai) ? $tanggalSelesai : null;
-
-        $pembayaran = PembayaranPembelian::query()
-            ->when($keyword !== '', function ($query) use ($keyword) {
-                $like = '%' . addcslashes($keyword, '%_\\') . '%';
-
-                $query->where(function ($q) use ($like) {
-                    $q->where('kode', 'like', $like)
-                    ->orWhereHas('pembelian', fn ($s) => $s->where('kode', 'like', $like));
-                });
-            })
-            ->when($metode, function ($query) use ($metode) {
-                $query->where('metode_pembayaran', $metode);
-            })
-            ->when($tanggalMulai, fn ($q) => $q->where('tanggal', '>=', $tanggalMulai . ' 00:00:00'))
-            ->when($tanggalSelesai, fn ($q) => $q->where('tanggal', '<=', $tanggalSelesai . ' 23:59:59'))
+        $pembayaran = PembayaranPembelian::search($request->q)
+            ->filter($request->query())
+            ->dateBetween($request->tanggal_mulai, $request->tanggal_selesai)
             ->with('pembelian.supplier')
             ->latest('id')
             ->paginate(10)
@@ -44,44 +25,31 @@ class PembayaranPembelianController extends Controller
 
         $pembelian = Pembelian::where('status', 'Belum Bayar')->with('supplier')->latest('id')->get();
 
-        $kode = $this->codeGenerator->pembayaran_pembelian();
+        $kode = $this->codeGenerator->pembayaranPembelian();
+        $metode = MetodePembayaran::cases();
 
-        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode'));
+        return view('pages.pembayaran-pembelian', compact('pembayaran', 'pembelian', 'kode', 'metode'));
     }
 
-    public function store(Request $request)
+    public function store(PembayaranPembelianRequest $request)
     {
-        $data = $this->validasi($request);
-        $data['kode'] = $this->codeGenerator->pembayaran_pembelian();
+        $validated = $request->validated();
+        $pembelian = Pembelian::findOrFail($validated['pembelian_id']);
 
-        PembayaranPembelian::create($data);
+        $validated['kode']    = $this->codeGenerator->pembayaranPembelian();
+        $validated['nominal'] = $pembelian->total;
 
+        PembayaranPembelian::create($validated);
         return response()->json(['ok' => true]);
     }
 
-    public function update(Request $request, PembayaranPembelian $pembayaranPembelian)
+    public function update(PembayaranPembelianRequest $request, PembayaranPembelian $pembayaranPembelian)
     {
-        $data = $this->validasi($request, $pembayaranPembelian);
-        $pembayaranPembelian->update($data);
+        $validated = $request->validated();
+        $validated['nominal'] = Pembelian::findOrFail($validated['pembelian_id'])->total;
+
+        $pembayaranPembelian->update($validated);
         return response()->json(['ok' => true]);
-    }
-
-    private function validasi(Request $request, ?PembayaranPembelian $pembayaran = null): array
-    {
-        $data = $request->validate([
-            'pembelian_id'          => 'required|exists:pembelian,id',
-            'tanggal'               => 'required|date',
-            'metode_pembayaran'     => 'required|in:Tunai,Transfer',
-        ], [
-            'pembelian_id.required'         => 'Pilih pembelian yang dibayar.',
-            'tanggal.required'              => 'Tanggal bayar wajib diisi.',
-            'metode_pembayaran.required'    => 'Pilih metode pembayaran.',
-        ]);
-
-        $pembelian = Pembelian::findOrFail($data['pembelian_id']);
-        $data['nominal'] = $pembelian->total;
-
-        return $data;
     }
 
     public function destroy(PembayaranPembelian $pembayaranPembelian)

@@ -7,7 +7,6 @@
         $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
         $cell = 'w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
         $rows = old('items') ?: [[]];
-        $kategoriList = ['Blouse', 'Kemeja', 'Rok', 'Celana', 'Overall', 'Outher', 'Jaket', 'Vest', 'Gamis', 'Dress'];
     @endphp
 
     <div>
@@ -150,8 +149,10 @@
                                                 @if ($errors->has("items.$i.kategori")) aria-invalid="true" @endif
                                                 class="{{ $cell }}">
                                             <option value="" disabled @selected(!isset($item['kategori']))>Pilih</option>
-                                            @foreach ($kategoriList as $kat)
-                                                <option value="{{ $kat }}" @selected(($item['kategori'] ?? '') === $kat)>{{ $kat }}</option>
+                                            @foreach ($kategori as $kat)
+                                                <option value="{{ $kat->value }}">
+                                                    {{ $kat->label() }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -213,8 +214,10 @@
                         <td class="px-2 py-2">
                             <select name="items[__INDEX__][kategori]" data-cell="kategori" class="{{ $cell }}">
                                 <option value="" disabled selected>Pilih</option>
-                                @foreach ($kategoriList as $kat)
-                                    <option value="{{ $kat }}">{{ $kat }}</option>
+                                @foreach ($kategori as $kat)
+                                    <option value="{{ $kat->value }}">
+                                        {{ $kat->label() }}
+                                    </option>
                                 @endforeach
                             </select>
                         </td>

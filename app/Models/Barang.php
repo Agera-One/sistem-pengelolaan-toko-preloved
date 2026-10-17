@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\BarangStatus;
+use App\Enums\KategoriBarang;
+use App\Traits\Searchable;
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +13,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Barang extends Model
 {
+    use Searchable, Filterable;
+
+    protected array $searchable = ['kode', 'nama'];
+    protected array $filterable = ['kategori', 'status'];
+
     protected $table = 'barang';
 
     protected $fillable = [
@@ -22,6 +31,14 @@ class Barang extends Model
         'status',
         'pembelian_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'status'    => BarangStatus::class,
+            'kategori'  => KategoriBarang::class,
+        ];
+    }
 
     public function detailPenjualan(): HasMany
     {

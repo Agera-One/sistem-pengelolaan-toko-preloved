@@ -68,8 +68,11 @@
                         <select name="metode" onchange="this.form.submit()"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Metode</option>
-                            <option value="Tunai" {{ strtolower(request('metode')) === 'Tunai' ? 'selected' : '' }}>Tunai</option>
-                            <option value="Transfer" {{ strtolower(request('metode')) === 'Transfer' ? 'selected' : '' }}>Transfer</option>
+                            @foreach ($metode as $m)
+                                <option value="{{ $m->value }}" {{ request('metode') == $m->value ? 'selected' : '' }}>
+                                    {{ $m->label() }}
+                                </option>
+                            @endforeach
                         </select>
                     </form>
 
@@ -125,7 +128,7 @@
                                     'kode_bayar' => $kodeBayar,
                                     'tanggal' => \Carbon\Carbon::parse($p->tanggal)->toDateString(),
                                     'nominal' => $p->nominal,
-                                    'metode_pembayaran' => $p->metode_pembayaran,
+                                    'metode_pembayaran' => $p->metode_pembayaran->value,
                                     'pembelian_id' => $p->pembelian_id,
                                     'pembelian' => [
                                         'id' => $p->pembelian->id,
@@ -160,7 +163,7 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    {{ $p->metode_pembayaran }}
+                                    {{ $p->metode_pembayaran->label() }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -258,7 +261,6 @@
         $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500/25';
         $label = 'mb-1.5 block font-medium text-stone-700';
         $error = 'mt-1 hidden text-xs text-red-600';
-        $metode = ['Tunai', 'Transfer'];
         $perf = 'relative mx-4 border-t-2 border-dashed border-stone-300 before:absolute before:-left-[27px] before:-top-[11px] before:size-5 before:rounded-full before:bg-white after:absolute after:-right-[27px] after:-top-[11px] after:size-5 after:rounded-full after:bg-white';
         $tutupIkon = '<svg class="size-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3 6.7a1 1 0 0 1 0-1.4Z"/></svg>';
 
@@ -377,8 +379,8 @@
                             <div data-wrap-for="metode_pembayaran" class="grid grid-cols-2 gap-2">
                                 @foreach ($metode as $m)
                                     <label class="cursor-pointer">
-                                        <input type="radio" name="metode_pembayaran" value="{{ $m }}" class="peer sr-only">
-                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25 [[aria-invalid=true]_&]:border-red-400">{{ $m }}</span>
+                                        <input type="radio" name="metode_pembayaran" value="{{ $m->value }}" class="peer sr-only">
+                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25">{{ $m->label() }}</span>
                                     </label>
                                 @endforeach
                             </div>
