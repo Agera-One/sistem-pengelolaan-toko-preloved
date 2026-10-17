@@ -49,18 +49,18 @@ class PembayaranObserver
     {
         if ($model instanceof PembayaranPembelian) {
             $ada = PembayaranPembelian::where('pembelian_id', $model->pembelian_id)->exists();
-            $this->setStatus(Pembelian::class, $model->pembelian_id, $ada ? PembelianStatus::BELUM_BAYAR : PembelianStatus::SUDAH_BAYAR);
+            $this->setStatus(Pembelian::class, $model->pembelian_id, $ada ? PembelianStatus::SUDAH_BAYAR : PembelianStatus::BELUM_BAYAR);
         }
 
         if ($model instanceof PembayaranPenjualan) {
             $ada = PembayaranPenjualan::where('penjualan_id', $model->penjualan_id)->exists();
-            $this->setStatus(Penjualan::class, $model->penjualan_id, $ada ? PenjualanStatus::BELUM_BAYAR : PenjualanStatus::SUDAH_BAYAR);
+            $this->setStatus(Penjualan::class, $model->penjualan_id, $ada ? PenjualanStatus::SUDAH_BAYAR : PenjualanStatus::BELUM_BAYAR);
         }
     }
 
-    private function setStatus(string $model_class, $id, $status): void
+    private function setStatus(string $model, $id, $status): void
     {
-        $model_class::where('id', $id)->update([
+        $model::where('id', $id)->update([
             'status'     => $status,
             'updated_at' => now(),
         ]);
