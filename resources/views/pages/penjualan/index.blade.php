@@ -37,9 +37,9 @@
             </nav>
         </div>
 
-        @if (session('error'))
-            <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800" role="alert">
-                {{ session('error') }}
+        @if (session('success'))
+            <div class="mt-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800" role="alert">
+                {{ session('success') }}
             </div>
         @endif
 
@@ -57,7 +57,7 @@
                         </svg>
                         <label for="q" class="sr-only">Cari penjualan</label>
                         <input type="search" id="q" name="q" value="{{ request('q') }}"
-                            placeholder="Cari kode, pelanggan, atau status"
+                            placeholder="Cari kode atau pelanggan"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </form>
 
@@ -69,8 +69,11 @@
                         <select name="status" onchange="this.form.submit()"
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 px-3 text-stone-900 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                             <option value="">Semua Status</option>
-                            <option value="Sudah Bayar" {{ request('status') === 'Sudah Bayar' ? 'selected' : '' }}>Sudah Bayar</option>
-                            <option value="Belum Bayar" {{ request('status') === 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status->value }}" {{ request('status') === $status->value ? 'selected' : '' }}>
+                                    {{ $status->label() }}
+                                </option>
+                            @endforeach
                         </select>
                     </form>
 
@@ -111,8 +114,6 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
                             <th scope="col" class="px-4 py-3 font-medium">Pelanggan</th>
                             <th scope="col" class="px-4 py-3 font-medium">Tanggal</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Subtotal</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Ongkir</th>
                             <th scope="col" class="px-4 py-3 font-medium">Total</th>
                             <th scope="col" class="px-4 py-3 font-medium">Status</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
@@ -139,34 +140,13 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 text-stone-700"">
-                                    Rp{{ number_format($p->subtotal, 0, ',', '.') }}
-                                </td>
-
-                                <td class="px-4 py-3.5 text-stone-700"">
-                                    Rp{{ number_format($p->ongkir, 0, ',', '.') }}
-                                </td>
-
-                                <td class="px-4 py-3.5 text-stone-700"">
                                     Rp{{ number_format($p->total, 0, ',', '.') }}
                                 </td>
 
-                                @php
-                                    $statusKey = strtolower($p->status);
-                                    $statusBadge = match ($statusKey) {
-                                        'belum bayar' => 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-300',
-                                        'sudah bayar' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-300',
-                                        default => 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300',
-                                    };
-                                    $statusDot = match ($statusKey) {
-                                        'belum bayar' => 'bg-red-500',
-                                        'sudah bayar' => 'bg-emerald-500',
-                                        default => 'bg-stone-400',
-                                    };
-                                @endphp
-                                <td class="px-4 py-3.5"">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $statusBadge }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $statusDot }}"></span>
-                                        {{ $p->status }}
+                                <td class="px-4 py-3.5" title="{{ $p->status->label() }}">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $p->status->badgeColor() }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $p->status->dotColor() }}"></span>
+                                        {{ $p->status->label() }}
                                     </span>
                                 </td>
 
@@ -193,7 +173,7 @@
                                             Detail
                                         </a>
 
-                                        @if ($p->status === 'Belum Bayar')
+                                        @if ($p->status->value === 'belum bayar')
                                             <a href="{{ route('penjualan.edit', $p) }}" role="menuitem" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 20h9" />
@@ -227,8 +207,11 @@
                                 <td colspan="7" class="px-4 py-16 text-center">
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart preview-icon">
+                                                <path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"/>
+                                                <path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"/>
+                                                <circle cx="18" cy="20" r="2"/>
+                                                <circle cx="8" cy="20" r="2"/>
                                             </svg>
                                         </span>
 
