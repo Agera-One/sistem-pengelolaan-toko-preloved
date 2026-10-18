@@ -20,7 +20,7 @@ class PenjualanService
 
             $penjualan = Penjualan::forceCreate([
                 'tanggal'      => $data['tanggal'],
-                'kode'         => $this->codeGenerator->generate(new Penjualan(), 'kode', 'JUA'),
+                'kode'         => $this->codeGenerator->penjualan(),
                 'pelanggan_id' => $data['pelanggan_id'],
                 'user_id'      => $userId,
             ] + $totals);
