@@ -176,9 +176,11 @@
                     </button>
 
                     <div class="flex flex-col gap-4 sm:items-end">
-                        <dl class="grid grid-cols-[auto_auto] gap-x-10 gap-y-1.5 text-sm text-stone-600">
-                            <dt>Subtotal</dt><dd id="sum-subtotal" class="text-right">Rp0</dd>
-                            <dt>Ongkir</dt><dd id="sum-ongkir" class="text-right">Rp0</dd>
+                        <dl class="grid grid-cols-[auto_auto] gap-x-10 gap-y-1.5">
+                            <dt class="text-stone-600">Subtotal</dt>
+                            <dd id="sum-subtotal" class="text-right font-semibold text-stone-900">Rp0</dd>
+                            <dt class="text-stone-600">Ongkir</dt>
+                            <dd id="sum-ongkir" class="text-right font-semibold text-stone-900">Rp0</dd>
                             <dt class="font-semibold text-stone-900">Total</dt>
                             <dd id="sum-total" class="text-right text-lg font-bold text-stone-900">Rp0</dd>
                         </dl>
