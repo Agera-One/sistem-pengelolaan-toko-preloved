@@ -16,6 +16,7 @@
         'resources/js/money-input.js',
         'resources/js/pembelian.js',
         'resources/js/pembayaran.js',
+        'resources/js/penjualan.js',
     ])
 </head>
 

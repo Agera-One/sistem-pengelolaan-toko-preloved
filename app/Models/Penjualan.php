@@ -7,16 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\Filterable;
+use App\Traits\Searchable;
+use App\Traits\HasDateRange;
 
 class Penjualan extends Model
 {
+    use Searchable, Filterable, HasDateRange;
+
+    protected array $searchable = ['kode'];
+    protected array $searchableRelations = ['pelanggan' => 'nama'];
+    protected array $filterable = ['status'];
+
     protected $table = 'penjualan';
 
     protected $fillable = [
         'tanggal',
         'kode',
         'ongkir',
+        'subtotal',
         'total',
+        'status',
         'user_id',
         'pelanggan_id',
     ];

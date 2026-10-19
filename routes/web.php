@@ -6,6 +6,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PembayaranPembelianController;
 
 Route::middleware('guest')->group(function () {
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('pembelian', PembelianController::class);
     Route::resource('pembayaran-pembelian', PembayaranPembelianController::class)->except(['show', 'create', 'edit'])->names('pembayaran-pembelian');
+
+    Route::resource('penjualan', PenjualanController::class);
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
