@@ -3,32 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
+use App\Services\PelangganService;
 use Illuminate\Http\Request;
-use App\Services\CodeGeneratorService;
 use App\Http\Requests\PelangganRequest;
-
 
 class PelangganController extends Controller
 {
-    public function __construct(protected CodeGeneratorService $codeGenerator) {}
+    public function __construct(
+        protected PelangganService $pelangganService,
+    ) {}
 
     public function index(Request $request)
     {
-        $pelanggan = Pelanggan::search($request->query('q'))
-            ->latest('id')
-            ->paginate(10)
-            ->withQueryString();
-
-        $kode = $this->codeGenerator->pelanggan();
-
-        return view('pages.pelanggan', compact('pelanggan', 'kode'));
+        return view('pages.pelanggan', $this->pelangganService->index($request->query()));
     }
 
     public function store(PelangganRequest $request)
     {
-        $validated = $request->validated();
-        $validated['kode'] = $this->codeGenerator->pelanggan();
-        Pelanggan::create($validated);
+
+        $this->pelangganService->store($request->validated());
         return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di tambahkan');
     }
 
