@@ -21,9 +21,9 @@ class SupplierService
         ];
     }
 
-    public function store(array $data)
+    public function store(array $validated)
     {
-        $data['kode'] = $this->codeGenerator->supplier();
-        Supplier::create($data);
+        $validated['kode'] = $this->codeGenerator->supplier();
+        Supplier::create($validated);
     }
 }

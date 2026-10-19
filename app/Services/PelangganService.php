@@ -21,9 +21,9 @@ class PelangganService
         ];
     }
 
-    public function store(array $data)
+    public function store(array $validated)
     {
-        $data['kode'] = $this->codeGenerator->pelanggan();
-        Pelanggan::create($data);
+        $validated['kode'] = $this->codeGenerator->pelanggan();
+        Pelanggan::create($validated);
     }
 }
