@@ -2,26 +2,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Services\BarangService;
 use Illuminate\Http\Request;
 use App\Http\Requests\BarangRequest;
-use App\Enums\BarangStatus;
-use App\Enums\KategoriBarang;
 
 class BarangController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, BarangService $barangService)
     {
-        $barang = Barang::search($request->q)
-            ->filter($request->query())
-            ->latest('id')
-            ->paginate(10)
-            ->withQueryString();
-
-
-        $statuses = BarangStatus::cases();
-        $kategori = KategoriBarang::cases();
-
-        return view('pages.barang', compact('barang', 'statuses', 'kategori'));
+        return view('pages.barang', $barangService->index($request->query()));
     }
 
     public function update(BarangRequest $request, Barang $barang)
