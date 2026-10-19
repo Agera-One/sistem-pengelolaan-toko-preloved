@@ -11,11 +11,6 @@
     var btnSimpan = document.getElementById('btn-simpan');
     var ongkirInput = document.getElementById('ongkir');
 
-    var barang = JSON.parse(document.getElementById('barang-data').textContent || '[]');
-    var oldItems = JSON.parse(document.getElementById('old-items').textContent || '[]');
-    var byId = {};
-    barang.forEach(function (b) { byId[String(b.id)] = b; });
-
     var counter = 0;
 
     function field(row, name) {
@@ -26,37 +21,24 @@
         return Array.prototype.slice.call(tbody.querySelectorAll('[data-row]'));
     }
 
-    function fillDetail(row, b) {
-        field(row, 'kategori').value = b ? (b.kategori || '') : '';
-        field(row, 'lingkar').value = b ? (b.lingkar == null ? '' : b.lingkar) : '';
-        field(row, 'panjang').value = b ? (b.panjang == null ? '' : b.panjang) : '';
+    function selectedOption(select) {
+        return select.options[select.selectedIndex] || null;
     }
 
-    function addRow(item) {
+    function fillDetail(row, opt) {
+        var d = opt && opt.value ? opt.dataset : null;
+        field(row, 'kategori').value = d ? (d.kategori || '') : '';
+        field(row, 'lingkar').value = d ? (d.lingkar || '') : '';
+        field(row, 'panjang').value = d ? (d.panjang || '') : '';
+    }
+
+    function addRow() {
         var html = template.innerHTML.replace(/__INDEX__/g, String(counter++));
         var holder = document.createElement('tbody');
         holder.innerHTML = html.trim();
         var row = holder.firstElementChild;
 
-        var select = field(row, 'barang');
-        barang.forEach(function (b) {
-            var opt = document.createElement('option');
-            opt.value = b.id;
-            opt.textContent = b.kode + ' — ' + b.nama;
-            select.appendChild(opt);
-        });
-
         tbody.appendChild(row);
-
-        if (item && item.barang_id && byId[String(item.barang_id)]) {
-            select.value = String(item.barang_id);
-            fillDetail(row, byId[select.value]);
-            var harga = item.harga_jual != null && item.harga_jual !== ''
-                ? item.harga_jual
-                : byId[select.value].harga_jual;
-            field(row, 'harga').value = M.format(harga);
-        }
-
         refreshOptions();
         recalc();
         return row;
@@ -136,9 +118,11 @@
         var row = e.target.closest('[data-row]');
         if (!row || e.target.getAttribute('data-field') !== 'barang') return;
 
-        var b = byId[e.target.value];
-        fillDetail(row, b);
-        field(row, 'harga').value = b ? M.format(b.harga_jual) : '';
+        var opt = selectedOption(e.target);
+        var has = opt && opt.value;
+
+        fillDetail(row, opt);
+        field(row, 'harga').value = has ? M.format(Number(opt.dataset.harga)) : '';
         setInvalid(e.target, false);
         setInvalid(field(row, 'harga'), false);
         setInvalid(field(row, 'harga').parentElement, false);
@@ -228,11 +212,13 @@
         btnSimpan.disabled = true;
     });
 
-    if (oldItems.length) {
-        oldItems.forEach(function (item) { addRow(item); });
-    } else {
-        addRow();
-    }
+    rows().forEach(function (row) {
+        var idx = parseInt(row.getAttribute('data-index'), 10);
+        if (!isNaN(idx) && idx >= counter) counter = idx + 1;
+    });
+    if (!rows().length) addRow();
+
     M.applyAll(form);
+    refreshOptions();
     recalc();
 })();
