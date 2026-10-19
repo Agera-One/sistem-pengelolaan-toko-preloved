@@ -2,12 +2,6 @@
 
 @section('title', 'Tambah Penjualan')
 
-@php
-    $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-    $readonly = 'w-full cursor-default rounded-lg border border-stone-200 bg-stone-100 px-3 py-2.5 text-stone-500 focus:outline-none';
-    $chevron = '<svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>';
-@endphp
-
 @section('content')
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -20,11 +14,11 @@
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
                 <ol class="flex items-center gap-1.5 text-stone-500">
                     <li><a href="{{ Route::has('dashboard') ? route('dashboard') : url('/') }}" class="rounded transition hover:text-link">Dashboard</a></li>
-                    <li aria-hidden="true">{!! $chevron !!}</li>
+                    <li aria-hidden="true"><svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg></li>
                     <li>Penjualan</li>
-                    <li aria-hidden="true">{!! $chevron !!}</li>
+                    <li aria-hidden="true"><svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg></li>
                     <li><a href="{{ route('penjualan.index') }}" class="rounded transition hover:text-link">Daftar Penjualan</a></li>
-                    <li aria-hidden="true">{!! $chevron !!}</li>
+                    <li aria-hidden="true"><svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg></li>
                     <li class="font-medium text-stone-900" aria-current="page">Tambah Penjualan</li>
                 </ol>
             </nav>
@@ -36,7 +30,7 @@
             <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800" role="alert">
                 <p class="font-medium">Penjualan belum bisa disimpan:</p>
                 <ul class="mt-1 list-disc pl-5">
-                    @foreach ($errors->all() as $message)
+                    @foreach ($errors->unique() as $message)
                         <li>{{ $message }}</li>
                     @endforeach
                 </ul>
@@ -55,24 +49,24 @@
                 <div class="grid gap-5 p-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div>
                         <label for="kode" class="mb-2 block text-stone-700">Kode Penjualan</label>
-                        <input type="text" id="kode" value="{{ $kode }}" readonly tabindex="-1" class="{{ $readonly }}">
+                        <input type="text" id="kode" value="{{ $kode }}" readonly tabindex="-1" class="w-full cursor-default rounded-lg border border-stone-200 bg-stone-100 px-3 py-2.5 text-stone-500 focus:outline-none">
                         <p class="mt-1.5 text-xs text-stone-500">Dibuat otomatis oleh sistem.</p>
                     </div>
 
                     <div>
                         <label for="tanggal" class="mb-2 block text-stone-700">Tanggal Penjualan <span class="text-red-600">*</span></label>
-                        <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', now()->toDateString()) }}" required
-                               class="{{ $input }} @error('tanggal') border-red-400 @enderror">
+                        <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', $tanggal) }}" required
+                               class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500 @error('tanggal') border-red-400 @enderror">
                         <p class="mt-1.5 hidden text-xs text-red-600" data-error-for="tanggal"></p>
                     </div>
 
                     <div>
                         <label for="pelanggan_id" class="mb-2 block text-stone-700">Nama Pelanggan <span class="text-red-600">*</span></label>
                         <select id="pelanggan_id" name="pelanggan_id" required
-                                class="{{ $input }} @error('pelanggan_id') border-red-400 @enderror">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500 @error('pelanggan_id') border-red-400 @enderror">
                             <option value="">Pilih pelanggan</option>
                             @foreach ($pelanggan as $p)
-                                <option value="{{ $p->getKey() }}" @selected(old('pelanggan_id') == $p->getKey())>{{ $p->nama }}</option>
+                                <option value="{{ $p->getKey() }}" @selected(old('pelanggan_id', $pelangganId) == $p->getKey())>{{ $p->nama }}</option>
                             @endforeach
                         </select>
                         <p class="mt-1.5 hidden text-xs text-red-600" data-error-for="pelanggan_id"></p>
@@ -84,7 +78,7 @@
                              class="flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand aria-invalid:border-red-400 aria-invalid:focus-within:border-red-500 aria-invalid:focus-within:ring-red-500">
                             <span class="text-stone-500">Rp</span>
                             <input type="text" inputmode="numeric" id="ongkir" name="ongkir" data-money placeholder="0"
-                                   value="{{ old('ongkir') }}" required
+                                   value="{{ old('ongkir', $ongkirAwal) }}" required
                                    class="min-w-0 flex-1 border-0 bg-transparent py-2.5 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-0">
                         </div>
                         <p class="mt-1.5 hidden text-xs text-red-600" data-error-for="ongkir"></p>
@@ -112,7 +106,62 @@
                                 <th scope="col" class="px-4 py-3 text-right font-medium">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="item-rows" class="divide-y divide-stone-300"></tbody>
+                        <tbody id="item-rows" class="divide-y divide-stone-300">
+                            @foreach ($rows as $row)
+                                @if ($row['template'])<template id="row-template">@endif
+                                <tr data-row data-index="{{ $row['index'] }}">
+                                    <td class="px-4 py-2.5">
+                                        <select name="items[{{ $row['index'] }}][barang_id]" data-field="barang" aria-label="Barang"
+                                                @error('items.'.$row['index'].'.barang_id') aria-invalid="true" @enderror
+                                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                                            <option value="">Pilih barang</option>
+                                            @foreach ($barangOptions as $b)
+                                                <option value="{{ $b['id'] }}"
+                                                        data-kategori="{{ $b['kategori'] }}"
+                                                        data-lingkar="{{ $b['lingkar'] }}"
+                                                        data-panjang="{{ $b['panjang'] }}"
+                                                        data-harga="{{ $b['harga'] }}"
+                                                        @selected((string) $row['barang_id'] === (string) $b['id'])>
+                                                    {{ $b['label'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td class="px-2 py-2.5">
+                                        <input type="text" data-field="kategori" aria-label="Kategori" readonly tabindex="-1"
+                                               value="{{ $row['kategori'] }}" class="w-full cursor-default rounded-lg border border-stone-200 bg-stone-100 px-3 py-2.5 text-stone-500 focus:outline-none">
+                                    </td>
+                                    <td class="px-2 py-2.5">
+                                        <input type="text" data-field="lingkar" aria-label="Lingkar" readonly tabindex="-1"
+                                               value="{{ $row['lingkar'] }}" class="w-full cursor-default rounded-lg border border-stone-200 bg-stone-100 px-3 py-2.5 text-stone-500 focus:outline-none">
+                                    </td>
+                                    <td class="px-2 py-2.5">
+                                        <input type="text" data-field="panjang" aria-label="Panjang" readonly tabindex="-1"
+                                               value="{{ $row['panjang'] }}" class="w-full cursor-default rounded-lg border border-stone-200 bg-stone-100 px-3 py-2.5 text-stone-500 focus:outline-none">
+                                    </td>
+                                    <td class="px-2 py-2.5">
+                                        <div @error('items.'.$row['index'].'.harga_jual') aria-invalid="true" @enderror
+                                             class="flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand aria-invalid:border-red-400 aria-invalid:focus-within:border-red-500 aria-invalid:focus-within:ring-red-500">
+                                            <span class="text-stone-500">Rp</span>
+                                            <input placeholder="0" type="text" inputmode="numeric" autocomplete="off" data-money
+                                                   name="items[{{ $row['index'] }}][harga_jual]" data-field="harga" aria-label="Harga jual"
+                                                   value="{{ $row['harga'] }}"
+                                                   @error('items.'.$row['index'].'.harga_jual') aria-invalid="true" @enderror
+                                                   class="min-w-0 flex-1 border-0 bg-transparent py-2.5 text-stone-900 focus:outline-none focus:ring-0">
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-2.5 text-right">
+                                        <button type="button" data-remove aria-label="Hapus baris"
+                                                class="inline-flex h-9 w-9 items-center justify-center rounded-md text-stone-500 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M3 6h18" /><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" /><path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" /><path d="M10 11v6M14 11v6" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @if ($row['template'])</template>@endif
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
 
@@ -148,35 +197,4 @@
             </section>
         </form>
     </div>
-
-    <template id="row-template">
-        <tr data-row>
-            <td class="px-4 py-2.5">
-                <select name="items[__INDEX__][barang_id]" data-field="barang" aria-label="Barang" class="{{ $input }}">
-                    <option value="">Pilih barang</option>
-                </select>
-            </td>
-            <td class="px-2 py-2.5"><input type="text" data-field="kategori" aria-label="Kategori" readonly tabindex="-1" class="{{ $readonly }}"></td>
-            <td class="px-2 py-2.5"><input type="text" data-field="lingkar" aria-label="Lingkar" readonly tabindex="-1" class="{{ $readonly }}"></td>
-            <td class="px-2 py-2.5"><input type="text" data-field="panjang" aria-label="Panjang" readonly tabindex="-1" class="{{ $readonly }}"></td>
-            <td class="px-2 py-2.5">
-                <div class="flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand aria-invalid:border-red-400 aria-invalid:focus-within:border-red-500 aria-invalid:focus-within:ring-red-500">
-                    <span class="text-stone-500">Rp</span>
-                    <input placeholder="0" type="text" inputmode="numeric" name="items[__INDEX__][harga_jual]" data-field="harga" data-money aria-label="Harga jual"
-                           class="min-w-0 flex-1 border-0 bg-transparent py-2.5 text-stone-900 focus:outline-none focus:ring-0">
-                </div>
-            </td>
-            <td class="px-4 py-2.5 text-right">
-                <button type="button" data-remove aria-label="Hapus baris"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-stone-500 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M3 6h18" /><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" /><path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" /><path d="M10 11v6M14 11v6" />
-                    </svg>
-                </button>
-            </td>
-        </tr>
-    </template>
-
-    <script type="application/json" id="barang-data">{!! json_encode($barang, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
-    <script type="application/json" id="old-items">{!! json_encode(array_values((array) old('items', [])), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
 @endsection
