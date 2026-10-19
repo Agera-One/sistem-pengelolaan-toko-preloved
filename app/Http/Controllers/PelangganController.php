@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggan;
 use App\Services\PelangganService;
 use Illuminate\Http\Request;
-use App\Services\CodeGeneratorService;
 use App\Http\Requests\PelangganRequest;
 
 class PelangganController extends Controller
 {
     public function __construct(
-        protected CodeGeneratorService $codeGenerator,
         protected PelangganService $pelangganService,
     ) {}
 
