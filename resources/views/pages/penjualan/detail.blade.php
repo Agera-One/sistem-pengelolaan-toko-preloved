@@ -185,6 +185,7 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kategori</th>
                             <th scope="col" class="px-4 py-3 font-medium">Lingkar</th>
                             <th scope="col" class="px-4 py-3 font-medium">Panjang</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Harga Beli</th>
                             <th scope="col" class="px-4 py-3 font-medium">Harga Jual</th>
                         </tr>
                     </thead>
@@ -212,6 +213,10 @@
 
                                 <td class="px-4 py-3.5">
                                     {{ $barang->panjang . ' cm' }}
+                                </td>
+
+                                <td class="px-4 py-3.5">
+                                    {{ $rupiah($barang->harga_beli) }}
                                 </td>
 
                                 <td class="px-4 py-3.5">

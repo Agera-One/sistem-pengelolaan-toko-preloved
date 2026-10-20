@@ -95,13 +95,14 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="min-w-[900px] w-full text-left">
+                    <table class="min-w-[1050px] w-full text-left">
                         <thead class="border-b border-stone-300 bg-brand/5 text-stone-600">
                             <tr>
                                 <th scope="col" class="w-[36%] px-4 py-3 font-medium">Barang</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Kategori</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Lingkar (cm)</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Panjang (cm)</th>
+                                <th scope="col" class="px-2 py-3 font-medium">Harga Beli</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Harga Jual</th>
                                 <th scope="col" class="px-4 py-3 text-right font-medium">Aksi</th>
                             </tr>
@@ -120,7 +121,8 @@
                                                         data-kategori="{{ $b['kategori'] }}"
                                                         data-lingkar="{{ $b['lingkar'] }}"
                                                         data-panjang="{{ $b['panjang'] }}"
-                                                        data-harga="{{ $b['harga'] }}"
+                                                        data-harga-jual="{{ $b['harga_jual'] }}"
+                                                        data-harga-beli="{{ $b['harga_beli'] ?? '' }}"
                                                         @selected((string) $row['barang_id'] === (string) $b['id'])>
                                                     {{ $b['label'] }}
                                                 </option>
@@ -140,12 +142,20 @@
                                                value="{{ $row['panjang'] }}" class="w-full cursor-default rounded-lg border border-stone-200 bg-stone-100 px-3 py-2.5 text-stone-500 focus:outline-none">
                                     </td>
                                     <td class="px-2 py-2.5">
+                                        <div class="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-100 px-3">
+                                            <span class="text-stone-500">Rp</span>
+                                            <input type="text" data-field="harga-beli" aria-label="Harga beli" readonly tabindex="-1"
+                                                   value="{{ !empty($row['harga_beli']) ? number_format((float) $row['harga_beli'], 0, ',', '.') : '' }}"
+                                                   class="min-w-0 flex-1 cursor-default border-0 bg-transparent py-2.5 text-stone-500 focus:outline-none focus:ring-0">
+                                        </div>
+                                    </td>
+                                    <td class="px-2 py-2.5">
                                         <div @error('items.'.$row['index'].'.harga_jual') aria-invalid="true" @enderror
                                              class="flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand aria-invalid:border-red-400 aria-invalid:focus-within:border-red-500 aria-invalid:focus-within:ring-red-500">
                                             <span class="text-stone-500">Rp</span>
                                             <input placeholder="0" type="text" inputmode="numeric" autocomplete="off" data-money
-                                                   name="items[{{ $row['index'] }}][harga_jual]" data-field="harga" aria-label="Harga jual"
-                                                   value="{{ $row['harga'] }}"
+                                                   name="items[{{ $row['index'] }}][harga_jual]" data-field="harga-jual" aria-label="Harga jual"
+                                                   value="{{ $row['harga_jual'] }}"
                                                    @error('items.'.$row['index'].'.harga_jual') aria-invalid="true" @enderror
                                                    class="min-w-0 flex-1 border-0 bg-transparent py-2.5 text-stone-900 focus:outline-none focus:ring-0">
                                         </div>
