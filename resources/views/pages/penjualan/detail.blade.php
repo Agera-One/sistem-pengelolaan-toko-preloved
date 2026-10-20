@@ -3,13 +3,6 @@
 @section('title', 'Detail Penjualan')
 
 @section('content')
-    @php
-        $inisial = fn (?string $nama) => \Illuminate\Support\Str::of($nama ?? '?')
-            ->trim()->explode(' ')->filter()->take(2)
-            ->map(fn ($kata) => \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($kata, 0, 1)))
-            ->implode('');
-    @endphp
-
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ route('penjualan.index') }}"
@@ -97,7 +90,7 @@
 
                 <div class="mt-4 flex items-center gap-4">
                     <span aria-hidden="true" class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand text-lg font-semibold text-white">
-                        {{ $inisial($penjualan->user->name) }}
+                        {{ $penjualan->user->inisial }}
                     </span>
                     <div class="min-w-0">
                         <p class="break-words text-lg font-semibold text-stone-900">{{ $penjualan->user->name }}</p>
@@ -137,7 +130,7 @@
 
                 <div class="mt-4 flex items-center gap-4">
                     <span aria-hidden="true" class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand text-lg font-semibold text-white">
-                        {{ $inisial($penjualan->pelanggan->nama) }}
+                        {{ $penjualan->pelanggan->inisial }}
                     </span>
                     <div class="min-w-0">
                         <p class="break-words text-lg font-semibold text-stone-900">{{ $penjualan->pelanggan->nama }}</p>
