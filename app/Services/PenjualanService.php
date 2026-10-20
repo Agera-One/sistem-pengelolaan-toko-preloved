@@ -165,7 +165,8 @@ class PenjualanService
                 'kategori'  => $selected?->kategori?->value,
                 'lingkar'   => $selected ? $angka($selected->lingkar) : '',
                 'panjang'   => $selected ? $angka($selected->panjang) : '',
-                'harga'     => blank($harga)
+                'harga_beli' => $selected ? (int) $selected->harga_beli : null,
+                'harga_jual'     => blank($harga)
                     ? ''
                     : number_format((int) preg_replace('/\D/', '', (string) $harga), 0, ',', '.'),
             ];
@@ -183,12 +184,13 @@ class PenjualanService
         return [
             'rows'          => $rows,
             'barangOptions' => $barang->map(fn ($b) => [
-                'id'       => $b->getKey(),
-                'label'    => "{$b->kode} — {$b->nama}",
-                'kategori' => $b->kategori?->value,
-                'lingkar'  => $angka($b->lingkar),
-                'panjang'  => $angka($b->panjang),
-                'harga'    => (int) $b->harga_jual,
+                'id'            => $b->getKey(),
+                'label'         => "{$b->kode} — {$b->nama}",
+                'kategori'      => $b->kategori?->value,
+                'lingkar'       => $angka($b->lingkar),
+                'panjang'       => $angka($b->panjang),
+                'harga_jual'    => (int) $b->harga_jual,
+                'harga_beli'    => (int) $b->harga_beli,
             ])->values()->all(),
             'tanggal'       => now()->toDateString(),
             'pelangganId'   => null,

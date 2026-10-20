@@ -30,6 +30,9 @@
         field(row, 'kategori').value = d ? (d.kategori || '') : '';
         field(row, 'lingkar').value = d ? (d.lingkar || '') : '';
         field(row, 'panjang').value = d ? (d.panjang || '') : '';
+        field(row, 'harga-beli').value = d && d.hargaBeli !== undefined && d.hargaBeli !== ''
+            ? M.format(Number(d.hargaBeli))
+            : '';
     }
 
     function addRow() {
@@ -64,7 +67,7 @@
     function recalc() {
         var subtotal = 0;
         rows().forEach(function (row) {
-            if (field(row, 'barang').value) subtotal += M.parse(field(row, 'harga').value);
+            if (field(row, 'barang').value) subtotal += M.parse(field(row, 'harga-jual').value);
         });
         var ongkir = M.parse(ongkirInput.value);
         document.getElementById('sum-subtotal').textContent = M.rupiah(subtotal);
@@ -122,17 +125,17 @@
         var has = opt && opt.value;
 
         fillDetail(row, opt);
-        field(row, 'harga').value = has ? M.format(Number(opt.dataset.harga)) : '';
+        field(row, 'harga-jual').value = has ? M.format(Number(opt.dataset.hargaJual)) : '';
         setInvalid(e.target, false);
-        setInvalid(field(row, 'harga'), false);
-        setInvalid(field(row, 'harga').parentElement, false);
+        setInvalid(field(row, 'harga-jual'), false);
+        setInvalid(field(row, 'harga-jual').parentElement, false);
         setItemError('');
         refreshOptions();
         recalc();
     });
 
     tbody.addEventListener('input', function (e) {
-        if (e.target.getAttribute('data-field') !== 'harga') return;
+        if (e.target.getAttribute('data-field') !== 'harga-jual') return;
 
         if (e.target.hasAttribute('aria-invalid')) {
             setInvalid(e.target, false);
@@ -150,7 +153,7 @@
         if (rows().length === 1) {
             field(row, 'barang').value = '';
             fillDetail(row, null);
-            field(row, 'harga').value = '';
+            field(row, 'harga-jual').value = '';
         } else {
             row.remove();
         }
@@ -183,8 +186,8 @@
 
         list.forEach(function (row) {
             var select = field(row, 'barang');
-            var harga = M.parse(field(row, 'harga').value);
-            var hargaInput = field(row, 'harga');
+            var harga = M.parse(field(row, 'harga-jual').value);
+            var hargaInput = field(row, 'harga-jual');
             var badBarang = !select.value;
             var badHarga = !badBarang && harga <= 0;
 
