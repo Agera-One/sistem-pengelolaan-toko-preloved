@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Enums\BarangStatus;
 use App\Enums\KategoriBarang;
 use App\Enums\PembelianStatus;
+use App\Models\Barang;
 use App\Models\Pembelian;
 use App\Models\Supplier;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class PembelianService
@@ -69,10 +71,26 @@ class PembelianService
 
     public function edit(Pembelian $pembelian): array
     {
+        $lockedIds = $this->lockedBarangIds($pembelian);
+
+        $rows = old('items') ?: $pembelian->barang
+            ->map(fn (Barang $barang) => $this->toFormRow($barang))
+            ->all();
+
+        $rows = collect($rows)
+            ->map(fn (array $row) => $row + [
+                'locked' => ! empty($row['id']) && in_array($row['id'], $lockedIds),
+            ])
+            ->all();
+
         return [
-            'pembelian' => $pembelian,
-            'supplier'  => Supplier::orderBy('nama')->get(),
-            'kategori'  => KategoriBarang::cases(),
+            'pembelian'  => $pembelian,
+            'supplier'   => Supplier::orderBy('nama')->get(),
+            'kategori'   => KategoriBarang::cases(),
+            'lockedIds'  => $lockedIds,
+            'rows'       => $rows ?: [['locked' => false]],
+            'tanggal'    => old('tanggal', Carbon::parse($pembelian->tanggal)->format('Y-m-d')),
+            'supplierId' => old('supplier_id', $pembelian->supplier_id),
         ];
     }
 
@@ -124,5 +142,26 @@ class PembelianService
 
             return $pembelian;
         });
+    }
+
+    private function lockedBarangIds(Pembelian $pembelian): array
+    {
+        return $pembelian->barang
+            ->where('status', '!=', BarangStatus::TERSEDIA)
+            ->pluck('id')
+            ->all();
+    }
+
+    private function toFormRow(Barang $barang): array
+    {
+        return [
+            'id'         => $barang->id,
+            'nama'       => $barang->nama,
+            'kategori'   => $barang->kategori->value,
+            'lingkar'    => (float) $barang->lingkar,
+            'panjang'    => (float) $barang->panjang,
+            'harga_beli' => (int) $barang->harga_beli,
+            'harga_jual' => (int) $barang->harga_jual,
+        ];
     }
 }

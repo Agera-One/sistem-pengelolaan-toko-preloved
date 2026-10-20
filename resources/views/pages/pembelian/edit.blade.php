@@ -3,25 +3,6 @@
 @section('title', 'Edit Pembelian')
 
 @section('content')
-    @php
-        $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-        $cell = 'w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-
-        $lockedIds = $pembelian->barang->where('status', '!=', 'Tersedia')->pluck('id')->all();
-
-        $rows = old('items') ?: $pembelian->barang->map(fn ($it) => [
-            'id'         => $it->id,
-            'nama'       => $it->nama,
-            'kategori'   => $it->kategori->value,
-            'lingkar'    => (float) $it->lingkar,
-            'panjang'    => (float) $it->panjang,
-            'harga_beli' => (int) $it->harga_beli,
-            'harga_jual' => (int) $it->harga_jual,
-        ])->all();
-
-        $rows = $rows ?: [[]];
-    @endphp
-
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ route('pembelian.index') }}"
@@ -95,10 +76,9 @@
                         <label for="tanggal" class="mb-1.5 block text-stone-900">
                             Tanggal Pembelian <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="date" id="tanggal" name="tanggal"
-                               value="{{ old('tanggal', \Illuminate\Support\Carbon::parse($pembelian->tanggal)->format('Y-m-d')) }}"
+                        <input type="date" id="tanggal" name="tanggal" value="{{ $tanggal }}"
                                @error('tanggal') aria-invalid="true" @enderror
-                               class="{{ $field }}">
+                               class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                     </div>
 
                     <div>
@@ -107,10 +87,10 @@
                         </label>
                         <select id="supplier_id" name="supplier_id"
                                 @error('supplier_id') aria-invalid="true" @enderror
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                             <option value="">Pilih supplier</option>
                             @foreach ($supplier as $s)
-                                <option value="{{ $s->id }}" @selected(old('supplier_id', $pembelian->supplier_id) == $s->id)>{{ $s->nama }}</option>
+                                <option value="{{ $s->id }}" @selected($supplierId == $s->id)>{{ $s->nama }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -145,61 +125,73 @@
                         </thead>
                         <tbody id="item-rows" class="divide-y divide-stone-200">
                             @foreach ($rows as $i => $item)
-                                @php
-                                    $locked = !empty($item['id']) && in_array($item['id'], $lockedIds);
-                                    // Barang terjual: hanya Harga Beli yang dikunci
-                                    $lockedCell = str_replace('bg-white', 'bg-stone-100 text-stone-500', $cell);
-                                    $bad = fn ($f) => $errors->has("items.$i.$f");
-                                @endphp
                                 <tr data-row data-index="{{ $i }}" class="align-top">
                                     <td class="px-4 py-2">
                                         <input type="hidden" name="items[{{ $i }}][id]" value="{{ $item['id'] ?? '' }}">
                                         <input type="text" name="items[{{ $i }}][nama]" value="{{ $item['nama'] ?? '' }}"
                                                data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
-                                               @if ($bad('nama')) aria-invalid="true" @endif
-                                               class="{{ $cell }}">
+                                               @if ($errors->has("items.$i.nama")) aria-invalid="true" @endif
+                                               class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                     </td>
 
                                     <td class="px-2 py-2">
                                         <select name="items[{{ $i }}][kategori]" data-cell="kategori"
-                                                @if ($bad('kategori')) aria-invalid="true" @endif
-                                                class="{{ $cell }}">
+                                                @if ($errors->has("items.$i.kategori")) aria-invalid="true" @endif
+                                                class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                             <option value="" disabled @selected(empty($item['kategori']))>Pilih</option>
                                             @foreach ($kategori as $kat)
-                                                <option value="{{ $kat->value }}" @selected($item['kategori'] === $kat->value)>
+                                                <option value="{{ $kat->value }}" @selected(($item['kategori'] ?? null) === $kat->value)>
                                                     {{ $kat->label() }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </td>
 
-                                    @foreach (['lingkar', 'panjang'] as $ukuran)
-                                        <td class="px-2 py-2">
-                                            <input type="number" step="any" min="0" inputmode="decimal"
-                                                   name="items[{{ $i }}][{{ $ukuran }}]" value="{{ $item[$ukuran] ?? '' }}"
-                                                   data-cell="{{ $ukuran }}" placeholder="0"
-                                                   @if ($bad($ukuran)) aria-invalid="true" @endif
-                                                   class="{{ $cell }}">
-                                        </td>
-                                    @endforeach
+                                    <td class="px-2 py-2">
+                                        <input type="number" step="any" min="0" inputmode="decimal"
+                                               name="items[{{ $i }}][lingkar]" value="{{ $item['lingkar'] ?? '' }}"
+                                               data-cell="lingkar" placeholder="0"
+                                               @if ($errors->has("items.$i.lingkar")) aria-invalid="true" @endif
+                                               class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                                    </td>
 
-                                    @foreach (['harga_beli', 'harga_jual'] as $money)
-                                        @php $moneyLocked = $locked && $money === 'harga_beli'; @endphp
-                                        <td class="px-2 py-2">
-                                            <div class="relative">
-                                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                                                <input type="text" inputmode="numeric" autocomplete="off" data-money
-                                                       name="items[{{ $i }}][{{ $money }}]" value="{{ $item[$money] ?? '' }}"
-                                                       data-cell="{{ $money }}" placeholder="0"
-                                                       @if ($moneyLocked) readonly tabindex="-1" title="Harga beli barang terjual tidak dapat diubah" @endif
-                                                       @if ($bad($money)) aria-invalid="true" @endif
-                                                       class="{{ $moneyLocked ? $lockedCell : $cell }} pl-8">
-                                            </div>
-                                        </td>
-                                    @endforeach
+                                    <td class="px-2 py-2">
+                                        <input type="number" step="any" min="0" inputmode="decimal"
+                                               name="items[{{ $i }}][panjang]" value="{{ $item['panjang'] ?? '' }}"
+                                               data-cell="panjang" placeholder="0"
+                                               @if ($errors->has("items.$i.panjang")) aria-invalid="true" @endif
+                                               class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                                    </td>
+
+                                    <td class="px-2 py-2">
+                                        <div class="relative">
+                                            <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                                            <input type="text" inputmode="numeric" autocomplete="off" data-money
+                                                   name="items[{{ $i }}][harga_beli]" value="{{ $item['harga_beli'] ?? '' }}"
+                                                   data-cell="harga_beli" placeholder="0"
+                                                   @if ($item['locked']) readonly tabindex="-1" title="Harga beli barang terjual tidak dapat diubah" @endif
+                                                   @if ($errors->has("items.$i.harga_beli")) aria-invalid="true" @endif
+                                                   @class([
+                                                       'w-full rounded-lg border border-stone-300 py-2 pl-8 pr-2.5 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500',
+                                                       'bg-white text-stone-900' => ! $item['locked'],
+                                                       'bg-stone-100 text-stone-500' => $item['locked'],
+                                                   ])>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-2 py-2">
+                                        <div class="relative">
+                                            <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                                            <input type="text" inputmode="numeric" autocomplete="off" data-money
+                                                   name="items[{{ $i }}][harga_jual]" value="{{ $item['harga_jual'] ?? '' }}"
+                                                   data-cell="harga_jual" placeholder="0"
+                                                   @if ($errors->has("items.$i.harga_jual")) aria-invalid="true" @endif
+                                                   class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-8 pr-2.5 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                                        </div>
+                                    </td>
 
                                     <td class="px-2 py-2 text-center">
-                                        @if ($locked)
+                                        @if ($item['locked'])
                                             <span class="inline-flex h-9 w-9 items-center justify-center text-stone-400" title="Barang sudah terjual, tidak dapat dihapus" aria-label="Barang tidak dapat dihapus">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
                                             </span>
@@ -207,11 +199,11 @@
                                             <button type="button" data-remove aria-label="Hapus baris"
                                                     class="inline-flex h-9 w-9 items-center justify-center rounded-md text-stone-500 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M3 6h18" />
-                                            <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                                            <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                                            <path d="M10 11v6M14 11v6" />
-                                        </svg>
+                                                    <path d="M3 6h18" />
+                                                    <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                                                    <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
+                                                    <path d="M10 11v6M14 11v6" />
+                                                </svg>
                                             </button>
                                         @endif
                                     </td>
@@ -227,11 +219,12 @@
                             <input type="hidden" name="items[__INDEX__][id]" value="">
                             <input type="text" name="items[__INDEX__][nama]" value=""
                                    data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
-                                   class="{{ $cell }}">
+                                   class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         </td>
 
                         <td class="px-2 py-2">
-                            <select name="items[__INDEX__][kategori]" data-cell="kategori" class="{{ $cell }}">
+                            <select name="items[__INDEX__][kategori]" data-cell="kategori"
+                                    class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                 <option value="" disabled selected>Pilih</option>
                                 @foreach ($kategori as $kat)
                                     <option value="{{ $kat->value }}">
@@ -241,36 +234,49 @@
                             </select>
                         </td>
 
-                        @foreach (['lingkar', 'panjang'] as $ukuran)
-                            <td class="px-2 py-2">
-                                <input type="number" step="any" min="0" inputmode="decimal"
-                                       name="items[__INDEX__][{{ $ukuran }}]" value=""
-                                       data-cell="{{ $ukuran }}" placeholder="0"
-                                       class="{{ $cell }}">
-                            </td>
-                        @endforeach
+                        <td class="px-2 py-2">
+                            <input type="number" step="any" min="0" inputmode="decimal"
+                                   name="items[__INDEX__][lingkar]" value=""
+                                   data-cell="lingkar" placeholder="0"
+                                   class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        </td>
 
-                        @foreach (['harga_beli', 'harga_jual'] as $money)
-                            <td class="px-2 py-2">
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
-                                    <input type="text" inputmode="numeric" autocomplete="off" data-money
-                                           name="items[__INDEX__][{{ $money }}]" value=""
-                                           data-cell="{{ $money }}" placeholder="0"
-                                           class="{{ $cell }} pl-8">
-                                </div>
-                            </td>
-                        @endforeach
+                        <td class="px-2 py-2">
+                            <input type="number" step="any" min="0" inputmode="decimal"
+                                   name="items[__INDEX__][panjang]" value=""
+                                   data-cell="panjang" placeholder="0"
+                                   class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        </td>
+
+                        <td class="px-2 py-2">
+                            <div class="relative">
+                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                                <input type="text" inputmode="numeric" autocomplete="off" data-money
+                                       name="items[__INDEX__][harga_beli]" value=""
+                                       data-cell="harga_beli" placeholder="0"
+                                       class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-8 pr-2.5 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                            </div>
+                        </td>
+
+                        <td class="px-2 py-2">
+                            <div class="relative">
+                                <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500">Rp</span>
+                                <input type="text" inputmode="numeric" autocomplete="off" data-money
+                                       name="items[__INDEX__][harga_jual]" value=""
+                                       data-cell="harga_jual" placeholder="0"
+                                       class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-8 pr-2.5 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                            </div>
+                        </td>
 
                         <td class="px-2 py-2 text-center">
                             <button type="button" data-remove aria-label="Hapus baris"
                                     class="inline-flex h-9 w-9 items-center justify-center rounded-md text-stone-500 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M3 6h18" />
-                                            <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                                            <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                                            <path d="M10 11v6M14 11v6" />
-                                        </svg>
+                                    <path d="M3 6h18" />
+                                    <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                                    <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
+                                    <path d="M10 11v6M14 11v6" />
+                                </svg>
                             </button>
                         </td>
                     </tr>
