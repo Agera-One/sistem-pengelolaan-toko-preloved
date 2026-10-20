@@ -1,0 +1,25 @@
+.takik {
+    --kotak: linear-gradient(#000, #000);
+    --lka: radial-gradient(circle 11px at 0 0, transparent 97%, #000);
+    --kna: radial-gradient(circle 11px at 100% 0, transparent 97%, #000);
+    --lkb: radial-gradient(circle 11px at 0 100%, transparent 97%, #000);
+    --knb: radial-gradient(circle 11px at 100% 100%, transparent 97%, #000);
+
+    --a: var(--kotak); --b: var(--kotak);
+    --c: var(--kotak); --d: var(--kotak);
+
+    -webkit-mask-image: var(--a), var(--b), var(--c), var(--d);
+    mask-image: var(--a), var(--b), var(--c), var(--d);
+    -webkit-mask-position: left top, right top, left bottom, right bottom;
+    mask-position: left top, right top, left bottom, right bottom;
+    -webkit-mask-size: 51% 51%;
+    mask-size: 51% 51%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
+
+.takik-atas       { --a: var(--lka); --b: var(--kna); }
+
+.takik-bawah      { --c: var(--lkb); --d: var(--knb); }
+
+.takik-atas-bawah { --a: var(--lka); --b: var(--kna); --c: var(--lkb); --d: var(--knb); }

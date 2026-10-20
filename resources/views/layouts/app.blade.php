@@ -10,6 +10,7 @@
 
     @vite([
         'resources/css/app.css',
+        'resources/css/pembayaran.css',
         'resources/js/sidebar.js',
         'resources/js/modal.js',
         'resources/js/daterange.js',

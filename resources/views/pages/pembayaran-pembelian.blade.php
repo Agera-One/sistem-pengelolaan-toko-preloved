@@ -119,39 +119,17 @@
 
                     <tbody class="divide-y divide-stone-300">
                         @forelse ($pembayaran as $p)
-                            @php
-                                $kodeBayar = $p->kode;
-                                $kodeBeli = $p->pembelian->kode;
-
-                                $payload = json_encode([
-                                    'id' => $p->getKey(),
-                                    'kode_bayar' => $kodeBayar,
-                                    'tanggal' => \Carbon\Carbon::parse($p->tanggal)->toDateString(),
-                                    'nominal' => $p->nominal,
-                                    'metode_pembayaran' => $p->metode_pembayaran->value,
-                                    'pembelian_id' => $p->pembelian_id,
-                                    'pembelian' => [
-                                        'id' => $p->pembelian->id,
-                                        'kode' => $p->pembelian->kode,
-                                        'tanggal' => \Carbon\Carbon::parse($p->pembelian->tanggal)->toDateString(),
-                                        'total' => $p->pembelian->total,
-                                        'supplier' => $p->pembelian->supplier->nama,
-                                    ],
-                                    'create_time' => (string) $p->create_time,
-                                    'url_update' => route('pembayaran-pembelian.update', $p),
-                                ]);
-                            @endphp
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">
                                     {{ $pembayaran->firstItem() + $loop->index }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-700">
-                                    {{ $kodeBayar }}
+                                    {{ $p->kode }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-900">
-                                    {{ $kodeBeli }}
+                                    {{ $p->pembelian->kode }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
@@ -171,7 +149,7 @@
                                             data-menu-toggle="menu-pembayaran-{{ $p->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ $kodeBayar }}"
+                                            aria-label="Aksi untuk {{ $p->kode }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -181,7 +159,7 @@
                                     </button>
 
                                     <div id="menu-pembayaran-{{ $p->getKey() }}" role="menu" hidden class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
-                                        <button type="button" role="menuitem" data-pembayaran-detail data-pembayaran="{{ $payload }}" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                        <button type="button" role="menuitem" data-pembayaran-detail data-pembayaran="{{ json_encode($p->payload) }}" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
                                                 <circle cx="12" cy="12" r="3" />
@@ -189,7 +167,7 @@
                                             Detail
                                         </button>
 
-                                        <button type="button" role="menuitem" data-pembayaran-ubah data-pembayaran="{{ $payload }}" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
+                                        <button type="button" role="menuitem" data-pembayaran-ubah data-pembayaran="{{ json_encode($p->payload) }}" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" />
                                                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
@@ -198,7 +176,7 @@
                                         </button>
 
                                         <form action="{{ route('pembayaran-pembelian.destroy', $p) }}" method="POST"
-                                            data-confirm="Hapus pembayaran {{ $kodeBayar }}? Data yang dihapus tidak bisa dikembalikan.">
+                                            data-confirm="Hapus pembayaran {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -257,44 +235,16 @@
         </div>
     </div>
 
-    @php
-        $input = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500/25';
-        $label = 'mb-1.5 block font-medium text-stone-700';
-        $error = 'mt-1 hidden text-xs text-red-600';
-        $perf = 'relative mx-4 border-t-2 border-dashed border-stone-300 before:absolute before:-left-[27px] before:-top-[11px] before:size-5 before:rounded-full before:bg-white after:absolute after:-right-[27px] after:-top-[11px] after:size-5 after:rounded-full after:bg-white';
-        $tutupIkon = '<svg class="size-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3 6.7a1 1 0 0 1 0-1.4Z"/></svg>';
-
-        $takik = function (array $sudut) {
-            $peta = [
-                'kiri-atas' => ['0 0', 'left top'],
-                'kanan-atas' => ['100% 0', 'right top'],
-                'kiri-bawah' => ['0 100%', 'left bottom'],
-                'kanan-bawah' => ['100% 100%', 'right bottom'],
-            ];
-            $lapis = [];
-            foreach ($peta as $nama => [$posisi, $tempat]) {
-                $isi = in_array($nama, $sudut, true)
-                    ? "radial-gradient(circle 11px at {$posisi}, transparent 97%, #000)"
-                    : 'linear-gradient(#000, #000)';
-                $lapis[] = "{$isi} {$tempat} / 51% 51% no-repeat";
-            }
-            $nilai = implode(',', $lapis);
-
-            return "-webkit-mask:{$nilai};mask:{$nilai};";
-        };
-
-        $takikBawah = $takik(['kiri-bawah', 'kanan-bawah']);
-        $takikAtas = $takik(['kiri-atas', 'kanan-atas']);
-        $takikAtasBawah = $takik(['kiri-atas', 'kanan-atas', 'kiri-bawah', 'kanan-bawah']);
-    @endphp
-
     <div id="modal-pembayaran" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
         role="dialog" aria-modal="true" aria-labelledby="modal-pembayaran-judul">
         <div class="flex max-h-[92vh] w-full max-w-xl flex-col rounded-2xl bg-white shadow-xl">
             <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
                 <h2 id="modal-pembayaran-judul" class="text-lg font-semibold text-stone-900"></h2>
-                <button type="button" data-modal-tutup aria-label="Tutup"
-                    class="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100">{!! $tutupIkon !!}</button>
+                <button type="button" data-modal-tutup aria-label="Tutup" class="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100">
+                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3 6.7a1 1 0 0 1 0-1.4Z"/>
+                    </svg>
+                </button>
             </div>
 
             <form id="form-pembayaran" method="POST" action="{{ route('pembayaran-pembelian.store') }}"
@@ -306,8 +256,8 @@
                 <div class="flex-1 space-y-7 overflow-y-auto px-6 py-5">
 
                     <section>
-                        <label for="pembelian_id" class="{{ $label }}">Kode Pembelian <span class="text-red-600">*</span></label>
-                        <select id="pembelian_id" name="pembelian_id" class="{{ $input }}">
+                        <label for="pembelian_id" class="mb-1.5 block font-medium text-stone-700">Kode Pembelian <span class="text-red-600">*</span></label>
+                        <select id="pembelian_id" name="pembelian_id" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500/25">
                             <option value="">Pilih Pembelian</option>
                             @foreach ($pembelian as $p)
                                 <option value="{{ $p->id }}"
@@ -319,7 +269,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <p data-error="pembelian_id" class="{{ $error }}"></p>
+                        <p data-error="pembelian_id" class="mt-1 hidden text-xs text-red-600"></p>
 
                         <p id="f-kosong" class="mt-3 rounded-xl border border-dashed border-stone-300 px-4 py-7 text-center text-sm text-stone-500">
                             Tagihan akan muncul di sini setelah kamu memilih pembelian.
@@ -343,7 +293,7 @@
                                     <p id="f-tgl-beli" class="font-medium text-stone-900"></p>
                                 </div>
                             </div>
-                            <div class="{{ $perf }}"></div>
+                            <div class="relative mx-4 border-t-2 border-dashed border-stone-300 before:absolute before:-left-[27px] before:-top-[11px] before:size-5 before:rounded-full before:bg-white after:absolute after:-right-[27px] after:-top-[11px] after:size-5 after:rounded-full after:bg-white"></div>
                             <div class="flex items-end justify-between gap-3 px-5 pb-5 pt-4">
                                 <p class="text-sm text-stone-500">Total Tagihan</p>
                                 <p id="f-total" class="text-xl font-semibold leading-none text-brand"></p>
@@ -353,7 +303,7 @@
 
                     <div class="space-y-6 overflow-y-auto">
                         <div>
-                            <label for="nominal" class="{{ $label }}">Nominal Bayar</label>
+                            <label for="nominal" class="mb-1.5 block font-medium text-stone-700">Nominal Bayar</label>
                             <div class="relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-stone-500">Rp</span>
                                 <input id="nominal" type="text" readonly placeholder="0" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 py-2.5 pl-8 pr-3 text-stone-500 placeholder:text-stone-400 focus:outline-none">
@@ -363,19 +313,19 @@
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
-                                <label for="kode-bayar" class="{{ $label }}">Kode Pembayaran</label>
+                                <label for="kode-bayar" class="mb-1.5 block font-medium text-stone-700">Kode Pembayaran</label>
                                 <input id="kode-bayar" type="text" readonly aria-describedby="hint-kode-bayar" class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
                                 <p class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
                             </div>
                             <div>
-                                <label for="tanggal" class="{{ $label }}">Tanggal Bayar</label>
-                                <input id="tanggal" name="tanggal" type="date" class="{{ $input }}">
-                                <p data-error="tanggal" class="{{ $error }}"></p>
+                                <label for="tanggal" class="mb-1.5 block font-medium text-stone-700">Tanggal Bayar</label>
+                                <input id="tanggal" name="tanggal" type="date" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500/25">
+                                <p data-error="tanggal" class="mt-1 hidden text-xs text-red-600"></p>
                             </div>
                         </div>
 
                         <div>
-                            <span class="{{ $label }}">Metode Pembayaran <span class="text-red-600">*</span></label>
+                            <span class="mb-1.5 block font-medium text-stone-700">Metode Pembayaran <span class="text-red-600">*</span></label>
                             <div data-wrap-for="metode_pembayaran" class="grid grid-cols-2 gap-2">
                                 @foreach ($metode as $m)
                                     <label class="cursor-pointer">
@@ -384,7 +334,7 @@
                                     </label>
                                 @endforeach
                             </div>
-                            <p data-error="metode_pembayaran" class="{{ $error }}"></p>
+                            <p data-error="metode_pembayaran" class="mt-1 hidden text-xs text-red-600"></p>
                         </div>
                     </div>
                 </div>
@@ -404,14 +354,18 @@
     <div id="modal-detail-pembayaran" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
         role="dialog" aria-modal="true" aria-label="Bukti pembayaran">
         <div class="max-h-[92vh] w-full max-w-md overflow-y-auto">
-            <div class="relative rounded-t-2xl bg-white px-6 pb-6 pt-8 text-center" style="{{ $takikBawah }}">
-                <button type="button" data-modal-tutup aria-label="Tutup"
-                    class="absolute right-3 top-3 rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">{!! $tutupIkon !!}</button>
+            <div class="takik takik-bawah relative rounded-t-2xl bg-white px-6 pb-6 pt-8 text-center">
+                <button type="button" data-modal-tutup aria-label="Tutup" class="absolute right-3 top-3 rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-70 s:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3
+                        6.7a1 1 0 0 1 0-1.4Z"/>
+                    </svg>
+                </button>
                 <p id="d-nominal" class="text-4xl font-semibold leading-tight text-stone-900"></p>
                 <p id="d-sub" class="mt-2 text-sm text-stone-900"></p>
             </div>
 
-            <div class="relative bg-white px-6 py-3" style="{{ $takikAtasBawah }}">
+            <div class="takik takik-atas-bawah relative bg-white px-6 py-3">
                 <div class="absolute inset-x-6 top-0 border-t-2 border-dashed border-stone-300"></div>
                 <dl class="text-sm">
                     <div class="flex justify-between gap-4 py-2.5"><dt class="text-stone-500">Kode Pembayaran</dt><dd id="d-kode-bayar" class="text-right font-medium text-stone-900"></dd></div>
@@ -422,7 +376,7 @@
                 </dl>
             </div>
 
-            <div class="relative rounded-b-2xl bg-white px-6 pb-6 pt-6 text-center" style="{{ $takikAtas }}">
+            <div class="takik takik-atas relative rounded-b-2xl bg-white px-6 pb-6 pt-6 text-center">
                 <div class="absolute inset-x-6 top-0 border-t-2 border-dashed border-stone-300"></div>
                 <p class="text-stone-500">Simpan resi ini sebagai bukti pembayaran</p>
                 <p class="mt-3 font-bold text-stone-900">TRISTANTI STORE</p>
