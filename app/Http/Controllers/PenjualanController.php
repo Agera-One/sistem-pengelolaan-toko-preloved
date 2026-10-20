@@ -47,7 +47,7 @@ class PenjualanController extends Controller
 
     public function destroy(Penjualan $penjualan)
     {
-        $penjualan->delete();
+        $this->penjualanService->destroy($penjualan);
         return redirect()->route('penjualan.index')->with('success', "Data penjualan berhasil di hapus");
     }
 }

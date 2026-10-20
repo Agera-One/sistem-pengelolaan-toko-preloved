@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\BarangStatus;
 use App\Enums\PenjualanStatus;
 use App\Models\Barang;
+use App\Models\DetailPenjualan;
 use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use Illuminate\Support\Carbon;
@@ -102,13 +103,21 @@ class PenjualanService
                 'pelanggan_id' => $data['pelanggan_id'],
             ] + $totals)->save();
 
-            DB::table('detail_penjualan')
-                ->where('penjualan_id', $penjualan->getKey())
-                ->delete();
+            DetailPenjualan::where('penjualan_id', $penjualan->getKey())
+                ->get()
+                ->each->delete();
 
             $this->simpanDetail($penjualan, $items);
 
             return $penjualan;
+        });
+    }
+
+    public function destroy(Penjualan $penjualan)
+    {
+        DB::transaction(function () use ($penjualan) {
+            $penjualan->detailPenjualan->each->delete();
+            $penjualan->delete();
         });
     }
 
@@ -126,13 +135,13 @@ class PenjualanService
 
     protected function simpanDetail(Penjualan $penjualan, Collection $items): void
     {
-        DB::table('detail_penjualan')->insert(
-            $items->map(fn ($item) => [
+        foreach ($items as $item) {
+            DetailPenjualan::create([
                 'penjualan_id' => $penjualan->getKey(),
                 'barang_id'    => $item['barang_id'],
                 'harga_jual'   => $item['harga_jual'],
-            ])->all()
-        );
+            ]);
+        }
     }
 
         protected function dataForm(Collection $barang, array $items = []): array
