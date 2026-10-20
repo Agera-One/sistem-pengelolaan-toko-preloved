@@ -146,7 +146,7 @@
                                             <span class="text-stone-500">Rp</span>
                                             <input type="text" data-field="harga-beli" aria-label="Harga beli" readonly tabindex="-1"
                                                    value="{{ !empty($row['harga_beli']) ? format_rupiah($row['harga_beli']) : '' }}"
-                                                   class="min-w-0 flex-1 cursor-default border-0 bg-transparent py-2.5 text-stone-500 focus:outline-none focus:ring-0">
+                                                   class="w-full cursor-default border-0 bg-transparent py-2.5 text-stone-500 focus:outline-none focus:ring-0">
                                         </div>
                                     </td>
                                     <td class="px-2 py-2.5">
@@ -157,7 +157,7 @@
                                                    name="items[{{ $row['index'] }}][harga_jual]" data-field="harga-jual" aria-label="Harga jual"
                                                    value="{{ $row['harga_jual'] }}"
                                                    @error('items.'.$row['index'].'.harga_jual') aria-invalid="true" @enderror
-                                                   class="min-w-0 flex-1 border-0 bg-transparent py-2.5 text-stone-900 focus:outline-none focus:ring-0">
+                                                   class="w-full border-0 bg-transparent py-2.5 text-stone-900 focus:outline-none focus:ring-0">
                                         </div>
                                     </td>
                                     <td class="px-4 py-2.5 text-right">
