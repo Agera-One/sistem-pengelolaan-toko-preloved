@@ -56,7 +56,7 @@
                 [
                     'label'  => 'Daftar Penjualan',
                     'route'  => 'penjualan.index',
-                    'active' => 'penjualan.index',
+                    'active' => 'penjualan.*',
                 ],
                 [
                     'label'  => 'Retur Penjualan',
