@@ -9,9 +9,7 @@ use App\Services\PenjualanService;
 
 class PenjualanController extends Controller
 {
-    public function __construct(
-        protected PenjualanService $penjualanService,
-    ) {}
+    public function __construct(protected PenjualanService $penjualanService) {}
 
     public function index(Request $request)
     {

@@ -9,9 +9,7 @@ use App\Http\Requests\PelangganRequest;
 
 class PelangganController extends Controller
 {
-    public function __construct(
-        protected PelangganService $pelangganService,
-    ) {}
+    public function __construct(protected PelangganService $pelangganService) {}
 
     public function index(Request $request)
     {
@@ -20,7 +18,6 @@ class PelangganController extends Controller
 
     public function store(PelangganRequest $request)
     {
-
         $this->pelangganService->store($request->validated());
         return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di tambahkan');
     }

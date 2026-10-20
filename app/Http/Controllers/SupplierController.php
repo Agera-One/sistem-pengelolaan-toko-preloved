@@ -9,9 +9,7 @@ use App\Http\Requests\SupplierRequest;
 
 class SupplierController extends Controller
 {
-    public function __construct(
-        protected SupplierService $supplierService,
-    ) {}
+    public function __construct(protected SupplierService $supplierService) {}
 
     public function index(Request $request)
     {
@@ -20,7 +18,6 @@ class SupplierController extends Controller
 
     public function store(SupplierRequest $request)
     {
-
         $this->supplierService->store($request->validated());
         return redirect()->route('supplier.index')->with('success', 'Data supplier berhasil di tambahkan');
     }
