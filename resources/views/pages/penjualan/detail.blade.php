@@ -215,7 +215,7 @@
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $rupiah($barang->harga_jual) }}
+                                    {{ $rupiah($barang->pivot->harga_jual) }}
                                 </td>
                             </tr>
                         @endforeach
