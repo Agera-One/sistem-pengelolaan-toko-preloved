@@ -139,8 +139,8 @@
                                     {{ $p->tanggal->translatedFormat('d F Y') }}
                                 </td>
 
-                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ $p->alamat }}">
-                                    Rp{{ number_format($p->total, 0, ',', '.') }}
+                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700">
+                                    {{ format_rupiah($p->total) }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5" title="{{ $p->status->label() }}">

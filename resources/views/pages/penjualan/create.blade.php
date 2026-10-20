@@ -145,7 +145,7 @@
                                         <div class="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-100 px-3">
                                             <span class="text-stone-500">Rp</span>
                                             <input type="text" data-field="harga-beli" aria-label="Harga beli" readonly tabindex="-1"
-                                                   value="{{ !empty($row['harga_beli']) ? number_format((float) $row['harga_beli'], 0, ',', '.') : '' }}"
+                                                   value="{{ !empty($row['harga_beli']) ? format_rupiah($row['harga_beli']) : '' }}"
                                                    class="min-w-0 flex-1 cursor-default border-0 bg-transparent py-2.5 text-stone-500 focus:outline-none focus:ring-0">
                                         </div>
                                     </td>

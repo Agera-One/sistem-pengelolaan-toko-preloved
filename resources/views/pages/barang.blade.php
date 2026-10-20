@@ -131,11 +131,11 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    Rp{{ number_format($b->harga_beli, 0, ',', '.') }}
+                                    {{ format_rupiah($b->harga_beli) }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    Rp{{ number_format($b->harga_jual, 0, ',', '.') }}
+                                    {{ format_rupiah($b->harga_jual) }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5" title="{{ $b->status->label() }}">

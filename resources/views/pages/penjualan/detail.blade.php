@@ -8,8 +8,6 @@
             ->trim()->explode(' ')->filter()->take(2)
             ->map(fn ($kata) => \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($kata, 0, 1)))
             ->implode('');
-
-        $rupiah = fn ($angka) => 'Rp' . number_format($angka, 0, ',', '.');
     @endphp
 
     <div>
@@ -216,11 +214,11 @@
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $rupiah($barang->harga_beli) }}
+                                    {{ format_rupiah($barang->harga_beli) }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $rupiah($barang->pivot->harga_jual) }}
+                                    {{ format_rupiah($barang->pivot->harga_jual) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -231,13 +229,13 @@
             <div class="flex justify-end border-t border-stone-300 bg-stone-50 px-4 py-4">
                 <dl class="grid grid-cols-[auto_auto] items-baseline gap-x-10 gap-y-1.5">
                     <dt class="text-stone-600">Subtotal</dt>
-                    <dd class="text-right font-semibold text-stone-900">{{ $rupiah($penjualan->subtotal) }}</dd>
+                    <dd class="text-right font-semibold text-stone-900">{{ format_rupiah($penjualan->subtotal) }}</dd>
 
                     <dt class="text-stone-600">Ongkir</dt>
-                    <dd class="text-right font-semibold text-stone-900">{{ $rupiah($penjualan->ongkir) }}</dd>
+                    <dd class="text-right font-semibold text-stone-900">{{ format_rupiah($penjualan->ongkir) }}</dd>
 
                     <dt class="font-semibold text-xl text-stone-900">Total</dt>
-                    <dd class="text-right text-xl font-bold text-stone-900">{{ $rupiah($penjualan->total) }}</dd>
+                    <dd class="text-right text-xl font-bold text-stone-900">{{ format_rupiah($penjualan->total) }}</dd>
                 </dl>
             </div>
         </section>

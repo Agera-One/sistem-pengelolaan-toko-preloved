@@ -140,7 +140,7 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 text-stone-700"">
-                                    Rp{{ number_format($p->total, 0, ',', '.') }}
+                                    {{ format_rupiah($p->total) }}
                                 </td>
 
                                 <td class="px-4 py-3.5" title="{{ $p->status->label() }}">

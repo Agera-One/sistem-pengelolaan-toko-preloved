@@ -137,7 +137,7 @@
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
-                                    Rp{{ number_format($p->nominal, 0, ',', '.') }}
+                                    {{ format_rupiah($p->nominal) }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">

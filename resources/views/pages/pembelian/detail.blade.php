@@ -8,8 +8,6 @@
             ->trim()->explode(' ')->filter()->take(2)
             ->map(fn ($kata) => \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($kata, 0, 1)))
             ->implode('');
-
-        $rupiah = fn ($angka) => 'Rp' . number_format($angka, 0, ',', '.');
     @endphp
 
     <div>
@@ -219,11 +217,11 @@
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $rupiah($barang->harga_beli) }}
+                                    {{ format_rupiah($barang->harga_beli) }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $rupiah($barang->harga_jual) }}
+                                    {{ format_rupiah($barang->harga_jual) }}
                                 </td>
 
                                 <td class="px-4 py-4">
@@ -240,7 +238,7 @@
 
             <div class="flex items-center justify-end gap-6 border-t border-stone-300 bg-stone-50 px-4 py-4">
                 <span>Total Harga Beli</span>
-                <span class="text-xl font-semibold">{{ $rupiah($pembelian->total) }}</span>
+                <span class="text-xl font-semibold">{{ format_rupiah($pembelian->total) }}</span>
             </div>
         </section>
     </div>
