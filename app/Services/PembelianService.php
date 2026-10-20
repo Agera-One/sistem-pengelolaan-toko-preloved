@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Enums\BarangStatus;
+use App\Enums\KategoriBarang;
+use App\Enums\PembelianStatus;
 use App\Models\Pembelian;
+use App\Models\Supplier;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +16,31 @@ class PembelianService
 
     public function __construct(protected CodeGeneratorService $codeGenerator) {}
 
-    public function create(array $data, int $userId): Pembelian
+    public function index(array $query): array
+    {
+        return [
+            'pembelian' => Pembelian::search($query['q'] ?? null)
+                ->filter($query)
+                ->dateBetween($query['tanggal_mulai'] ?? null, $query['tanggal_selesai'] ?? null)
+                ->with(['supplier', 'user'])
+                ->latest('id')
+                ->paginate(10)
+                ->withQueryString(),
+            'supplier'  => Supplier::orderBy('nama')->get(),
+            'statuses'  => PembelianStatus::cases(),
+        ];
+    }
+
+    public function create(): array
+    {
+        return [
+            'kode'      => $this->codeGenerator->pembelian(),
+            'supplier'  => Supplier::orderBy('nama')->get(),
+            'kategori'  => KategoriBarang::cases(),
+        ];
+    }
+
+    public function store(array $data, int $userId): Pembelian
     {
         return DB::transaction(function () use ($data, $userId) {
             $items = collect($data['items'])->values();
@@ -38,6 +65,15 @@ class PembelianService
 
             return $pembelian;
         });
+    }
+
+    public function edit(Pembelian $pembelian): array
+    {
+        return [
+            'pembelian' => $pembelian,
+            'supplier'  => Supplier::orderBy('nama')->get(),
+            'kategori'  => KategoriBarang::cases(),
+        ];
     }
 
     public function update(Pembelian $pembelian, array $data): Pembelian
