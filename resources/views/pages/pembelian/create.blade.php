@@ -3,12 +3,6 @@
 @section('title', 'Tambah Pembelian')
 
 @section('content')
-    @php
-        $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-        $cell = 'w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-        $rows = old('items') ?: [[]];
-    @endphp
-
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ route('pembelian.index') }}"
@@ -89,7 +83,7 @@
                         </label>
                         <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', now()->format('Y-m-d')) }}"
                                @error('tanggal') aria-invalid="true" @enderror
-                               class="{{ $field }}">
+                               class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                     </div>
 
                     <div>
@@ -98,7 +92,7 @@
                         </label>
                         <select id="supplier_id" name="supplier_id"
                                 @error('supplier_id') aria-invalid="true" @enderror
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                             <option value="">Pilih supplier</option>
                             @foreach ($supplier as $s)
                                 <option value="{{ $s->id }}" @selected(old('supplier_id') == $s->id)>{{ $s->nama }}</option>
@@ -135,19 +129,19 @@
                             </tr>
                         </thead>
                         <tbody id="item-rows" class="divide-y divide-stone-200">
-                            @foreach ($rows as $i => $item)
+                            @foreach (old('items') ?: [[]] as $i => $item)
                                 <tr data-row data-index="{{ $i }}" class="align-top">
                                     <td class="px-4 py-2">
                                         <input type="text" name="items[{{ $i }}][nama]" value="{{ $item['nama'] ?? '' }}"
                                                data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
                                                @if ($errors->has("items.$i.nama")) aria-invalid="true" @endif
-                                               class="{{ $cell }}">
+                                               class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                     </td>
 
                                     <td class="px-2 py-2">
                                         <select name="items[{{ $i }}][kategori]" data-cell="kategori"
                                                 @if ($errors->has("items.$i.kategori")) aria-invalid="true" @endif
-                                                class="{{ $cell }}">
+                                                class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                             <option value="" disabled @selected(!isset($item['kategori']))>Pilih</option>
                                             @foreach ($kategori as $kat)
                                                 <option value="{{ $kat->value }}">
@@ -162,7 +156,7 @@
                                                name="items[{{ $i }}][lingkar]" value="{{ $item['lingkar'] ?? '' }}"
                                                data-cell="lingkar" placeholder="0"
                                                @if ($errors->has("items.$i.lingkar")) aria-invalid="true" @endif
-                                               class="{{ $cell }}">
+                                               class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                     </td>
 
                                     <td class="px-2 py-2">
@@ -170,7 +164,7 @@
                                                name="items[{{ $i }}][panjang]" value="{{ $item['panjang'] ?? '' }}"
                                                data-cell="panjang" placeholder="0"
                                                @if ($errors->has("items.$i.panjang")) aria-invalid="true" @endif
-                                               class="{{ $cell }}">
+                                               class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                     </td>
 
                                     @foreach (['harga_beli', 'harga_jual'] as $money)
@@ -181,7 +175,7 @@
                                                        name="items[{{ $i }}][{{ $money }}]" value="{{ $item[$money] ?? '' }}"
                                                        data-cell="{{ $money }}" placeholder="0"
                                                        @if ($errors->has("items.$i.$money")) aria-invalid="true" @endif
-                                                       class="{{ $cell }} pl-8">
+                                                       class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500 pl-8">
                                             </div>
                                         </td>
                                     @endforeach
@@ -208,11 +202,11 @@
                         <td class="px-4 py-2">
                             <input type="text" name="items[__INDEX__][nama]" value=""
                                    data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
-                                   class="{{ $cell }}">
+                                   class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         </td>
 
                         <td class="px-2 py-2">
-                            <select name="items[__INDEX__][kategori]" data-cell="kategori" class="{{ $cell }}">
+                            <select name="items[__INDEX__][kategori]" data-cell="kategori" class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                 <option value="" disabled selected>Pilih</option>
                                 @foreach ($kategori as $kat)
                                     <option value="{{ $kat->value }}">
@@ -226,14 +220,14 @@
                             <input type="number" step="any" min="0" inputmode="decimal"
                                    name="items[__INDEX__][lingkar]" value=""
                                    data-cell="lingkar" placeholder="0"
-                                   class="{{ $cell }}">
+                                   class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         </td>
 
                         <td class="px-2 py-2">
                             <input type="number" step="any" min="0" inputmode="decimal"
                                    name="items[__INDEX__][panjang]" value=""
                                    data-cell="panjang" placeholder="0"
-                                   class="{{ $cell }}">
+                                   class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         </td>
 
                         @foreach (['harga_beli', 'harga_jual'] as $money)
@@ -243,7 +237,7 @@
                                     <input type="text" inputmode="numeric" autocomplete="off" data-money
                                            name="items[__INDEX__][{{ $money }}]" value=""
                                            data-cell="{{ $money }}" placeholder="0"
-                                           class="{{ $cell }} pl-8">
+                                           class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500 pl-8">
                                 </div>
                             </td>
                         @endforeach
