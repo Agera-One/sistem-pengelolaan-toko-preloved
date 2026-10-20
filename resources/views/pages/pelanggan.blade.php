@@ -222,10 +222,6 @@
         </div>
     </div>
 
-    @php
-        $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-    @endphp
-
     <dialog id="modal-tambah"
             aria-labelledby="modal-tambah-title"
             class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
@@ -260,7 +256,7 @@
                                 placeholder="08xxxxxxxxxx" autocomplete="off"
                                 data-label="Nomor telepon" data-rules="required|max:15"
                                 aria-describedby="err-nomor_telepon"
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
@@ -273,7 +269,7 @@
                                 autocomplete="off" autofocus
                                 data-label="Nama lengkap" data-rules="required|string|max:255"
                                 aria-describedby="err-nama"
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
@@ -285,7 +281,7 @@
                                 placeholder="Jalan, nomor, kelurahan, kota"
                                 data-label="Alamat lengkap" data-rules="required"
                                 aria-describedby="err-alamat"
-                                class="{{ $field }}"></textarea>
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500"></textarea>
                     <p id="err-alamat" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
@@ -339,7 +335,7 @@
                                 data-fill="telepon"
                                 data-label="Nomor telepon" data-rules="required|max:15"
                                 aria-describedby="err-edit-nomor_telepon"
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
@@ -353,7 +349,7 @@
                             data-fill="nama"
                             data-label="Nama lengkap" data-rules="required|string|max:255"
                             aria-describedby="err-edit-nama"
-                            class="{{ $field }}">
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
@@ -366,7 +362,7 @@
                                 data-fill="alamat"
                                 data-label="Alamat lengkap" data-rules="required"
                                 aria-describedby="err-edit-alamat"
-                                class="{{ $field }}"></textarea>
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500"></textarea>
                     <p id="err-edit-alamat" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>

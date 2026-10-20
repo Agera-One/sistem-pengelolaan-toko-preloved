@@ -269,10 +269,6 @@
         </div>
     </div>
 
-    @php
-        $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-    @endphp
-
     <dialog id="modal-ubah"
         aria-labelledby="modal-ubah-title"
         class="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-xl border border-stone-300 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-900/50">
@@ -308,7 +304,7 @@
                             data-fill="nama"
                             data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-edit-nama"
-                            class="{{ $field }}">
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
@@ -320,7 +316,7 @@
                             data-fill="kategori"
                             data-label="Kategori" data-rules="required|string|max:255"
                             aria-describedby="err-edit-kategori"
-                            class="{{ $field }}">
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <option value="" disabled selected>Pilih kategori</option>
                         @foreach ($kategori as $kat)
                             <option value="{{ $kat->value }}">
@@ -342,7 +338,7 @@
                                 data-fill="lingkar"
                                 data-label="Lingkar" data-rules="required|numeric|min:1"
                                 aria-describedby="err-edit-lingkar"
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <p id="err-edit-lingkar" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
 
@@ -356,7 +352,7 @@
                                 data-fill="panjang"
                                 data-label="Panjang" data-rules="required|numeric|min:1"
                                 aria-describedby="err-edit-panjang"
-                                class="{{ $field }}">
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <p id="err-edit-panjang" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
@@ -389,7 +385,7 @@
                                     data-fill="hargaJual"
                                     data-label="Harga Jual" data-rules="required|numeric|min:1|gt:harga_beli"
                                     aria-describedby="err-edit-harga_jual"
-                                    class="{{ $field }} pl-9">
+                                    class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500 pl-9">
                         </div>
                         <p id="err-edit-harga_jual" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
