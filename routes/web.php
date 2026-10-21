@@ -8,6 +8,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PembayaranPembelianController;
+use App\Http\Controllers\PembayaranPenjualanController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -22,9 +23,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('supplier', SupplierController::class)->except(['show', 'create', 'edit']);
 
     Route::resource('pembelian', PembelianController::class);
-    Route::resource('pembayaran-pembelian', PembayaranPembelianController::class)->except(['show', 'create', 'edit'])->names('pembayaran-pembelian');
+    Route::resource('pembayaran-pembelian', PembayaranPembelianController::class)
+        ->except(['show', 'create', 'edit'])
+        ->names('pembayaran-pembelian');
 
     Route::resource('penjualan', PenjualanController::class);
+    Route::resource('pembayaran-penjualan', PembayaranPenjualanController::class)
+        ->except(['show', 'create', 'edit'])
+        ->names('pembayaran-penjualan');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
