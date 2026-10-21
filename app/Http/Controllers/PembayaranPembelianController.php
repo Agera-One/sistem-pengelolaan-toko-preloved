@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\PembayaranPembelianService;
 use Illuminate\Http\Request;
-use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
 use App\Http\Requests\PembayaranPembelianRequest;
 
