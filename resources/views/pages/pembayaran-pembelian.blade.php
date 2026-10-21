@@ -199,8 +199,10 @@
                                 <td colspan="7" class="px-4 py-16 text-center">
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card preview-icon">
+                                                <rect width="20" height="14" x="2" y="5" rx="2"/>
+                                                <line x1="2" x2="22" y1="10" y2="10"/>
+                                                <path d="M6 14h2"/>
                                             </svg>
                                         </span>
 
@@ -247,7 +249,7 @@
                 </button>
             </div>
 
-            <form id="form-pembayaran" method="POST" action="{{ route('pembayaran-pembelian.store') }}"
+            <form id="form-pembayaran" data-jenis="pembelian" method="POST" action="{{ route('pembayaran-pembelian.store') }}"
                 data-url-store="{{ route('pembayaran-pembelian.store') }}" data-kode-bayar="{{ $kode }}"
                 novalidate class="flex min-h-0 flex-1 flex-col">
                 @csrf
