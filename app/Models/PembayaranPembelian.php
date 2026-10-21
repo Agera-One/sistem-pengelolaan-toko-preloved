@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Enums\MetodePembayaran;
-use App\Traits\HasDateRange;
-use App\Traits\Searchable;
+use App\Http\Resources\PembayaranPembelianResource;
 use App\Traits\Filterable;
+use App\Traits\HasDateRange;
+use App\Traits\HasPayload;
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PembayaranPembelian extends Model
 {
-    use Searchable, Filterable, HasDateRange;
+    use Searchable, Filterable, HasDateRange, HasPayload;
 
     protected array $searchable = ['kode'];
     protected array $searchableRelations = ['pembelian' => 'kode'];
@@ -38,5 +40,15 @@ class PembayaranPembelian extends Model
     public function pembelian(): BelongsTo
     {
         return $this->belongsTo(Pembelian::class, 'pembelian_id');
+    }
+
+    protected function resourceClass(): string
+    {
+        return PembayaranPembelianResource::class;
+    }
+
+    protected function payloadRelations(): array
+    {
+        return ['pembelian.supplier'];
     }
 }
