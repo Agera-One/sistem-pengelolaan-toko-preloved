@@ -27,6 +27,6 @@ class AppServiceProvider extends ServiceProvider
 
         DetailPenjualan::observe(DetailPenjualanObserver::class);
         PembayaranPembelian::observe(PembayaranObserver::class);
-        // PembayaranPenjualan::observe(PembayaranPenjualan::class);
+        PembayaranPenjualan::observe(PembayaranObserver::class);
     }
 }
