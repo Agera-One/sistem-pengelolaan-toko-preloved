@@ -8,6 +8,7 @@ use App\Models\Pelanggan;
 use App\Models\Pembelian;
 use App\Models\PembayaranPembelian;
 use App\Models\Penjualan;
+use App\Models\PembayaranPenjualan;
 use Illuminate\Database\Eloquent\Model;
 
 class CodeGeneratorService
@@ -66,5 +67,10 @@ class CodeGeneratorService
     public function penjualan()
     {
         return $this->generate(new penjualan(), 'kode', 'JUA');
+    }
+
+    public function pembayaranPenjualan()
+    {
+        return $this->generate(new PembayaranPenjualan(), 'kode', 'MSK');
     }
 }
