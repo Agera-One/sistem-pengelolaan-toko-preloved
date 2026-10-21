@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Enums\MetodePembayaran;
-use App\Http\Resources\PembayaranPembelianResource;
+use App\Enums\PembelianStatus;
 use App\Models\PembayaranPembelian;
 use App\Models\Pembelian;
 
@@ -16,21 +16,22 @@ class PembayaranPembelianService
     public function index(array $query): array
     {
         return [
-            'pembayaran' => PembayaranPembelian::with('pembelian.supplier')
+            'pembayaran' => PembayaranPembelian::denganRelasi()
                 ->search($query['q'] ?? null)
+                ->filter($query)
+                ->dateBetween($query['tanggal_mulai'] ?? null, $query['tanggal_selesai'] ?? null)
                 ->latest('id')
                 ->paginate(10)
-                ->withQueryString()
-                ->through(function (PembayaranPembelian $p) {
-                    $p->setAttribute('payload', PembayaranPembelianResource::make($p)->resolve());
-
-                    return $p;
-                }),
-            'pembelian' => Pembelian::where('status', 'Belum Bayar')->with('supplier')->latest('id')->get(),
-            'kode'      => $this->codeGenerator->pembayaranPembelian(),
-            'metode'    => MetodePembayaran::cases(),
+                ->withQueryString(),
+            'pembelian' => Pembelian::where('status', PembelianStatus::BELUM_BAYAR)
+                ->with('supplier')
+                ->latest('id')
+                ->get(),
+            'kode'   => $this->codeGenerator->pembayaranPembelian(),
+            'metode' => MetodePembayaran::cases(),
         ];
     }
+
 
     public function store(array $validated)
     {
