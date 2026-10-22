@@ -43,9 +43,9 @@ class Pembelian extends Model
         return $this->hasOne(PembayaranPembelian::class, 'pembelian_id');
     }
 
-    public function barang(): HasMany
+    public function pakaian(): HasMany
     {
-        return $this->hasMany(Barang::class, 'pembelian_id');
+        return $this->hasMany(Pakaian::class, 'pembelian_id');
     }
 
 

@@ -60,9 +60,9 @@ class Penjualan extends Model
         return $this->hasMany(DetailRetur::class, 'penjualan_id');
     }
 
-    public function barang(): BelongsToMany
+    public function pakaian(): BelongsToMany
     {
-        return $this->belongsToMany(Barang::class, 'detail_penjualan', 'penjualan_id', 'barang_id')
+        return $this->belongsToMany(Pakaian::class, 'detail_penjualan', 'penjualan_id', 'pakaian_id')
             ->withPivot('harga_jual');
     }
 

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('detail_penjualan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('barang_id')->constrained('barang')->onDelete('restrict');;
+            $table->foreignId('pakaian_id')->constrained('pakaian')->onDelete('restrict');;
             $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('cascade');;
             $table->unsignedInteger('harga_jual');
         });

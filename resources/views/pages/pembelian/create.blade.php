@@ -106,7 +106,7 @@
                 <header class="flex items-center justify-between border-b border-stone-300 px-4 py-3.5">
                     <div class="flex items-center gap-3">
                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-semibold text-white">2</span>
-                        <h2 class="font-semibold text-stone-900">Daftar Barang</h2>
+                        <h2 class="font-semibold text-stone-900">Daftar Pakaian</h2>
                     </div>
 
                     <div class="flex items-center gap-2 rounded-lg bg-stone-100 px-3 py-1.5 text-sm">
@@ -119,7 +119,7 @@
                     <table class="w-full min-w-[1080px] text-left">
                         <thead class="border-b border-stone-300 bg-brand/5 text-stone-600">
                             <tr>
-                                <th scope="col" class="px-4 py-3 font-medium">Nama Barang</th>
+                                <th scope="col" class="px-4 py-3 font-medium">Nama Pakaian</th>
                                 <th scope="col" class="w-48 px-2 py-3 font-medium">Kategori</th>
                                 <th scope="col" class="w-48 px-2 py-3 font-medium">Lingkar (cm)</th>
                                 <th scope="col" class="w-48 px-2 py-3 font-medium">Panjang (cm)</th>
@@ -133,7 +133,7 @@
                                 <tr data-row data-index="{{ $i }}" class="align-top">
                                     <td class="px-4 py-2">
                                         <input type="text" name="items[{{ $i }}][nama]" value="{{ $item['nama'] ?? '' }}"
-                                               data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
+                                               data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama pakaian"
                                                @if ($errors->has("items.$i.nama")) aria-invalid="true" @endif
                                                class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                     </td>
@@ -201,7 +201,7 @@
                     <tr data-row data-index="__INDEX__" class="align-top">
                         <td class="px-4 py-2">
                             <input type="text" name="items[__INDEX__][nama]" value=""
-                                   data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
+                                   data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama pakaian"
                                    class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         </td>
 

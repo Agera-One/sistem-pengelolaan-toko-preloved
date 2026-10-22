@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\BarangController;
+use App\Http\Controllers\PakaianController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PembelianController;
@@ -18,7 +18,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', fn () => view('pages.dashboard'))->name('dashboard');
 
-    Route::resource('barang', BarangController::class)->except(['show', 'create', 'store', 'edit']);
+    Route::resource('pakaian', PakaianController::class)->except(['show', 'create', 'store', 'edit']);
     Route::resource('pelanggan', PelangganController::class)->except(['show', 'create', 'edit']);
     Route::resource('supplier', SupplierController::class)->except(['show', 'create', 'edit']);
 

@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Enums\BarangStatus;
-use App\Enums\KategoriBarang;
+use App\Enums\PakaianStatus;
+use App\Enums\KategoriPakaian;
 use App\Enums\PembelianStatus;
-use App\Models\Barang;
+use App\Models\Pakaian;
 use App\Models\Pembelian;
 use App\Models\Supplier;
 use Illuminate\Support\Arr;
@@ -38,7 +38,7 @@ class PembelianService
         return [
             'kode'      => $this->codeGenerator->pembelian(),
             'supplier'  => Supplier::orderBy('nama')->get(),
-            'kategori'  => KategoriBarang::cases(),
+            'kategori'  => KategoriPakaian::cases(),
         ];
     }
 
@@ -46,7 +46,7 @@ class PembelianService
     {
         return DB::transaction(function () use ($data, $userId) {
             $items = collect($data['items'])->values();
-            $kodeBarang = $this->codeGenerator->barang($items->count());
+            $kodePakaian = $this->codeGenerator->pakaian($items->count());
 
             $pembelian = Pembelian::create([
                 'kode'        => $this->codeGenerator->pembelian(),
@@ -57,10 +57,10 @@ class PembelianService
             ]);
 
             foreach ($items as $i => $row) {
-                $pembelian->barang()->create(
+                $pembelian->pakaian()->create(
                     Arr::only($row, self::FIELD_BARANG) + [
-                        'kode'   => $kodeBarang[$i],
-                        'status' => BarangStatus::TERSEDIA,
+                        'kode'   => $kodePakaian[$i],
+                        'status' => PakaianStatus::TERSEDIA,
                     ]
                 );
             }
@@ -71,10 +71,10 @@ class PembelianService
 
     public function edit(Pembelian $pembelian): array
     {
-        $lockedIds = $this->lockedBarangIds($pembelian);
+        $lockedIds = $this->lockedPakaianIds($pembelian);
 
-        $rows = old('items') ?: $pembelian->barang
-            ->map(fn (Barang $barang) => $this->toFormRow($barang))
+        $rows = old('items') ?: $pembelian->pakaian
+            ->map(fn (Pakaian $pakaian) => $this->toFormRow($pakaian))
             ->all();
 
         $rows = collect($rows)
@@ -86,7 +86,7 @@ class PembelianService
         return [
             'pembelian'  => $pembelian,
             'supplier'   => Supplier::orderBy('nama')->get(),
-            'kategori'   => KategoriBarang::cases(),
+            'kategori'   => KategoriPakaian::cases(),
             'lockedIds'  => $lockedIds,
             'rows'       => $rows ?: [['locked' => false]],
             'tanggal'    => old('tanggal', Carbon::parse($pembelian->tanggal)->format('Y-m-d')),
@@ -98,11 +98,11 @@ class PembelianService
     {
         return DB::transaction(function () use ($pembelian, $data) {
             $items    = collect($data['items'] ?? []);
-            $locked   = $pembelian->barang()->where('status', '!=', BarangStatus::TERSEDIA)->get()->keyBy('id');
-            $editable = $pembelian->barang()->where('status', BarangStatus::TERSEDIA)->get()->keyBy('id');
+            $locked   = $pembelian->pakaian()->where('status', '!=', PakaianStatus::TERSEDIA)->get()->keyBy('id');
+            $editable = $pembelian->pakaian()->where('status', PakaianStatus::TERSEDIA)->get()->keyBy('id');
 
             $newCount = $items->filter(fn ($r) => blank($r['id'] ?? null))->count();
-            $kodeBaru = $newCount > 0 ? $this->codeGenerator->barang($newCount) : [];
+            $kodeBaru = $newCount > 0 ? $this->codeGenerator->pakaian($newCount) : [];
             $n = 0;
             $keptIds = [];
 
@@ -110,26 +110,26 @@ class PembelianService
                 $attributes = Arr::only($row, self::FIELD_BARANG);
 
                 if (blank($row['id'] ?? null)) {
-                    $barang = $pembelian->barang()->create($attributes + [
+                    $pakaian = $pembelian->pakaian()->create($attributes + [
                         'kode'   => $kodeBaru[$n++],
-                        'status' => BarangStatus::TERSEDIA,
+                        'status' => PakaianStatus::TERSEDIA,
                     ]);
-                    $keptIds[] = $barang->id;
+                    $keptIds[] = $pakaian->id;
                     continue;
                 }
 
                 $id = (int) $row['id'];
 
-                if ($lockedBarang = $locked->get($id)) {
-                    $lockedBarang->update(Arr::except($attributes, ['harga_beli']));
+                if ($lockedPakaian = $locked->get($id)) {
+                    $lockedPakaian->update(Arr::except($attributes, ['harga_beli']));
                     continue;
                 }
 
-                $barang = $editable->get($id)
-                    ?? throw new \RuntimeException('Barang tidak valid.');
+                $pakaian = $editable->get($id)
+                    ?? throw new \RuntimeException('Pakaian tidak valid.');
 
-                $barang->update($attributes);
-                $keptIds[] = $barang->id;
+                $pakaian->update($attributes);
+                $keptIds[] = $pakaian->id;
             }
 
             $editable->except($keptIds)->each->delete();
@@ -137,31 +137,31 @@ class PembelianService
             $pembelian->update([
                 'tanggal'     => $data['tanggal'],
                 'supplier_id' => $data['supplier_id'],
-                'total'       => $pembelian->barang()->sum('harga_beli'),
+                'total'       => $pembelian->pakaian()->sum('harga_beli'),
             ]);
 
             return $pembelian;
         });
     }
 
-    private function lockedBarangIds(Pembelian $pembelian): array
+    private function lockedPakaianIds(Pembelian $pembelian): array
     {
-        return $pembelian->barang
-            ->where('status', '!=', BarangStatus::TERSEDIA)
+        return $pembelian->pakaian
+            ->where('status', '!=', PakaianStatus::TERSEDIA)
             ->pluck('id')
             ->all();
     }
 
-    private function toFormRow(Barang $barang): array
+    private function toFormRow(Pakaian $pakaian): array
     {
         return [
-            'id'         => $barang->id,
-            'nama'       => $barang->nama,
-            'kategori'   => $barang->kategori->value,
-            'lingkar'    => (float) $barang->lingkar,
-            'panjang'    => (float) $barang->panjang,
-            'harga_beli' => (int) $barang->harga_beli,
-            'harga_jual' => (int) $barang->harga_jual,
+            'id'         => $pakaian->id,
+            'nama'       => $pakaian->nama,
+            'kategori'   => $pakaian->kategori->value,
+            'lingkar'    => (float) $pakaian->lingkar,
+            'panjang'    => (float) $pakaian->panjang,
+            'harga_beli' => (int) $pakaian->harga_beli,
+            'harga_jual' => (int) $pakaian->harga_jual,
         ];
     }
 }

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Barang')
+@section('title', 'Daftar Pakaian')
 
 @section('content')
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold text-stone-900">Daftar Barang</h1>
+                <h1 class="text-2xl font-semibold text-stone-900">Daftar Pakaian</h1>
             </div>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
@@ -32,7 +32,7 @@
                             <path d="m9 18 6-6-6-6" />
                         </svg>
                     </li>
-                    <li class="font-medium text-stone-900" aria-current="page">Daftar Barang</li>
+                    <li class="font-medium text-stone-900" aria-current="page">Daftar Pakaian</li>
                 </ol>
             </nav>
         </div>
@@ -46,7 +46,7 @@
         <div class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-                    <form method="GET" action="{{ route('barang.index') }}" class="relative w-full sm:max-w-xs">
+                    <form method="GET" action="{{ route('pakaian.index') }}" class="relative w-full sm:max-w-xs">
                         <input type="hidden" name="kategori" value="{{ request('kategori') }}">
                         <input type="hidden" name="status" value="{{ request('status') }}">
 
@@ -59,7 +59,7 @@
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </form>
 
-                    <form method="GET" action="{{ route('barang.index') }}" class="w-full sm:w-48">
+                    <form method="GET" action="{{ route('pakaian.index') }}" class="w-full sm:w-48">
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <input type="hidden" name="status" value="{{ request('status') }}">
 
@@ -74,7 +74,7 @@
                         </select>
                     </form>
 
-                    <form method="GET" action="{{ route('barang.index') }}" class="w-full sm:w-48">
+                    <form method="GET" action="{{ route('pakaian.index') }}" class="w-full sm:w-48">
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <input type="hidden" name="kategori" value="{{ request('kategori') }}">
 
@@ -89,7 +89,7 @@
                         </select>
                     </form>
 
-                    <a href="{{ route('barang.index') }}"
+                    <a href="{{ route('pakaian.index') }}"
                     class="rounded-lg border border-stone-300 bg-white px-4 py-2 text-center font-medium text-stone-700 transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                         Reset
                     </a>
@@ -112,10 +112,10 @@
                     </thead>
 
                     <tbody class="divide-y divide-stone-300">
-                        @forelse ($barang as $b)
+                        @forelse ($pakaian as $b)
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">
-                                    {{ $barang->firstItem() + $loop->index }}
+                                    {{ $pakaian->firstItem() + $loop->index }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-stone-700">
@@ -147,7 +147,7 @@
 
                                 <td class="px-4 py-3.5 text-center">
                                     <button type="button"
-                                            data-menu-toggle="menu-barang-{{ $b->getKey() }}"
+                                            data-menu-toggle="menu-pakaian-{{ $b->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
                                             aria-label="Aksi untuk {{ $b->nama }}"
@@ -159,7 +159,7 @@
                                         </svg>
                                     </button>
 
-                                    <div id="menu-barang-{{ $b->getKey() }}"
+                                    <div id="menu-pakaian-{{ $b->getKey() }}"
                                          role="menu"
                                          hidden
                                          class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
@@ -186,7 +186,7 @@
 
                                         <button type="button" role="menuitem"
                                                 data-edit-open="modal-ubah"
-                                                data-action="{{ route('barang.update', $b) }}"
+                                                data-action="{{ route('pakaian.update', $b) }}"
                                                 data-kode="{{ $b->kode }}"
                                                 data-nama="{{ $b->nama }}"
                                                 data-lingkar="{{ $b->lingkar }}"
@@ -205,8 +205,8 @@
                                         </button>
 
                                         @if ($b->status->value === 'tersedia')
-                                            <form action="{{ route('barang.destroy', $b) }}" method="POST"
-                                                data-confirm="Hapus barang {{ $b->nama }}? Data yang dihapus tidak bisa dikembalikan.">
+                                            <form action="{{ route('pakaian.destroy', $b) }}" method="POST"
+                                                data-confirm="Hapus pakaian {{ $b->nama }}? Data yang dihapus tidak bisa dikembalikan.">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -236,22 +236,22 @@
                                         </span>
 
                                         @if (request()->filled('q'))
-                                            <p class="mt-4 font-medium text-stone-900">Barang tidak ditemukan</p>
+                                            <p class="mt-4 font-medium text-stone-900">Pakaian tidak ditemukan</p>
                                             <p class="mt-1 text-stone-500">
                                                 Tidak ada hasil untuk "{{ request('q') }}". Coba kata kunci lain.
                                             </p>
-                                            <a href="{{ route('barang.index') }}"
+                                            <a href="{{ route('pakaian.index') }}"
                                             class="mt-4 font-medium text-link hover:text-link-hover hover:underline">
-                                                Tampilkan semua barang
+                                                Tampilkan semua pakaian
                                             </a>
                                         @else
-                                            <p class="mt-4 font-medium text-stone-900">Belum ada barang</p>
+                                            <p class="mt-4 font-medium text-stone-900">Belum ada pakaian</p>
                                             <p class="mt-1 text-stone-500">
-                                                Beli barang pertama Anda untuk mulai mencatat penjualan.
+                                                Beli pakaian pertama Anda untuk mulai mencatat penjualan.
                                             </p>
                                             <a href="{{ route('pembelian.create') }}">
                                                 <button type="button" class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                    Beli Barang
+                                                    Beli Pakaian
                                                 </button>
                                             </a>
                                         @endif
@@ -263,7 +263,7 @@
                 </table>
             </div>
 
-            <x-pagination :paginator="$barang" />
+            <x-pagination :paginator="$pakaian" />
         </div>
     </div>
 
@@ -275,7 +275,7 @@
             @method('PUT')
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Barang</h2>
+                <h2 id="modal-ubah-title" class="text-lg font-semibold">Ubah Pakaian</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -286,7 +286,7 @@
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div>
-                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode Barang</label>
+                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode Pakaian</label>
                     <input type="text" id="edit-kode" data-fill="kode"
                             readonly aria-describedby="hint-edit-kode"
                             class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
@@ -409,7 +409,7 @@
         <div class="flex max-h-[90vh] flex-col">
 
             <div class="flex items-center justify-between border-b border-stone-300 px-6 py-4">
-                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Barang</h2>
+                <h2 id="modal-detail-title" class="text-lg font-semibold">Detail Pakaian</h2>
                 <button type="button" data-modal-close aria-label="Tutup"
                         class="rounded-md p-1.5 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

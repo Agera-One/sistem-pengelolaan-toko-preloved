@@ -6,12 +6,12 @@ use Illuminate\Support\Collection;
 
 class UpdateRequest extends PembelianRequest
 {
-    protected ?Collection $lockedBarang = null;
+    protected ?Collection $lockedPakaian = null;
 
     public function rules(): array
     {
         return $this->baseRules() + [
-            'items'      => $this->lockedBarang()->isNotEmpty()
+            'items'      => $this->lockedPakaian()->isNotEmpty()
                 ? 'nullable|array'
                 : 'required|array|min:1',
             'items.*.id' => 'nullable|integer',
@@ -22,17 +22,17 @@ class UpdateRequest extends PembelianRequest
     {
         $row = parent::normalizeRow($row);
 
-        if ($locked = $this->lockedBarang()->get((int) ($row['id'] ?? 0))) {
+        if ($locked = $this->lockedPakaian()->get((int) ($row['id'] ?? 0))) {
             $row['harga_beli'] = (string) (int) $locked->harga_beli;
         }
 
         return $row;
     }
 
-    protected function lockedBarang(): Collection
+    protected function lockedPakaian(): Collection
     {
-        return $this->lockedBarang ??= $this->route('pembelian')
-            ->barang()
+        return $this->lockedPakaian ??= $this->route('pembelian')
+            ->pakaian()
             ->where('status', '!=', 'Tersedia')
             ->get()
             ->keyBy('id');

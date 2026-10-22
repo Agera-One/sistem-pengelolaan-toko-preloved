@@ -5,14 +5,14 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class BarangSeeder extends Seeder
+class PakaianSeeder extends Seeder
 {
     public function run(): void
     {
-        $barang = [];
+        $pakaian = [];
         $counterKode = 1;
 
-        $templateBarang = [
+        $templatePakaian = [
             [
                 'kategori'      => 'blouse',
                 'nama'          => 'Casual Cotton',
@@ -56,11 +56,11 @@ class BarangSeeder extends Seeder
         ];
 
         for ($pembelianId = 1; $pembelianId <= 20; $pembelianId++) {
-            foreach ($templateBarang as $tb) {
+            foreach ($templatePakaian as $tb) {
                 $kodeNomor = str_pad($counterKode, 4, '0', STR_PAD_LEFT);
 
-                $barang[] = [
-                    'kode'         => "BRG-202610-{$kodeNomor}",
+                $pakaian[] = [
+                    'kode'         => "PAK-202610-{$kodeNomor}",
                     'nama'         => "{$tb['kategori']} {$tb['nama']}",
                     'lingkar'      => $tb['lingkar'],
                     'panjang'      => $tb['panjang'],
@@ -77,6 +77,6 @@ class BarangSeeder extends Seeder
             }
         }
 
-        DB::table('barang')->insert($barang);
+        DB::table('pakaian')->insert($pakaian);
     }
 }

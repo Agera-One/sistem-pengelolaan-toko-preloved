@@ -91,7 +91,7 @@
                 <div class="flex items-center justify-between gap-3 border-b border-stone-300 px-4 py-3.5">
                     <div class="flex items-center gap-3">
                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-medium text-white">2</span>
-                        <h2 class="font-semibold text-stone-900">Daftar Barang</h2>
+                        <h2 class="font-semibold text-stone-900">Daftar Pakaian</h2>
                     </div>
                 </div>
 
@@ -99,7 +99,7 @@
                     <table class="min-w-[1050px] w-full text-left">
                         <thead class="border-b border-stone-300 bg-brand/5 text-stone-600">
                             <tr>
-                                <th scope="col" class="w-[36%] px-4 py-3 font-medium">Barang</th>
+                                <th scope="col" class="w-[36%] px-4 py-3 font-medium">Pakaian</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Kategori</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Lingkar (cm)</th>
                                 <th scope="col" class="px-2 py-3 font-medium">Panjang (cm)</th>
@@ -113,18 +113,18 @@
                                 @if ($row['template'])<template id="row-template">@endif
                                 <tr data-row data-index="{{ $row['index'] }}">
                                     <td class="px-4 py-2.5">
-                                        <select name="items[{{ $row['index'] }}][barang_id]" data-field="barang" aria-label="Barang"
-                                                @error('items.'.$row['index'].'.barang_id') aria-invalid="true" @enderror
+                                        <select name="items[{{ $row['index'] }}][pakaian_id]" data-field="pakaian" aria-label="Pakaian"
+                                                @error('items.'.$row['index'].'.pakaian_id') aria-invalid="true" @enderror
                                                 class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                                            <option value="">Pilih barang</option>
-                                            @foreach ($barangOptions as $b)
+                                            <option value="">Pilih pakaian</option>
+                                            @foreach ($pakaianOptions as $b)
                                                 <option value="{{ $b['id'] }}"
                                                         data-kategori="{{ $b['kategori'] }}"
                                                         data-lingkar="{{ $b['lingkar'] }}"
                                                         data-panjang="{{ $b['panjang'] }}"
                                                         data-harga-jual="{{ $b['harga_jual'] }}"
                                                         data-harga-beli="{{ $b['harga_beli'] ?? '' }}"
-                                                        @selected((string) $row['barang_id'] === (string) $b['id'])>
+                                                        @selected((string) $row['pakaian_id'] === (string) $b['id'])>
                                                     {{ $b['label'] }}
                                                 </option>
                                             @endforeach
