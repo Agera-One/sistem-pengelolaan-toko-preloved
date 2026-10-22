@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum BarangStatus: string
+enum PakaianStatus: string
 {
     case TERSEDIA = 'tersedia';
     case TERJUAL = 'terjual';

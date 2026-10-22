@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum KategoriBarang: string
+enum KategoriPakaian: string
 {
     case BLOUSE = 'blouse';
     case KEMEJA = 'kemeja';

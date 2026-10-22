@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\BarangStatus;
-use App\Enums\KategoriBarang;
+use App\Enums\PakaianStatus;
+use App\Enums\KategoriPakaian;
 use App\Traits\Searchable;
 use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Barang extends Model
+class Pakaian extends Model
 {
     use Searchable, Filterable;
 
     protected array $searchable = ['kode', 'nama'];
     protected array $filterable = ['kategori', 'status'];
 
-    protected $table = 'barang';
+    protected $table = 'pakaian';
 
     protected $fillable = [
         'kode',
@@ -35,14 +35,14 @@ class Barang extends Model
     protected function casts(): array
     {
         return [
-            'status'    => BarangStatus::class,
-            'kategori'  => KategoriBarang::class,
+            'status'    => PakaianStatus::class,
+            'kategori'  => KategoriPakaian::class,
         ];
     }
 
     public function detailPenjualan(): HasMany
     {
-        return $this->hasMany(DetailPenjualan::class, 'barang_id');
+        return $this->hasMany(DetailPenjualan::class, 'pakaian_id');
     }
 
     public function pembelian(): BelongsTo
@@ -52,7 +52,7 @@ class Barang extends Model
 
     public function penjualan(): BelongsToMany
     {
-        return $this->belongsToMany(Penjualan::class, 'detail_penjualan', 'barang_id', 'penjualan_id')
+        return $this->belongsToMany(Penjualan::class, 'detail_penjualan', 'pakaian_id', 'penjualan_id')
             ->withPivot('harga_jual');
     }
 }
