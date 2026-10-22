@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Enums\BarangStatus;
+use App\Enums\PakaianStatus;
 use App\Enums\PenjualanStatus;
-use App\Models\Barang;
+use App\Models\Pakaian;
 use App\Models\DetailPenjualan;
 use App\Models\Pelanggan;
 use App\Models\Penjualan;
@@ -35,11 +35,11 @@ class PenjualanService
 
     public function create(): array
     {
-        $barang = Barang::where('status', BarangStatus::TERSEDIA)
+        $pakaian = Pakaian::where('status', PakaianStatus::TERSEDIA)
             ->latest('id')
             ->get();
 
-        return array_merge($this->dataForm($barang), [
+        return array_merge($this->dataForm($pakaian), [
             'kode'      => $this->codeGenerator->penjualan(),
             'pelanggan' => Pelanggan::orderBy('nama')->get(),
         ]);
@@ -67,23 +67,23 @@ class PenjualanService
 
     public function edit(Penjualan $penjualan): array
     {
-        $barang = Barang::where('status', BarangStatus::TERSEDIA)
-            ->orWhereIn('id', $penjualan->barang()->pluck('barang.id'))
+        $pakaian = Pakaian::where('status', PakaianStatus::TERSEDIA)
+            ->orWhereIn('id', $penjualan->pakaian()->pluck('pakaian.id'))
             ->latest('id')
             ->get();
 
         $items = DB::table('detail_penjualan')
             ->where('penjualan_id', $penjualan->getKey())
-            ->get(['barang_id', 'harga_jual'])
+            ->get(['pakaian_id', 'harga_jual'])
             ->map(fn ($row) => [
-                'barang_id'  => $row->barang_id,
+                'pakaian_id'  => $row->pakaian_id,
                 'harga_jual' => (int) $row->harga_jual,
             ])
             ->all();
 
         $ongkir = (int) $penjualan->ongkir;
 
-        return array_merge($this->dataForm($barang, $items), [
+        return array_merge($this->dataForm($pakaian, $items), [
             'penjualan'   => $penjualan,
             'pelanggan'   => Pelanggan::orderBy('nama')->get(),
             'tanggal'     => Carbon::parse($penjualan->tanggal)->toDateString(),
@@ -138,20 +138,20 @@ class PenjualanService
         foreach ($items as $item) {
             DetailPenjualan::create([
                 'penjualan_id' => $penjualan->getKey(),
-                'barang_id'    => $item['barang_id'],
+                'pakaian_id'    => $item['pakaian_id'],
                 'harga_jual'   => $item['harga_jual'],
             ]);
         }
     }
 
-        protected function dataForm(Collection $barang, array $items = []): array
+        protected function dataForm(Collection $pakaian, array $items = []): array
     {
         $angka      = fn ($v) => $v === null || $v === '' ? '' : (float) $v;
-        $barangById = $barang->keyBy(fn ($b) => $b->getKey());
+        $pakaianById = $pakaian->keyBy(fn ($b) => $b->getKey());
 
-        $buatBaris = function ($index, array $item, bool $template = false) use ($barangById, $angka): array {
-            $barangId = $item['barang_id'] ?? null;
-            $selected = filled($barangId) ? $barangById->get($barangId) : null;
+        $buatBaris = function ($index, array $item, bool $template = false) use ($pakaianById, $angka): array {
+            $pakaianId = $item['pakaian_id'] ?? null;
+            $selected = filled($pakaianId) ? $pakaianById->get($pakaianId) : null;
 
             $harga = $item['harga_jual'] ?? null;
             if (blank($harga) && $selected) {
@@ -161,7 +161,7 @@ class PenjualanService
             return [
                 'index'     => $index,
                 'template'  => $template,
-                'barang_id' => $barangId,
+                'pakaian_id' => $pakaianId,
                 'kategori'  => $selected?->kategori?->value,
                 'lingkar'   => $selected ? $angka($selected->lingkar) : '',
                 'panjang'   => $selected ? $angka($selected->panjang) : '',
@@ -183,7 +183,7 @@ class PenjualanService
 
         return [
             'rows'          => $rows,
-            'barangOptions' => $barang->map(fn ($b) => [
+            'pakaianOptions' => $pakaian->map(fn ($b) => [
                 'id'            => $b->getKey(),
                 'label'         => "{$b->kode} — {$b->nama}",
                 'kategori'      => $b->kategori?->value,

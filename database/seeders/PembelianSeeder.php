@@ -9,7 +9,7 @@ class PembelianSeeder extends Seeder
 {
     public function run(): void
     {
-        $templateBarang = [
+        $templatePakaian = [
             ['harga_beli' => 35000],
             ['harga_beli' => 40000],
             ['harga_beli' => 45000],
@@ -17,7 +17,7 @@ class PembelianSeeder extends Seeder
             ['harga_beli' => 65000],
         ];
 
-        $totalHargaBeli = array_sum(array_column($templateBarang, 'harga_beli'));
+        $totalHargaBeli = array_sum(array_column($templatePakaian, 'harga_beli'));
 
         $pembelian = [];
 

@@ -60,7 +60,7 @@ class PakaianSeeder extends Seeder
                 $kodeNomor = str_pad($counterKode, 4, '0', STR_PAD_LEFT);
 
                 $pakaian[] = [
-                    'kode'         => "BRG-202610-{$kodeNomor}",
+                    'kode'         => "PAK-202610-{$kodeNomor}",
                     'nama'         => "{$tb['kategori']} {$tb['nama']}",
                     'lingkar'      => $tb['lingkar'],
                     'panjang'      => $tb['panjang'],

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Barang;
+use App\Models\Pakaian;
 use App\Models\Supplier;
 use App\Models\Pelanggan;
 use App\Models\Pembelian;
@@ -40,8 +40,8 @@ class CodeGeneratorService
         );
     }
 
-    public function barang(int $count) {
-        return $this->generateBatch(new Barang(), 'kode', 'BRG', $count);
+    public function pakaian(int $count) {
+        return $this->generateBatch(new Pakaian(), 'kode', 'PAK', $count);
     }
 
     public function supplier()

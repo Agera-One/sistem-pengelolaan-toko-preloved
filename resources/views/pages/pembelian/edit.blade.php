@@ -50,7 +50,7 @@
 
         @if ($lockedIds)
             <p class="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                Pada barang yang sudah terjual. Harga Beli tidak dapat diubah dan tidak dapat dihapus.
+                Pada pakaian yang sudah terjual. Harga Beli tidak dapat diubah dan tidak dapat dihapus.
             </p>
         @endif
 
@@ -101,7 +101,7 @@
                 <header class="flex items-center justify-between border-b border-stone-300 px-4 py-3.5">
                     <div class="flex items-center gap-3">
                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-semibold text-white">2</span>
-                        <h2 class="font-semibold text-stone-900">Daftar Barang</h2>
+                        <h2 class="font-semibold text-stone-900">Daftar Pakaian</h2>
                     </div>
 
                     <div class="flex items-center gap-2 rounded-lg bg-stone-100 px-3 py-1.5 text-sm">
@@ -114,7 +114,7 @@
                     <table class="w-full min-w-[1080px] text-left">
                         <thead class="border-b border-stone-300 bg-brand/5 text-stone-600">
                             <tr>
-                                <th scope="col" class="px-4 py-3 font-medium">Nama Barang</th>
+                                <th scope="col" class="px-4 py-3 font-medium">Nama Pakaian</th>
                                 <th scope="col" class="w-48 px-2 py-3 font-medium">Kategori</th>
                                 <th scope="col" class="w-48 px-2 py-3 font-medium">Lingkar (cm)</th>
                                 <th scope="col" class="w-48 px-2 py-3 font-medium">Panjang (cm)</th>
@@ -129,7 +129,7 @@
                                     <td class="px-4 py-2">
                                         <input type="hidden" name="items[{{ $i }}][id]" value="{{ $item['id'] ?? '' }}">
                                         <input type="text" name="items[{{ $i }}][nama]" value="{{ $item['nama'] ?? '' }}"
-                                               data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
+                                               data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama pakaian"
                                                @if ($errors->has("items.$i.nama")) aria-invalid="true" @endif
                                                class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                                     </td>
@@ -169,7 +169,7 @@
                                             <input type="text" inputmode="numeric" autocomplete="off" data-money
                                                    name="items[{{ $i }}][harga_beli]" value="{{ $item['harga_beli'] ?? '' }}"
                                                    data-cell="harga_beli" placeholder="0"
-                                                   @if ($item['locked']) readonly tabindex="-1" title="Harga beli barang terjual tidak dapat diubah" @endif
+                                                   @if ($item['locked']) readonly tabindex="-1" title="Harga beli pakaian terjual tidak dapat diubah" @endif
                                                    @if ($errors->has("items.$i.harga_beli")) aria-invalid="true" @endif
                                                    @class([
                                                        'w-full rounded-lg border border-stone-300 py-2 pl-8 pr-2.5 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500',
@@ -192,7 +192,7 @@
 
                                     <td class="px-2 py-2 text-center">
                                         @if ($item['locked'])
-                                            <span class="inline-flex h-9 w-9 items-center justify-center text-stone-400" title="Barang sudah terjual, tidak dapat dihapus" aria-label="Barang tidak dapat dihapus">
+                                            <span class="inline-flex h-9 w-9 items-center justify-center text-stone-400" title="Pakaian sudah terjual, tidak dapat dihapus" aria-label="Pakaian tidak dapat dihapus">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
                                             </span>
                                         @else
@@ -218,7 +218,7 @@
                         <td class="px-4 py-2">
                             <input type="hidden" name="items[__INDEX__][id]" value="">
                             <input type="text" name="items[__INDEX__][nama]" value=""
-                                   data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama barang"
+                                   data-cell="nama" maxlength="255" autocomplete="off" placeholder="Nama pakaian"
                                    class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         </td>
 

@@ -2,31 +2,31 @@
 
 namespace App\Observers;
 
-use App\Enums\BarangStatus;
-use App\Models\Barang;
+use App\Enums\PakaianStatus;
+use App\Models\Pakaian;
 use App\Models\DetailPenjualan;
 
 class DetailPenjualanObserver
 {
     public function created(DetailPenjualan $detailPenjualan): void
     {
-        $detailPenjualan->barang()->update([
-            'status' => BarangStatus::TERJUAL
+        $detailPenjualan->pakaian()->update([
+            'status' => PakaianStatus::TERJUAL
         ]);
     }
 
     public function updated(DetailPenjualan $detailPenjualan): void
     {
-        if ($detailPenjualan->wasChanged('barang_id')) {
-            $barangLamaId = $detailPenjualan->getOriginal('barang_id');
+        if ($detailPenjualan->wasChanged('pakaian_id')) {
+            $pakaianLamaId = $detailPenjualan->getOriginal('pakaian_id');
 
-            if ($barangLamaId) {
-                Barang::where('id', $barangLamaId)->update([
+            if ($pakaianLamaId) {
+                Pakaian::where('id', $pakaianLamaId)->update([
                     'status' => 'tersedia',
                 ]);
             }
 
-            $detailPenjualan->barang->update([
+            $detailPenjualan->pakaian->update([
                 'status' => 'terjual',
             ]);
         }
@@ -34,8 +34,8 @@ class DetailPenjualanObserver
 
     public function deleted(DetailPenjualan $detailPenjualan): void
     {
-        $detailPenjualan->barang()->update([
-            'status' => BarangStatus::TERSEDIA
+        $detailPenjualan->pakaian()->update([
+            'status' => PakaianStatus::TERSEDIA
         ]);
     }
 }

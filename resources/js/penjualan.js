@@ -50,11 +50,11 @@
     function refreshOptions() {
         var chosen = {};
         rows().forEach(function (row) {
-            var v = field(row, 'barang').value;
+            var v = field(row, 'pakaian').value;
             if (v) chosen[v] = true;
         });
         rows().forEach(function (row) {
-            var select = field(row, 'barang');
+            var select = field(row, 'pakaian');
             Array.prototype.forEach.call(select.options, function (opt) {
                 if (!opt.value) return;
                 var taken = chosen[opt.value] && opt.value !== select.value;
@@ -67,7 +67,7 @@
     function recalc() {
         var subtotal = 0;
         rows().forEach(function (row) {
-            if (field(row, 'barang').value) subtotal += M.parse(field(row, 'harga-jual').value);
+            if (field(row, 'pakaian').value) subtotal += M.parse(field(row, 'harga-jual').value);
         });
         var ongkir = M.parse(ongkirInput.value);
         document.getElementById('sum-subtotal').textContent = M.rupiah(subtotal);
@@ -119,7 +119,7 @@
 
     tbody.addEventListener('change', function (e) {
         var row = e.target.closest('[data-row]');
-        if (!row || e.target.getAttribute('data-field') !== 'barang') return;
+        if (!row || e.target.getAttribute('data-field') !== 'pakaian') return;
 
         var opt = selectedOption(e.target);
         var has = opt && opt.value;
@@ -151,7 +151,7 @@
         var row = btn.closest('[data-row]');
 
         if (rows().length === 1) {
-            field(row, 'barang').value = '';
+            field(row, 'pakaian').value = '';
             fillDetail(row, null);
             field(row, 'harga-jual').value = '';
         } else {
@@ -164,7 +164,7 @@
 
     document.getElementById('btn-add-row').addEventListener('click', function () {
         var row = addRow();
-        field(row, 'barang').focus();
+        field(row, 'pakaian').focus();
     });
 
     ongkirInput.addEventListener('input', recalc);
@@ -182,22 +182,22 @@
 
         var message = '';
         var list = rows();
-        if (!list.length) message = 'Tambahkan minimal satu barang.';
+        if (!list.length) message = 'Tambahkan minimal satu pakaian.';
 
         list.forEach(function (row) {
-            var select = field(row, 'barang');
+            var select = field(row, 'pakaian');
             var harga = M.parse(field(row, 'harga-jual').value);
             var hargaInput = field(row, 'harga-jual');
-            var badBarang = !select.value;
-            var badHarga = !badBarang && harga <= 0;
+            var badPakaian = !select.value;
+            var badHarga = !badPakaian && harga <= 0;
 
-            if (badBarang) {
-                message = message || 'Pilih barang pada setiap baris, atau hapus baris yang kosong.';
+            if (badPakaian) {
+                message = message || 'Pilih pakaian pada setiap baris, atau hapus baris yang kosong.';
             } else if (badHarga) {
                 message = message || 'Harga jual minimal 1.';
             }
 
-            setInvalid(select, badBarang);
+            setInvalid(select, badPakaian);
             setInvalid(hargaInput, badHarga);
             setInvalid(hargaInput.parentElement, badHarga);
         });

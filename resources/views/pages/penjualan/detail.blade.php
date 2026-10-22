@@ -163,7 +163,7 @@
 
         <section class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white" aria-labelledby="judul-barang">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 id="judul-barang" class="text-lg font-semibold text-stone-900">Daftar Barang</h2>
+                <h2 id="judul-barang" class="text-lg font-semibold text-stone-900">Daftar Pakaian</h2>
             </div>
 
             <div class="overflow-x-auto">
@@ -171,8 +171,8 @@
                     <thead class="border-b border-stone-300 bg-brand/5 text-stone-600">
                         <tr>
                             <th scope="col" class="w-16 px-4 py-3 font-medium">No</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Kode Barang</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Nama Barang</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Kode Pakaian</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Nama Pakaian</th>
                             <th scope="col" class="px-4 py-3 font-medium">Kategori</th>
                             <th scope="col" class="px-4 py-3 font-medium">Lingkar</th>
                             <th scope="col" class="px-4 py-3 font-medium">Panjang</th>

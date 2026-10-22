@@ -5,7 +5,7 @@ function initPembelianIndex() {
     const form = document.getElementById('form-tambah-pembelian');
     const rowsContainer = document.getElementById('item-rows');
     const template = document.getElementById('item-row-template');
-    const btnTambahBarang = document.getElementById('btn-tambah-barang');
+    const btnTambahPakaian = document.getElementById('btn-tambah-pakaian');
     const totalDisplay = document.getElementById('total-display');
     const errItems = document.getElementById('err-items');
 
@@ -30,17 +30,17 @@ function initPembelianIndex() {
     };
 
     const isRowValid = (row) => {
-        const barangSelect = row.querySelector('.item-barang');
+        const pakaianSelect = row.querySelector('.item-pakaian');
         const hargaBeliInput = row.querySelector('.item-harga-beli');
         const hargaJualInput = row.querySelector('.item-harga-jual');
-        return Boolean(barangSelect.value) && hargaBeliInput.value !== '' && hargaJualInput.value !== '';
+        return Boolean(pakaianSelect.value) && hargaBeliInput.value !== '' && hargaJualInput.value !== '';
     };
 
     const validateAllRows = ({ markInvalid = false } = {}) => {
         let hasError = false;
 
         getRows().forEach((row) => {
-            const barangSelect = row.querySelector('.item-barang');
+            const pakaianSelect = row.querySelector('.item-pakaian');
             const hargaBeliInput = row.querySelector('.item-harga-beli');
             const hargaJualInput = row.querySelector('.item-harga-jual');
             const rowValid = isRowValid(row);
@@ -48,11 +48,11 @@ function initPembelianIndex() {
             if (!rowValid) hasError = true;
 
             if (markInvalid) {
-                setRowInvalid(barangSelect, !barangSelect.value);
+                setRowInvalid(pakaianSelect, !pakaianSelect.value);
                 setRowInvalid(hargaBeliInput, hargaBeliInput.value === '');
                 setRowInvalid(hargaJualInput, hargaJualInput.value === '');
             } else if (rowValid) {
-                setRowInvalid(barangSelect, false);
+                setRowInvalid(pakaianSelect, false);
                 setRowInvalid(hargaBeliInput, false);
                 setRowInvalid(hargaJualInput, false);
             }
@@ -63,13 +63,13 @@ function initPembelianIndex() {
     };
 
     const bindRow = (row) => {
-        const barangSelect = row.querySelector('.item-barang');
+        const pakaianSelect = row.querySelector('.item-pakaian');
         const hargaBeliInput = row.querySelector('.item-harga-beli');
         const hargaJualInput = row.querySelector('.item-harga-jual');
         const btnHapus = row.querySelector('.btn-hapus-item');
 
-        barangSelect.addEventListener('change', () => {
-            const selected = barangSelect.selectedOptions[0];
+        pakaianSelect.addEventListener('change', () => {
+            const selected = pakaianSelect.selectedOptions[0];
             const hargaBeli = selected?.dataset.hargaBeli;
             const hargaJual = selected?.dataset.hargaJual;
 
@@ -126,7 +126,7 @@ function initPembelianIndex() {
 
         const firstRow = rowsContainer.querySelector('[data-item-row]');
         if (firstRow) {
-            firstRow.querySelector('.item-barang').value = '';
+            firstRow.querySelector('.item-pakaian').value = '';
             firstRow.querySelector('.item-harga-beli').value = '';
             firstRow.querySelector('.item-harga-jual').value = '';
         }
@@ -140,7 +140,7 @@ function initPembelianIndex() {
     updateRemoveButtons();
     recalculateTotal();
 
-    btnTambahBarang.addEventListener('click', addRow);
+    btnTambahPakaian.addEventListener('click', addRow);
 
     dialog.addEventListener('close', resetRows);
 
@@ -216,7 +216,7 @@ function initPembelianIndex() {
                         </div>
                     </div>
                 `).join('')
-                : `<p class="px-4 py-6 text-center text-stone-400">Tidak ada barang.</p>`;
+                : `<p class="px-4 py-6 text-center text-stone-400">Tidak ada pakaian.</p>`;
         }
 
         if (statusBadge && statusDot) {
@@ -363,7 +363,7 @@ function initPembelianCreate() {
         if (itemsError) {
             itemsError.hidden = filled.length > 0;
             if (!filled.length) {
-                itemsError.textContent = 'Tambahkan minimal satu barang.';
+                itemsError.textContent = 'Tambahkan minimal satu pakaian.';
                 const firstRowName = cell(rows()[0], 'nama');
                 if (firstRowName) firstInvalid ??= firstRowName;
             }

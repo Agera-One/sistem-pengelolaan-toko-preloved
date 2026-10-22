@@ -162,10 +162,10 @@
             </section>
         </div>
 
-        {{-- Daftar Barang --}}
-        <section class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white" aria-labelledby="judul-barang">
+        {{-- Daftar Pakaian --}}
+        <section class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white" aria-labelledby="judul-pakaian">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 id="judul-barang" class="text-lg font-semibold text-stone-900">Daftar Barang</h2>
+                <h2 id="judul-pakaian" class="text-lg font-semibold text-stone-900">Daftar Pakaian</h2>
             </div>
 
             <div class="overflow-x-auto">
@@ -173,8 +173,8 @@
                     <thead class="border-b border-stone-300 bg-brand/5 text-stone-600">
                         <tr>
                             <th scope="col" class="w-16 px-4 py-3 font-medium">No</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Kode Barang</th>
-                            <th scope="col" class="px-4 py-3 font-medium">Nama Barang</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Kode Pakaian</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Nama Pakaian</th>
                             <th scope="col" class="px-4 py-3 font-medium">Kategori</th>
                             <th scope="col" class="px-4 py-3 font-medium">Lingkar</th>
                             <th scope="col" class="px-4 py-3 font-medium">Panjang</th>
@@ -185,42 +185,42 @@
                     </thead>
 
                     <tbody class="divide-y divide-stone-300">
-                        @foreach ($pembelian->barang as $barang)
+                        @foreach ($pembelian->pakaian as $pakaian)
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">{{ $loop->iteration }}</td>
 
                                 <td class="px-4 py-3.5">
-                                    <p class="font-medium text-stone-900">{{ $barang->kode }}</p>
+                                    <p class="font-medium text-stone-900">{{ $pakaian->kode }}</p>
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->nama }}
+                                    {{ $pakaian->nama }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->kategori->label() }}
+                                    {{ $pakaian->kategori->label() }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->lingkar . ' cm' }}
+                                    {{ $pakaian->lingkar . ' cm' }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->panjang . ' cm' }}
+                                    {{ $pakaian->panjang . ' cm' }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ format_rupiah($barang->harga_beli) }}
+                                    {{ format_rupiah($pakaian->harga_beli) }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ format_rupiah($barang->harga_jual) }}
+                                    {{ format_rupiah($pakaian->harga_jual) }}
                                 </td>
 
                                 <td class="px-4 py-4">
-                                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $barang->status->badgeColor() }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $barang->status->dotColor() }}"></span>
-                                        {{ $barang->status->label() }}
+                                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pakaian->status->badgeColor() }}">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $pakaian->status->dotColor() }}"></span>
+                                        {{ $pakaian->status->label() }}
                                     </span>
                                 </td>
                             </tr>
