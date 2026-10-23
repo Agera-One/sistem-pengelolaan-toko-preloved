@@ -83,7 +83,7 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
                             <th scope="col" class="px-4 py-3 font-medium">Nama</th>
                             <th scope="col" class="px-4 py-3 font-medium">Telepon</th>
-                            <th scope="col" class="px-4 py-3 font-medium">kota</th>
+                            <th scope="col" class="px-4 py-3 font-medium">kota/Kabupaten</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
                     </thead>
@@ -107,8 +107,8 @@
                                     {{ $s->nomor_telepon }}
                                 </td>
 
-                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ $s->kota }}">
-                                    {{ $s->kota }}
+                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700">
+                                    {{ $s->kabupaten_kota }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -134,9 +134,8 @@
                                                 data-kode="{{ $s->kode }}"
                                                 data-nama="{{ $s->nama }}"
                                                 data-telepon="{{ $s->nomor_telepon }}"
-                                                data-kota="{{ $s->kota }}"
+                                                data-kabupaten-kota="{{ $s->kabupaten_kota }}"
                                                 data-dibuat="{{ $s->created_at?->translatedFormat('d F Y') }}"
-                                                data-diperbarui="{{ $s->updated_at?->translatedFormat('d F Y') }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
@@ -151,7 +150,7 @@
                                                 data-kode="{{ $s->kode }}"
                                                 data-nama="{{ $s->nama }}"
                                                 data-telepon="{{ $s->nomor_telepon }}"
-                                                data-kota="{{ $s->kota }}"
+                                                data-kabupaten-kota="{{ $s->kabupaten_kota }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" />
@@ -271,15 +270,15 @@
                     </div>
 
                     <div>
-                        <label for="kota" class="mb-1.5 block text-stone-900">
-                            Kota <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="kabupaten_kota" class="mb-1.5 block text-stone-900">
+                            Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="kota" name="kota"
+                        <input type="text" id="kabupaten_kota" name="kabupaten_kota"
                                 placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-label="Kota" data-rules="required|string|max:255"
-                                aria-describedby="err-kota"
+                                data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                                aria-describedby="err-kabupaten_kota"
                                 class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
             </div>
@@ -351,16 +350,16 @@
                     </div>
 
                     <div>
-                        <label for="edit-kota" class="mb-1.5 block text-stone-900">
-                            Kota <span class="text-red-500" aria-hidden="true">*</span>
+                        <label for="edit-kabupaten_kota" class="mb-1.5 block text-stone-900">
+                            Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="edit-kota" name="kota"
+                        <input type="text" id="edit-kabupaten_kota" name="kabupaten_kota"
                                 placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-fill="kota"
-                                data-label="Kota" data-rules="required|string|max:255"
-                                aria-describedby="err-edit-kota"
+                                data-fill="kabupatenKota"
+                                data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                                aria-describedby="err-edit-kabupaten_kota"
                                 class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-edit-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-edit-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
                 </div>
             </div>
@@ -405,20 +404,16 @@
 
                 <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Nomor telepon</dt>
+                        <dt class="text-stone-500">Nomor Telepon</dt>
                         <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">kota</dt>
-                        <dd data-detail="kota" class="break-words text-stone-900 sm:col-span-2"></dd>
+                        <dt class="text-stone-500">Kota/Kabupaten</dt>
+                        <dd data-detail="kabupaten_kota" class="break-words text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terdaftar pada</dt>
+                        <dt class="text-stone-500">Terdaftar Pada</dt>
                         <dd data-detail="dibuat" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terakhir diperbarui</dt>
-                        <dd data-detail="diperbarui" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
                 </dl>
             </div>

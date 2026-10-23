@@ -12,7 +12,7 @@ class Supplier extends Model
 {
     use Searchable;
 
-    protected array $searchable = ['kode', 'nama', 'nomor_telepon', 'kota'];
+    protected array $searchable = ['kode', 'nama', 'nomor_telepon', 'kabupaten_kota'];
 
     protected $table = 'supplier';
 
@@ -20,7 +20,7 @@ class Supplier extends Model
         'kode',
         'nama',
         'nomor_telepon',
-        'kota',
+        'kabupaten_kota',
     ];
 
     public function pembelian(): HasMany
