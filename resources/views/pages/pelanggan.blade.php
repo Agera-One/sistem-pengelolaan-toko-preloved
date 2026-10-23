@@ -83,7 +83,9 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
                             <th scope="col" class="px-4 py-3 font-medium">Nama</th>
                             <th scope="col" class="px-4 py-3 font-medium">Telepon</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Kota/Kabupaten</th>
                             <th scope="col" class="px-4 py-3 font-medium">Alamat</th>
+                            <th scope="col" class="px-4 py-3 font-medium">Kode Pos</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
                     </thead>
@@ -106,9 +108,15 @@
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
                                     {{ $p->nomor_telepon }}
                                 </td>
+                                <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
+                                    {{ $p->kabupaten_kota }}
+                                </td>
 
                                 <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ $p->alamat }}">
                                     {{ $p->alamat }}
+                                </td>
+                                <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
+                                    {{ $p->kode_pos }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -134,9 +142,13 @@
                                                 data-kode="{{ $p->kode }}"
                                                 data-nama="{{ $p->nama }}"
                                                 data-telepon="{{ $p->nomor_telepon }}"
+                                                data-provinsi="{{ $p->provinsi }}"
+                                                data-kabupaten-kota="{{ $p->kabupaten_kota }}"
+                                                data-kecamatan="{{ $p->kecamatan }}"
+                                                data-kelurahan="{{ $p->kelurahan }}"
                                                 data-alamat="{{ $p->alamat }}"
+                                                data-kode-pos="{{ $p->kode_pos }}"
                                                 data-dibuat="{{ $p->created_at?->translatedFormat('d F Y') }}"
-                                                data-diperbarui="{{ $p->updated_at?->translatedFormat('d F Y') }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
@@ -151,6 +163,12 @@
                                                 data-kode="{{ $p->kode }}"
                                                 data-nama="{{ $p->nama }}"
                                                 data-telepon="{{ $p->nomor_telepon }}"
+                                                data-provinsi="{{ $p->provinsi }}"
+                                                data-kabupaten-kota="{{ $p->kabupaten_kota }}"
+                                                data-kecamatan="{{ $p->kecamatan }}"
+                                                data-kelurahan="{{ $p->kelurahan }}"
+                                                data-alamat="{{ $p->alamat }}"
+                                                data-kode-pos="{{ $p->kode_pos }}"
                                                 data-alamat="{{ $p->alamat }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -241,7 +259,7 @@
             <div class="space-y-6 overflow-y-auto px-6 py-5">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label for="kode" class="mb-1.5 block text-stone-900">Kode pelanggan</label>
+                        <label for="kode" class="mb-1.5 block text-stone-900">Kode Pelanggan</label>
                         <input name="kode" type="text" id="kode" value="{{ $kode }}"
                                 readonly aria-describedby="hint-kode"
                                 class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
@@ -250,11 +268,11 @@
 
                     <div>
                         <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                            Nomor Telepon <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
                         <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
                                 placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-label="Nomor telepon" data-rules="required|max:15"
+                                data-label="Nomor Telepon" data-rules="required|max:15"
                                 aria-describedby="err-nomor_telepon"
                                 class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                         <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
@@ -262,23 +280,89 @@
                 </div>
 
                 <div>
-                        <label for="nama" class="mb-1.5 block text-stone-900">
-                            Nama lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                    <label for="nama" class="mb-1.5 block text-stone-900">
+                        Nama Lengkap <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="nama" name="nama"
+                            placeholder="Wahyu Setiawan"
+                            autocomplete="off" autofocus
+                            data-label="Nama Lengkap" data-rules="required|string|max:255"
+                            aria-describedby="err-nama"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="provinsi" class="mb-1.5 block text-stone-900">
+                            Provinsi <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
-                        <input type="text" id="nama" name="nama"
-                                autocomplete="off" autofocus
-                                data-label="Nama lengkap" data-rules="required|string|max:255"
-                                aria-describedby="err-nama"
+                        <input type="tel" inputmode="tel" id="provinsi" name="provinsi"
+                                autocomplete="off"
+                                data-label="Provinsi" data-rules="required|string|max:255"
+                                aria-describedby="err-provinsi"
                                 class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
+                        <p id="err-provinsi" class="mt-1.5 text-xs text-red-600" hidden></p>
                     </div>
+
+                    <div>
+                        <label for="kabupaten_kota" class="mb-1.5 block text-stone-900">
+                            Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="kabupaten_kota" name="kabupaten_kota"
+                                autocomplete="off"
+                                data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                                aria-describedby="err-kabupaten_kota"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="kecamatan" class="mb-1.5 block text-stone-900">
+                            Kecamatan <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="kecamatan" name="kecamatan"
+                                autocomplete="off"
+                                data-label="Kecamatan" data-rules="required|string|max:255"
+                                aria-describedby="err-kecamatan"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-kecamatan" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+
+                    <div>
+                        <label for="kelurahan" class="mb-1.5 block text-stone-900">
+                            Kelurahan <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="kelurahan" name="kelurahan"
+                                autocomplete="off"
+                                data-label="Kelurahan" data-rules="required|string|max:255"
+                                aria-describedby="err-kelurahan"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-kelurahan" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="kode_pos" class="mb-1.5 block text-stone-900">
+                        Kode Pos <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="kode_pos" name="kode_pos"
+                            placeholder="12345"
+                            autocomplete="off" autofocus
+                            data-label="Kode Pos" data-rules="required|string|max:5"
+                            aria-describedby="err-kode_pos"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-kode_pos" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
 
                 <div>
                     <label for="alamat" class="mb-1.5 block text-stone-900">
                         Alamat lengkap <span class="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <textarea id="alamat" name="alamat" rows="3"
-                                placeholder="Jalan, nomor, kelurahan, kota"
+                                placeholder="Jl. Kasturi No. 29, Surabaya"
                                 data-label="Alamat lengkap" data-rules="required"
                                 aria-describedby="err-alamat"
                                 class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500"></textarea>
@@ -353,6 +437,73 @@
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit-provinsi" class="mb-1.5 block text-stone-900">
+                            Provinsi <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="edit-provinsi" name="provinsi"
+                                autocomplete="off" autofocus
+                                data-fill="provinsi"
+                                data-label="Provinsi" data-rules="required|string|max:255"
+                                aria-describedby="err-edit-provinsi"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-edit-provinsi" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                    <div>
+                        <label for="edit-kabupaten_kota" class="mb-1.5 block text-stone-900">
+                            Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="edit-kabupaten_kota" name="kabupaten_kota"
+                                autocomplete="off" autofocus
+                                data-fill="kabupatenKota"
+                                data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                                aria-describedby="err-edit-kabupaten_kota"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-edit-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit-kecamatan" class="mb-1.5 block text-stone-900">
+                            Kecamatan <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="edit-kecamatan" name="kecamatan"
+                                autocomplete="off" autofocus
+                                data-fill="kecamatan"
+                                data-label="Kecamatan" data-rules="required|string|max:255"
+                                aria-describedby="err-edit-kecamatan"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-edit-kecamatan" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                    <div>
+                        <label for="edit-kelurahan" class="mb-1.5 block text-stone-900">
+                            Kelurahan <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="edit-kelurahan" name="kelurahan"
+                                autocomplete="off" autofocus
+                                data-fill="kelurahan"
+                                data-label="Kelurahan" data-rules="required|string|max:255"
+                                aria-describedby="err-edit-kelurahan"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-edit-kelurahan" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="edit-kode_pos" class="mb-1.5 block text-stone-900">
+                        Kode Pos <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="edit-kode_pos" name="kode_pos"
+                            autocomplete="off" autofocus
+                            data-fill="kodePos"
+                            data-label="Kode Pos" data-rules="required|string|max:255"
+                            aria-describedby="err-edit-kode_pos"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-edit-kode_pos" class="mt-1.5 text-xs text-red-600" hidden></p>
+                </div>
+
                 <div>
                     <label for="edit-alamat" class="mb-1.5 block text-stone-900">
                         Alamat lengkap <span class="text-red-500" aria-hidden="true">*</span>
@@ -407,21 +558,38 @@
 
                 <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Nomor telepon</dt>
+                        <dt class="text-stone-500">Nomor Telepon</dt>
                         <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Provinsi</dt>
+                        <dd data-detail="provinsi" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Kota/Kabupaten</dt>
+                        <dd data-detail="kabupaten_kota" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Kecamatan</dt>
+                        <dd data-detail="kecamatan" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Kelurahan</dt>
+                        <dd data-detail="kelurahan" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                         <dt class="text-stone-500">Alamat</dt>
                         <dd data-detail="alamat" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-stone-500">Kode Pos</dt>
+                        <dd data-detail="kode_pos" class="whitespace-pre-line break-words text-stone-900 sm:col-span-2"></dd>
+                    </div>
+                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                         <dt class="text-stone-500">Terdaftar pada</dt>
                         <dd data-detail="dibuat" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terakhir diperbarui</dt>
-                        <dd data-detail="diperbarui" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
+
                 </dl>
             </div>
 

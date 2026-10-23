@@ -12,7 +12,17 @@ class Pelanggan extends Model
 {
     use Searchable;
 
-    protected array $searchable = ['kode', 'nama', 'nomor_telepon', 'alamat'];
+    protected array $searchable = [
+        'kode',
+        'nama',
+        'nomor_telepon',
+        'provinsi',
+        'kabupaten_kota',
+        'kecamatan',
+        'kelurahan',
+        'alamat',
+        'kode_pos',
+    ];
 
     protected $table = 'pelanggan';
 
@@ -20,7 +30,12 @@ class Pelanggan extends Model
         'kode',
         'nama',
         'nomor_telepon',
+        'provinsi',
+        'kabupaten_kota',
+        'kecamatan',
+        'kelurahan',
         'alamat',
+        'kode_pos',
     ];
 
     public function penjualan(): HasMany
