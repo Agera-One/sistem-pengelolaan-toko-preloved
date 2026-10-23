@@ -1,4 +1,4 @@
-@props(['storeName' => 'TRISTANTI STORE'])
+@props(['storeName' => 'TRISTANTI PRELOVED'])
 
 @php
     $menus = [
