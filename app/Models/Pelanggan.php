@@ -20,7 +20,12 @@ class Pelanggan extends Model
         'kode',
         'nama',
         'nomor_telepon',
+        'provinsi',
+        'kabupaten_kota',
+        'kecamatan',
+        'kelurahan',
         'alamat',
+        'kode_pos',
     ];
 
     public function penjualan(): HasMany
