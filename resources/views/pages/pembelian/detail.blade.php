@@ -101,7 +101,7 @@
                     Download
                 </a>
 
-                @if (Route::has('pembelian.edit'))
+                @if ($pembelian->status->value === 'belum bayar')
                     <a href="{{ route('pembelian.edit', $pembelian) }}"
                        class="inline-flex h-11 items-center gap-2 rounded-lg bg-brand px-4 font-medium text-white transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
