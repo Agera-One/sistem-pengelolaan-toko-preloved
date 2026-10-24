@@ -161,9 +161,9 @@
             </section>
         </div>
 
-        <section class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white" aria-labelledby="judul-barang">
+        <section class="mt-6 overflow-hidden rounded-xl border border-stone-300 bg-white" aria-labelledby="judul-pakaian">
             <div class="flex flex-col gap-3 border-b border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 id="judul-barang" class="text-lg font-semibold text-stone-900">Daftar Pakaian</h2>
+                <h2 id="judul-pakaian" class="text-lg font-semibold text-stone-900">Daftar Pakaian</h2>
             </div>
 
             <div class="overflow-x-auto">
@@ -182,36 +182,36 @@
                     </thead>
 
                     <tbody class="divide-y divide-stone-300">
-                        @foreach ($penjualan->barang as $barang)
+                        @foreach ($penjualan->pakaian as $pakaian)
                             <tr class="transition hover:bg-stone-50/70">
                                 <td class="px-4 py-3.5 text-stone-500">{{ $loop->iteration }}</td>
 
                                 <td class="px-4 py-3.5">
-                                    <p class="font-medium text-stone-900">{{ $barang->kode }}</p>
+                                    <p class="font-medium text-stone-900">{{ $pakaian->kode }}</p>
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->nama }}
+                                    {{ $pakaian->nama }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->kategori->label() }}
+                                    {{ $pakaian->kategori->label() }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->lingkar . ' cm' }}
+                                    {{ $pakaian->lingkar . ' cm' }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ $barang->panjang . ' cm' }}
+                                    {{ $pakaian->panjang . ' cm' }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ format_rupiah($barang->harga_beli) }}
+                                    {{ format_rupiah($pakaian->harga_beli) }}
                                 </td>
 
                                 <td class="px-4 py-3.5">
-                                    {{ format_rupiah($barang->pivot->harga_jual) }}
+                                    {{ format_rupiah($pakaian->pivot->harga_jual) }}
                                 </td>
                             </tr>
                         @endforeach
