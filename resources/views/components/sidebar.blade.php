@@ -204,8 +204,8 @@
 
     <div class="border-t border-stone-200 p-4">
         <div class="flex items-center gap-3 px-2 pb-4">
-            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand text-lg font-semibold text-white"
-                  aria-hidden="true">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span>
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-lg font-semibold text-white"
+                  aria-hidden="true">{{ $user->inisial }}</span>
             <div class="min-w-0">
                 <p class="truncate text-lg font-semibold text-stone-900">{{ $user->name }}</p>
                 @if ($user?->email)
