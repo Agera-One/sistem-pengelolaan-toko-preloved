@@ -12,10 +12,10 @@ enum KategoriPakaian: string
     public function label(): string
     {
         return match($this) {
-            self::ATASAN   => 'Blouse',
-            self::BAWAHAN   => 'Kemeja',
-            self::TERUSAN      => 'Rok',
-            self::LUARAN   => 'Celana',
+            self::ATASAN    => 'Atasan',
+            self::BAWAHAN   => 'Bawahan',
+            self::TERUSAN   => 'Terusan',
+            self::LUARAN    => 'Luaran',
         };
     }
 }
