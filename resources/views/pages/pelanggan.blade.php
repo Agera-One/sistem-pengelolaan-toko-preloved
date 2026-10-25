@@ -71,7 +71,7 @@
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Tambah pelanggan
+                    Tambah Pelanggan
                 </button>
             </div>
 
@@ -225,7 +225,7 @@
                                             </p>
                                             <button type="button" data-modal-open="modal-tambah"
                                                     class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                Tambah pelanggan
+                                                Tambah Pelanggan
                                             </button>
                                         @endif
                                     </div>
@@ -298,6 +298,7 @@
                             Provinsi <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
                         <input type="tel" inputmode="tel" id="provinsi" name="provinsi"
+                                placeholder="Jawa Timur"
                                 autocomplete="off"
                                 data-label="Provinsi" data-rules="required|string|max:255"
                                 aria-describedby="err-provinsi"
@@ -310,6 +311,7 @@
                             Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
                         <input type="tel" inputmode="tel" id="kabupaten_kota" name="kabupaten_kota"
+                                placeholder="Kabupaten Sidoarjo"
                                 autocomplete="off"
                                 data-label="Kota/Kabupaten" data-rules="required|string|max:255"
                                 aria-describedby="err-kabupaten_kota"
@@ -324,6 +326,7 @@
                             Kecamatan <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
                         <input type="tel" inputmode="tel" id="kecamatan" name="kecamatan"
+                                placeholder="Waru"
                                 autocomplete="off"
                                 data-label="Kecamatan" data-rules="required|string|max:255"
                                 aria-describedby="err-kecamatan"
@@ -336,6 +339,7 @@
                             Kelurahan <span class="text-red-500" aria-hidden="true">*</span>
                         </label>
                         <input type="tel" inputmode="tel" id="kelurahan" name="kelurahan"
+                                placeholder="Kedungrejo"
                                 autocomplete="off"
                                 data-label="Kelurahan" data-rules="required|string|max:255"
                                 aria-describedby="err-kelurahan"
