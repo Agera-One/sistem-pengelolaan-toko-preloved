@@ -4,30 +4,18 @@ namespace App\Enums;
 
 enum KategoriPakaian: string
 {
-    case BLOUSE = 'blouse';
-    case KEMEJA = 'kemeja';
-    case ROK = 'rok';
-    case CELANA = 'celana';
-    case OVERALL = 'overall';
-    case OUTER = 'outher';
-    case JAKET = 'jaket';
-    case VEST = 'vest';
-    case GAMIS = 'gamis';
-    case DRESS = 'dress';
+    case ATASAN = 'atasan';
+    case BAWAHAN = 'bawahan';
+    case TERUSAN = 'terusan';
+    case LUARAN = 'luaran';
 
     public function label(): string
     {
         return match($this) {
-            self::BLOUSE   => 'Blouse',
-            self::KEMEJA   => 'Kemeja',
-            self::ROK      => 'Rok',
-            self::CELANA   => 'Celana',
-            self::OVERALL  => 'Overall',
-            self::OUTER    => 'Outher',
-            self::JAKET    => 'Jaket',
-            self::VEST     => 'Vest',
-            self::GAMIS    => 'Gamis',
-            self::DRESS    => 'Dress',
+            self::ATASAN   => 'Blouse',
+            self::BAWAHAN   => 'Kemeja',
+            self::TERUSAN      => 'Rok',
+            self::LUARAN   => 'Celana',
         };
     }
 }
