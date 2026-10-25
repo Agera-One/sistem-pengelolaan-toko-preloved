@@ -61,7 +61,7 @@ class PakaianSeeder extends Seeder
 
                 $pakaian[] = [
                     'kode'         => "PAK-202610-{$kodeNomor}",
-                    'nama'         => "{$tb['kategori']} {$tb['nama']}",
+                    'nama'         => $tb['nama'],
                     'lingkar'      => $tb['lingkar'],
                     'panjang'      => $tb['panjang'],
                     'kategori'     => $tb['kategori'],
