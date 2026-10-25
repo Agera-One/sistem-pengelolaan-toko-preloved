@@ -14,40 +14,40 @@ class PakaianSeeder extends Seeder
 
         $templatePakaian = [
             [
-                'kategori'      => 'blouse',
-                'nama'          => 'Casual Cotton',
+                'kategori'      => 'atasan',
+                'nama'          => 'Blouse Casual Cotton',
                 'lingkar'       => 98,
                 'panjang'       => 65,
                 'harga_beli'    => 35000,
                 'harga_jual'    => 65000
             ],
             [
-                'kategori'      => 'kemeja',
-                'nama'          => 'Slim Fit Polos',
+                'kategori'      => 'atasan',
+                'nama'          => 'Kemeja Slim Fit Polos',
                 'lingkar'       => 102,
                 'panjang'       => 72,
                 'harga_beli'    => 40000,
                 'harga_jual'    => 75000
             ],
             [
-                'kategori'      => 'rok',
-                'nama'          => 'Plisket Panjang',
+                'kategori'      => 'bawahan',
+                'nama'          => 'Rok Plisket Panjang',
                 'lingkar'       => 70,
                 'panjang'       => 92,
                 'harga_beli'    => 45000,
                 'harga_jual'    => 80000
             ],
             [
-                'kategori'      => 'celana',
-                'nama'          => 'Chino Reguler',
+                'kategori'      => 'bawahan',
+                'nama'          => 'Celana Chino Reguler',
                 'lingkar'       => 82,
                 'panjang'       => 100,
                 'harga_beli'    => 50000,
                 'harga_jual'    => 95000
             ],
             [
-                'kategori'      => 'overall',
-                'nama'          => 'Denim Style',
+                'kategori'      => 'terusan',
+                'nama'          => 'Overall Denim Style',
                 'lingkar'       => 96,
                 'panjang'       => 130,
                 'harga_beli'    => 65000,
