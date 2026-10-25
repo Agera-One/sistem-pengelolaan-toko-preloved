@@ -71,7 +71,7 @@
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Tambah supplier
+                    Tambah Supplier
                 </button>
             </div>
 
@@ -204,7 +204,7 @@
                                             </p>
                                             <button type="button" data-modal-open="modal-tambah"
                                                     class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                Tambah supplier
+                                                Tambah Supplier
                                             </button>
                                         @endif
                                     </div>
@@ -236,12 +236,26 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div>
-                    <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
-                    <input name="kode" type="text" id="kode" value="{{ $kode }}"
-                            readonly aria-describedby="hint-kode"
-                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
-                    <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                        <input name="kode" type="text" id="kode" value="{{ $kode }}"
+                                readonly aria-describedby="hint-kode"
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                        <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                    </div>
+
+                    <div>
+                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-nomor_telepon"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
 
                 <div>
@@ -256,30 +270,16 @@
                     <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-nomor_telepon"
-                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="kabupaten_kota" class="mb-1.5 block text-stone-900">
-                            Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="text" id="kabupaten_kota" name="kabupaten_kota"
-                                placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-label="Kota/Kabupaten" data-rules="required|string|max:255"
-                                aria-describedby="err-kabupaten_kota"
-                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
+                <div>
+                    <label for="kabupaten_kota" class="mb-1.5 block text-stone-900">
+                        Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="kabupaten_kota" name="kabupaten_kota"
+                            placeholder="Kota Surabaya" autocomplete="off"
+                            data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                            aria-describedby="err-kabupaten_kota"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -314,12 +314,27 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div>
-                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
-                    <input type="text" id="edit-kode" data-fill="kode"
-                            readonly aria-describedby="hint-edit-kode"
-                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
-                    <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                        <input type="text" id="edit-kode" data-fill="kode"
+                                readonly aria-describedby="hint-edit-kode"
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
+                        <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                    </div>
+
+                    <div>
+                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-fill="telepon"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-edit-nomor_telepon"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
 
                 <div>
@@ -335,32 +350,17 @@
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-fill="telepon"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-edit-nomor_telepon"
-                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="edit-kabupaten_kota" class="mb-1.5 block text-stone-900">
-                            Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="text" id="edit-kabupaten_kota" name="kabupaten_kota"
-                                placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-fill="kabupatenKota"
-                                data-label="Kota/Kabupaten" data-rules="required|string|max:255"
-                                aria-describedby="err-edit-kabupaten_kota"
-                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
-                        <p id="err-edit-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
+                <div>
+                    <label for="edit-kabupaten_kota" class="mb-1.5 block text-stone-900">
+                        Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="edit-kabupaten_kota" name="kabupaten_kota"
+                            placeholder="Contoh: Surabaya" autocomplete="off"
+                            data-fill="kabupatenKota"
+                            data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                            aria-describedby="err-edit-kabupaten_kota"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-edit-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
