@@ -103,9 +103,7 @@ class PenjualanService
                 'pelanggan_id' => $data['pelanggan_id'],
             ] + $totals)->save();
 
-            DetailPenjualan::where('penjualan_id', $penjualan->getKey())
-                ->get()
-                ->each->delete();
+            DetailPenjualan::where('penjualan_id', $penjualan->getKey())->delete();
 
             $this->simpanDetail($penjualan, $items);
 
@@ -116,7 +114,7 @@ class PenjualanService
     public function destroy(Penjualan $penjualan)
     {
         DB::transaction(function () use ($penjualan) {
-            $penjualan->detailPenjualan->each->delete();
+            $penjualan->detailPenjualan()->delete();
             $penjualan->delete();
         });
     }
@@ -135,16 +133,16 @@ class PenjualanService
 
     protected function simpanDetail(Penjualan $penjualan, Collection $items): void
     {
-        foreach ($items as $item) {
-            DetailPenjualan::create([
-                'penjualan_id' => $penjualan->getKey(),
-                'pakaian_id'    => $item['pakaian_id'],
-                'harga_jual'   => $item['harga_jual'],
-            ]);
-        }
+        $detailData = $items->map(fn ($item) => [
+            'penjualan_id' => $penjualan->getKey(),
+            'pakaian_id'   => $item['pakaian_id'],
+            'harga_jual'   => $item['harga_jual'],
+        ])->toArray();
+
+        DetailPenjualan::insert($detailData);
     }
 
-        protected function dataForm(Collection $pakaian, array $items = []): array
+    protected function dataForm(Collection $pakaian, array $items = []): array
     {
         $angka      = fn ($v) => $v === null || $v === '' ? '' : (float) $v;
         $pakaianById = $pakaian->keyBy(fn ($b) => $b->getKey());
@@ -159,14 +157,14 @@ class PenjualanService
             }
 
             return [
-                'index'     => $index,
-                'template'  => $template,
+                'index'      => $index,
+                'template'   => $template,
                 'pakaian_id' => $pakaianId,
-                'kategori'  => $selected?->kategori?->value,
-                'lingkar'   => $selected ? $angka($selected->lingkar) : '',
-                'panjang'   => $selected ? $angka($selected->panjang) : '',
+                'kategori'   => $selected?->kategori?->value,
+                'lingkar'    => $selected ? $angka($selected->lingkar) : '',
+                'panjang'    => $selected ? $angka($selected->panjang) : '',
                 'harga_beli' => $selected ? (int) $selected->harga_beli : null,
-                'harga_jual'     => blank($harga)
+                'harga_jual' => blank($harga)
                     ? ''
                     : number_format((int) preg_replace('/\D/', '', (string) $harga), 0, ',', '.'),
             ];
@@ -182,20 +180,19 @@ class PenjualanService
         $rows[] = $buatBaris('__INDEX__', [], true);
 
         return [
-            'rows'          => $rows,
+            'rows'           => $rows,
             'pakaianOptions' => $pakaian->map(fn ($b) => [
-                'id'            => $b->getKey(),
-                'label'         => "{$b->kode} — {$b->nama}",
-                'kategori'      => $b->kategori?->value,
-                'lingkar'       => $angka($b->lingkar),
-                'panjang'       => $angka($b->panjang),
-                'harga_jual'    => (int) $b->harga_jual,
-                'harga_beli'    => (int) $b->harga_beli,
+                'id'         => $b->getKey(),
+                'label'      => "{$b->kode} — {$b->nama}",
+                'kategori'   => $b->kategori?->value,
+                'lingkar'    => $angka($b->lingkar),
+                'panjang'    => $angka($b->panjang),
+                'harga_jual' => (int) $b->harga_jual,
+                'harga_beli' => (int) $b->harga_beli,
             ])->values()->all(),
-            'tanggal'       => now()->toDateString(),
-            'pelangganId'   => null,
-            'ongkirAwal'    => '',
+            'tanggal'     => now()->toDateString(),
+            'pelangganId' => null,
+            'ongkirAwal'  => '',
         ];
     }
-
 }
