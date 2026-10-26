@@ -56,14 +56,17 @@ class PembelianService
                 'user_id'     => $userId,
             ]);
 
+            $pakaianData = [];
+
             foreach ($items as $i => $row) {
-                $pembelian->pakaian()->create(
-                    Arr::only($row, self::FIELD_BARANG) + [
-                        'kode'   => $kodePakaian[$i],
-                        'status' => PakaianStatus::TERSEDIA,
-                    ]
-                );
+                $pakaianData[] = Arr::only($row, self::FIELD_BARANG) + [
+                    'pembelian_id' => $pembelian->id,
+                    'kode'         => $kodePakaian[$i],
+                    'status'       => PakaianStatus::TERSEDIA->value,
+                ];
             }
+
+            Pakaian::insert($pakaianData);
 
             return $pembelian;
         });
@@ -132,7 +135,10 @@ class PembelianService
                 $keptIds[] = $pakaian->id;
             }
 
-            $editable->except($keptIds)->each->delete();
+            $idsToDelete = $editable->except($keptIds)->pluck('id');
+            if ($idsToDelete->isNotEmpty()) {
+                Pakaian::whereIn('id', $idsToDelete)->delete();
+            }
 
             $pembelian->update([
                 'tanggal'     => $data['tanggal'],
