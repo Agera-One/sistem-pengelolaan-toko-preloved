@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
-            $table->unsignedInteger('kerugian_pengiriman');
-            $table->string('alasan', 255);
-            $table->string('tipe', 255);
+            $table->unsignedInteger('pengembalian_dana');
             $table->timestamps();
+
+            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
         });
     }
 
