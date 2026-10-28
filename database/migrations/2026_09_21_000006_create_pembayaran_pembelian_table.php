@@ -10,13 +10,13 @@ return new class extends Migration
     {
         Schema::create('pembayaran_pembelian', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');
+
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
             $table->unsignedInteger('nominal');
             $table->string('metode_pembayaran');
             $table->timestamps();
-
-            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');
         });
     }
 

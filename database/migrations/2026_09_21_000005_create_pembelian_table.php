@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('pembelian', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('supplier_id')->constrained('supplier')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
+
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
             $table->unsignedInteger('total');
             $table->string('status')->default('belum bayar');
             $table->timestamps();
-
-            $table->foreignId('supplier_id')->constrained('supplier')->onDelete('restrict');
-            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
         });
     }
 

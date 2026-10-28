@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('retur', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
+
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
             $table->unsignedInteger('pengembalian_dana');
             $table->timestamps();
-
-            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
         });
     }
 

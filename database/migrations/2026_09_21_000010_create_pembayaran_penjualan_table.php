@@ -10,13 +10,13 @@ return new class extends Migration
     {
         Schema::create('pembayaran_penjualan', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
+
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
             $table->unsignedInteger('nominal');
             $table->string('metode_pembayaran');
             $table->timestamps();
-
-            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
         });
     }
 
