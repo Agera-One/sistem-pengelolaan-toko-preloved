@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('ditanggung_oleh');
             $table->date('tanggal');
             $table->timestamps();
-
-            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
         });
     }
 
