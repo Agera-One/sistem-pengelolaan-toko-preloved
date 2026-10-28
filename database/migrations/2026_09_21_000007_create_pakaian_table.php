@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('pakaian', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict')->nullable();
+
             $table->char('kode', 15)->unique();
             $table->string('nama');
             $table->unsignedInteger('lingkar');
@@ -19,8 +21,6 @@ return new class extends Migration
             $table->unsignedInteger('harga_jual');
             $table->string('status')->default('tersedia');
             $table->timestamps();
-
-            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');
         });
     }
 
