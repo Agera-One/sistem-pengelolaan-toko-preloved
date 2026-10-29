@@ -11,11 +11,9 @@ class Retur extends Model
     protected $table = 'retur';
 
     protected $fillable = [
-        'tanggal',
         'kode',
-        'kerugian_pengiriman',
-        'alasan',
-        'tipe',
+        'tanggal',
+        'pengembalian_dana',
     ];
 
     protected function casts(): array
