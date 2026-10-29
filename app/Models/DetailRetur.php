@@ -12,8 +12,9 @@ class DetailRetur extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'penjualan_id',
         'retur_id',
+        'detail_penjualan_id',
+        'alasan'
     ];
 
     public function penjualan(): BelongsTo
