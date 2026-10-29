@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('pakaian', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict')->nullable();
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('restrict');
 
             $table->char('kode', 15)->unique();
             $table->string('nama');
