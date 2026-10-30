@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('pengiriman', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
+
             $table->string('nomor_resi', 20);
             $table->string('jenis');
             $table->unsignedInteger('ongkir');
