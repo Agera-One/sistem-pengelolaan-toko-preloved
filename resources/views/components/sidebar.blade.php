@@ -63,6 +63,11 @@
                     'active' => 'pembayaran-penjualan.*',
                 ],
                 [
+                    'label'  => 'Pengiriman',
+                    'route'  => 'pengiriman.index',
+                    'active' => 'pengiriman.index',
+                ],
+                [
                     'label'  => 'Retur',
                     'route'  => 'retur.index',
                     'active' => 'retur.*',
