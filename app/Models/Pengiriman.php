@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\DitanggungPengiriman;
 use App\Enums\JenisPengiriman;
+use App\Enums\KurirPengiriman;
 use App\Traits\Filterable;
 use App\Traits\Searchable;
 use App\Traits\HasDateRange;
@@ -17,7 +18,7 @@ class Pengiriman extends Model
 
     protected array $searchable = ['nomor_resi'];
     protected array $searchableRelations = ['penjualan' => 'kode'];
-    protected array $filterable = ['jenis', 'kurir', 'ditanggung_oleh'];
+    protected array $filterable = ['jenis', 'kurir', 'ditanggung' => 'ditanggung_oleh'];
 
     protected $table = 'pengiriman';
 
@@ -36,6 +37,7 @@ class Pengiriman extends Model
         return [
             'tanggal'           => 'date',
             'jenis'             => JenisPengiriman::class,
+            'kurir'             => KurirPengiriman::class,
             'ditanggung_oleh'   => DitanggungPengiriman::class,
         ];
     }
