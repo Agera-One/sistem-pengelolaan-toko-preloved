@@ -101,7 +101,7 @@
                     </button>
 
                     <form id="panel-filter" method="GET" action="{{ route('pengiriman.index') }}" hidden
-                          class="absolute left-0 sm:left-auto sm:right-0 top-full z-40 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-xl border border-stone-300 bg-white text-left shadow-lg">
+                          class="absolute left-0 sm:left-auto sm:right-0 top-full z-40 mt-2 w-96 max-w-[calc(100vw-2rem)] rounded-xl border border-stone-300 bg-white text-left shadow-lg">
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <div class="border-b border-stone-200 px-4 py-3 font-medium text-stone-900">Filter</div>
 
