@@ -18,6 +18,7 @@
         'resources/js/pembelian.js',
         'resources/js/pembayaran.js',
         'resources/js/penjualan.js',
+        'resources/js/pengiriman.js',
     ])
 </head>
 
