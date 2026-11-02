@@ -50,3 +50,24 @@
         }
     });
 })();
+
+document.querySelectorAll('[data-multiselect]').forEach(function (dropdown) {
+    dropdown.querySelector('[data-multiselect-clear]')?.addEventListener('click', function () {
+        dropdown.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+            cb.checked = false;
+        });
+    });
+
+    document.addEventListener('click', function (e) {
+        if (dropdown.open && !dropdown.contains(e.target)) {
+            dropdown.removeAttribute('open');
+        }
+    });
+
+    dropdown.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            dropdown.removeAttribute('open');
+            dropdown.querySelector('summary')?.focus();
+        }
+    });
+});
