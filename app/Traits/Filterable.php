@@ -12,7 +12,13 @@ trait Filterable
             $param = is_int($param) ? $column : $param;
             $value = $filters[$param] ?? null;
 
-            if (is_scalar($value) && filled($value)) {
+            if (is_array($value)) {
+                $value = array_values(array_filter($value, fn ($v) => is_scalar($v) && filled($v)));
+
+                if ($value !== []) {
+                    $query->whereIn($column, $value);
+                }
+            } elseif (is_scalar($value) && filled($value)) {
                 $query->where($column, $value);
             }
         }
