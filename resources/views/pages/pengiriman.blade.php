@@ -3,9 +3,6 @@
 @section('title', 'Daftar Pengiriman')
 
 @section('content')
-    @php
-        $kurirDipilih = array_values(array_filter((array) request('kurir', []), 'is_scalar'));
-    @endphp
     <div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -296,10 +293,12 @@
                                 <td colspan="9" class="px-4 py-16 text-center">
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card preview-icon">
-                                                <rect width="20" height="14" x="2" y="5" rx="2"/>
-                                                <line x1="2" x2="22" y1="10" y2="10"/>
-                                                <path d="M6 14h2"/>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-van preview-icon">
+                                                <path d="M13 6v5a1 1 0 0 0 1 1h6.102a1 1 0 0 1 .712.298l.898.91a1 1 0 0 1 .288.702V17a1 1 0 0 1-1 1h-3"/>
+                                                <path d="M5 18H3a1 1 0 0 1-1-1V8a2 2 0 0 1 2-2h12c1.1 0 2.1.8 2.4 1.8l1.176 4.2"/>
+                                                <path d="M9 18h5"/>
+                                                <circle cx="16" cy="18" r="2"/>
+                                                <circle cx="7" cy="18" r="2"/>
                                             </svg>
                                         </span>
 
