@@ -27,6 +27,7 @@ class PengirimanService
             'jenis'         => JenisPengiriman::cases(),
             'kurir'         => KurirPengiriman::cases(),
             'ditanggung'    => DitanggungPengiriman::cases(),
+            'kurirDipilih'  => array_values(array_filter((array) request('kurir', []), 'is_scalar')),
         ];
     }
 }
