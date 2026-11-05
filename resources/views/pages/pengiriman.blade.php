@@ -290,7 +290,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="px-4 py-16 text-center"> 
+                                <td colspan="9" class="px-4 py-16 text-center">  
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-van preview-icon">
