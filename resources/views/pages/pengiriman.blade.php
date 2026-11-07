@@ -64,7 +64,7 @@
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </form>
 
-                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-40">
+                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-40"> 
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <input type="hidden" name="ditanggung" value="{{ request('ditanggung') }}">
                         @foreach ($kurirDipilih as $kv)
@@ -290,7 +290,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="px-4 py-16 text-center">   
+                                <td colspan="9" class="px-4 py-16 text-center">
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-van preview-icon">
