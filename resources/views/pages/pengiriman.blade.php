@@ -64,7 +64,7 @@
                             class="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
                     </form>
 
-                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-40"> 
+                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-40">
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <input type="hidden" name="ditanggung" value="{{ request('ditanggung') }}">
                         @foreach ($kurirDipilih as $kv)
@@ -104,7 +104,7 @@
                         </select>
                     </form>
 
-                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-44">
+                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-44"> 
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <input type="hidden" name="jenis" value="{{ request('jenis') }}">
                         <input type="hidden" name="ditanggung" value="{{ request('ditanggung') }}">
