@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('pembayaran-penjualan', PembayaranPenjualanController::class)
         ->except(['show', 'create', 'edit'])
         ->names('pembayaran-penjualan');
-    Route::resource('pengiriman', PengirimanController::class)->except(['show', 'create', 'edit'])->names('pengiriman');
+    Route::resource('pengiriman', PengirimanController::class);
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
