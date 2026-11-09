@@ -65,7 +65,7 @@
                 [
                     'label'  => 'Pengiriman',
                     'route'  => 'pengiriman.index',
-                    'active' => 'pengiriman.index',
+                    'active' => 'pengiriman.*',
                 ],
                 [
                     'label'  => 'Retur',
