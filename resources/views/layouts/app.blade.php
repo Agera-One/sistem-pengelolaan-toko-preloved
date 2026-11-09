@@ -13,6 +13,7 @@
         'resources/css/pembayaran.css',
         'resources/js/sidebar.js',
         'resources/js/modal.js',
+        'resources/js/dropdown.js',
         'resources/js/daterange.js',
         'resources/js/money-input.js',
         'resources/js/pembelian.js',
