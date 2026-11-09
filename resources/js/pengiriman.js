@@ -71,3 +71,130 @@ document.querySelectorAll('[data-multiselect]').forEach(function (dropdown) {
         }
     });
 });
+
+(function () {
+    var SELECTOR = 'details[data-row-menu]';
+    var GAP = 4;
+    var MARGIN = 8;
+
+    function getMenus() {
+        return document.querySelectorAll(SELECTOR);
+    }
+
+    function closeAll(except) {
+        getMenus().forEach(function (menu) {
+            if (menu !== except) menu.removeAttribute('open');
+        });
+    }
+
+    function positionPanel(menu) {
+        var trigger = menu.querySelector('summary');
+        var panel = menu.querySelector('[data-row-menu-panel]');
+        var rect = trigger.getBoundingClientRect();
+        var height = panel.offsetHeight;
+        var width = panel.offsetWidth;
+
+        var spaceBelow = window.innerHeight - rect.bottom - MARGIN;
+        var spaceAbove = rect.top - MARGIN;
+        var openUp = height > spaceBelow && height <= spaceAbove;
+
+        var top = openUp ? rect.top - height - GAP : rect.bottom + GAP;
+        var left = Math.max(MARGIN, rect.right - width);
+
+        panel.style.top = top + 'px';
+        panel.style.left = left + 'px';
+    }
+
+    document.addEventListener('toggle', function (e) {
+        var menu = e.target;
+        if (!menu.matches || !menu.matches(SELECTOR) || !menu.open) return;
+
+        closeAll(menu);
+        positionPanel(menu);
+    }, true);
+
+    document.addEventListener('click', function (e) {
+        var menu = e.target.closest(SELECTOR);
+
+        if (!menu) {
+            closeAll();
+            return;
+        }
+        if (e.target.closest('[role="menuitem"]')) {
+            menu.removeAttribute('open');
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+
+        var openMenu = document.querySelector(SELECTOR + '[open]');
+        if (!openMenu) return;
+
+        openMenu.removeAttribute('open');
+        openMenu.querySelector('summary')?.focus();
+    });
+
+    window.addEventListener('resize', function () { closeAll(); });
+    window.addEventListener('scroll', function () { closeAll(); }, true);
+})();
+
+// Form Tambah / Ubah Pengiriman
+(function () {
+    var form = document.getElementById('form-pengiriman');
+    if (!form) return;
+
+    var counter = document.getElementById('selected-count');
+    var btnSimpan = document.getElementById('btn-simpan');
+    var resiInput = document.getElementById('nomor_resi');
+    var ongkirDisplay = document.getElementById('ongkir_display');
+    var ongkirHidden = document.getElementById('ongkir');
+
+    function digitsOnly(v) { return String(v).replace(/\D/g, ''); }
+
+    function formatRupiah(v) {
+        var d = digitsOnly(v);
+        return d ? Number(d).toLocaleString('id-ID') : '';
+    }
+
+    function selectedTotal() {
+        return form.querySelectorAll('.item-checkbox:not(:disabled):checked').length;
+    }
+
+    function refresh() {
+        var total = selectedTotal();
+        counter.textContent = total;
+        btnSimpan.disabled = total === 0 || resiInput.value.trim() === '';
+    }
+
+    ongkirDisplay.addEventListener('input', function () {
+        ongkirHidden.value = digitsOnly(ongkirDisplay.value) || '0';
+        ongkirDisplay.value = formatRupiah(ongkirDisplay.value);
+    });
+
+    resiInput.addEventListener('input', function () {
+        resiInput.value = resiInput.value.toUpperCase().replace(/\s+/g, '');
+        refresh();
+    });
+
+    form.addEventListener('change', function (e) {
+        if (e.target.classList.contains('item-checkbox')) refresh();
+    });
+
+    form.addEventListener('submit', function (e) {
+        if (selectedTotal() === 0) {
+            e.preventDefault();
+            alert('Pilih minimal satu barang untuk dikirim.');
+            return;
+        }
+        if (resiInput.value.trim() === '') {
+            e.preventDefault();
+            resiInput.focus();
+            return;
+        }
+        btnSimpan.disabled = true;
+        btnSimpan.textContent = 'Menyimpan...';
+    });
+
+    refresh();
+})();

@@ -104,7 +104,7 @@
                         </select>
                     </form>
 
-                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-44"> 
+                    <form method="GET" action="{{ route('pengiriman.index') }}" class="w-full sm:w-44">
                         <input type="hidden" name="q" value="{{ request('q') }}">
                         <input type="hidden" name="jenis" value="{{ request('jenis') }}">
                         <input type="hidden" name="ditanggung" value="{{ request('ditanggung') }}">
@@ -178,13 +178,15 @@
                     </a>
                 </div>
 
-                <button type="button" data-pengiriman-tambah
-                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    Tambah Pengiriman
-                </button>
+                <a href="{{ route('pengiriman.create') }}">
+                    <button type="button" data-pengiriman-tambah
+                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Tambah Pengiriman
+                    </button>
+                </a>
             </div>
 
             <div class="overflow-x-auto">
@@ -239,53 +241,54 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
-                                    <button type="button"
-                                            data-menu-toggle="menu-pengiriman-{{ $p->getKey() }}"
-                                            aria-haspopup="menu"
-                                            aria-expanded="false"
-                                            aria-label="Aksi untuk {{ $p->kode }}"
-                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <circle cx="12" cy="5" r="1.75" />
-                                            <circle cx="12" cy="12" r="1.75" />
-                                            <circle cx="12" cy="19" r="1.75" />
-                                        </svg>
-                                    </button>
-
-                                    <div id="menu-pengiriman-{{ $p->getKey() }}" role="menu" hidden class="fixed z-50 w-44 rounded-lg border border-stone-300 bg-white p-1 text-left shadow-lg">
-                                        <button type="button" role="menuitem" data-pengiriman-detail data-pengiriman="{{ json_encode($p->payload) }}" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
-                                                <circle cx="12" cy="12" r="3" />
+                                    <details data-row-menu class="group relative inline-block text-left">
+                                        <summary
+                                            aria-label="Aksi untuk resi {{ $p->nomor_resi }}"
+                                            class="flex h-8 w-8 cursor-pointer list-none items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand group-open:bg-stone-100 [&::-webkit-details-marker]:hidden">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <circle cx="12" cy="5" r="1.6" />
+                                                <circle cx="12" cy="12" r="1.6" />
+                                                <circle cx="12" cy="19" r="1.6" />
                                             </svg>
-                                            Detail
-                                        </button>
+                                        </summary>
 
-                                        <button type="button" role="menuitem" data-pengiriman-ubah data-pengiriman="{{ json_encode($p->payload) }}" class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M12 20h9" />
-                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                            </svg>
-                                            Ubah
-                                        </button>
-
-                                        <form action="{{ route('pengiriman.destroy', $p) }}" method="POST"
-                                            data-confirm="Hapus pengiriman {{ $p->kode }}? Data yang dihapus tidak bisa dikembalikan.">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                    role="menuitem"
-                                                    class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-red-600 transition hover:bg-red-50 focus:bg-red-50 focus:outline-none">
+                                        <div data-row-menu-panel role="menu"
+                                             class="fixed z-50 w-40 rounded-xl border border-stone-300 bg-white p-1.5 text-left shadow-lg">
+                                            <a href="{{ route('pengiriman.show', $p) }}" role="menuitem"
+                                               class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="M3 6h18" />
-                                                    <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
-                                                    <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
-                                                    <path d="M10 11v6M14 11v6" />
+                                                    <path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0" />
+                                                    <circle cx="12" cy="12" r="3" />
                                                 </svg>
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
+                                                Detail
+                                            </a>
+
+                                            <a href="{{ route('pengiriman.edit', $p) }}" role="menuitem"
+                                               class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z" />
+                                                    <path d="m15 5 4 4" />
+                                                </svg>
+                                                Ubah
+                                            </a>
+
+                                            <form method="POST" action="{{ route('pengiriman.destroy', $p) }}"
+                                                  onsubmit="return confirm('Hapus pengiriman dengan resi {{ e($p->nomor_resi) }}?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" role="menuitem"
+                                                        class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-red-600 transition hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+                                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M3 6h18" />
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                        <path d="M10 11v6M14 11v6" />
+                                                    </svg>
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </details>
                                 </td>
                             </tr>
                         @empty
