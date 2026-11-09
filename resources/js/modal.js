@@ -1,88 +1,6 @@
 (function () {
     'use strict';
 
-    var activeToggle = null;
-
-    function menuOf(toggle) {
-        return document.getElementById(toggle.dataset.menuToggle);
-    }
-
-    function closeMenu() {
-        if (!activeToggle) return;
-
-        menuOf(activeToggle).hidden = true;
-        activeToggle.setAttribute('aria-expanded', 'false');
-        activeToggle = null;
-    }
-
-    function openMenu(toggle, focusFirst) {
-        closeMenu();
-
-        var menu = menuOf(toggle);
-        menu.hidden = false;
-
-        var rect = toggle.getBoundingClientRect();
-        var top = rect.bottom + 4;
-
-        if (top + menu.offsetHeight > window.innerHeight - 8) {
-            top = rect.top - menu.offsetHeight - 4;
-        }
-
-        var left = Math.min(rect.right - menu.offsetWidth, window.innerWidth - menu.offsetWidth - 8);
-
-        menu.style.top = Math.max(8, top) + 'px';
-        menu.style.left = Math.max(8, left) + 'px';
-
-        toggle.setAttribute('aria-expanded', 'true');
-        activeToggle = toggle;
-
-        if (focusFirst) {
-            var first = menu.querySelector('[role="menuitem"]');
-            if (first) first.focus({ preventScroll: true });
-        }
-    }
-
-    document.addEventListener('click', function (e) {
-        var toggle = e.target.closest('[data-menu-toggle]');
-
-        if (toggle) {
-            toggle === activeToggle ? closeMenu() : openMenu(toggle, e.detail === 0);
-            return;
-        }
-
-        if (activeToggle && !e.target.closest('[role="menu"]')) {
-            closeMenu();
-        }
-    });
-
-    document.addEventListener('keydown', function (e) {
-        if (!activeToggle) return;
-
-        if (e.key === 'Escape') {
-            var toggle = activeToggle;
-            closeMenu();
-            toggle.focus();
-            return;
-        }
-
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            e.preventDefault();
-
-            var items = Array.prototype.slice.call(
-                menuOf(activeToggle).querySelectorAll('[role="menuitem"]')
-            );
-            var index = items.indexOf(document.activeElement);
-            var next = index === -1
-                ? (e.key === 'ArrowDown' ? 0 : items.length - 1)
-                : (e.key === 'ArrowDown' ? index + 1 : index - 1);
-
-            items[(next + items.length) % items.length].focus();
-        }
-    });
-
-    window.addEventListener('resize', closeMenu);
-    window.addEventListener('scroll', closeMenu, true);
-
     document.addEventListener('submit', function (e) {
         var message = e.target.dataset ? e.target.dataset.confirm : null;
 
@@ -244,7 +162,7 @@
     }
 
     function openModal(dialog) {
-        closeMenu();
+        document.dispatchEvent(new CustomEvent('dropdown:close'));
         dialog.showModal();
         document.body.classList.add('overflow-hidden');
     }
