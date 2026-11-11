@@ -14,12 +14,13 @@ class DetailRetur extends Model
     protected $fillable = [
         'retur_id',
         'detail_penjualan_id',
+        'harga',
         'alasan'
     ];
 
-    public function penjualan(): BelongsTo
+    public function detailPenjualan(): BelongsTo
     {
-        return $this->belongsTo(Penjualan::class, 'penjualan_id');
+        return $this->belongsTo(DetailPenjualan::class, 'detail_penjualan_id');
     }
 
     public function retur(): BelongsTo
