@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\MetodePembayaran;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Retur extends Model
@@ -11,15 +12,19 @@ class Retur extends Model
     protected $table = 'retur';
 
     protected $fillable = [
+        'penjualan_id',
+        'user_id',
         'kode',
         'tanggal',
-        'pengembalian_dana',
+        'total_refund',
+        'metode_refund',
     ];
 
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'       => 'date',
+            'metode_refund' => MetodePembayaran::class
         ];
     }
 
@@ -28,8 +33,13 @@ class Retur extends Model
         return $this->hasMany(DetailRetur::class, 'retur_id');
     }
 
-    public function penjualan(): BelongsToMany
+    public function penjualan(): BelongsTo
     {
-        return $this->belongsToMany(Penjualan::class, 'detail_retur', 'retur_id', 'penjualan_id');
+        return $this->belongsTo(Penjualan::class, 'penjualan_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
