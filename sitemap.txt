@@ -21,8 +21,8 @@ Sistem Manajemen Toko Preloved
 │
 ├── Penjualan
 │   ├── Daftar Penjualan
-│   └── Pembayaran
-│   ├── Retur
+│   ├── Pembayaran
+│   └── Retur
 │
 ├── Keuangan
 │   ├── Pemasukan
