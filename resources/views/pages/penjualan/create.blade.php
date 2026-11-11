@@ -4,12 +4,17 @@
 
 @section('content')
     <div>
-        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <a href="{{ route('penjualan.index') }}"
-               class="inline-flex items-center gap-1.5 text-stone-500 transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
-                Kembali ke daftar penjualan
-            </a>
+        <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-3">
+                <a href="{{ route('pembelian.index') }}"
+                aria-label="Kembali ke daftar pembelian"
+                class="flex h-10 w-10 items-center justify-center rounded-xl border border-stone-300 bg-white text-stone-700 shadow-sm transition hover:bg-stone-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m15 18-6-6 6-6" />
+                    </svg>
+                </a>
+                <h1 class="text-2xl font-semibold text-stone-900">Tambah Penjualan</h1>
+            </div>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
                 <ol class="flex items-center gap-1.5 text-stone-500">
@@ -23,8 +28,6 @@
                 </ol>
             </nav>
         </div>
-
-        <h1 class="mt-5 text-2xl font-semibold text-stone-900">Tambah Penjualan</h1>
 
         @if ($errors->any())
             <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800" role="alert">
@@ -42,7 +45,6 @@
 
             <section class="rounded-xl border border-stone-300 bg-white">
                 <div class="flex items-center gap-3 border-b border-stone-300 px-4 py-4">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-medium text-white">1</span>
                     <h2 class="font-semibold text-stone-900">Informasi Penjualan</h2>
                 </div>
 
@@ -89,7 +91,6 @@
             <section class="rounded-xl border border-stone-300 bg-white">
                 <div class="flex items-center justify-between gap-3 border-b border-stone-300 px-4 py-3.5">
                     <div class="flex items-center gap-3">
-                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-medium text-white">2</span>
                         <h2 class="font-semibold text-stone-900">Daftar Pakaian</h2>
                     </div>
                 </div>
