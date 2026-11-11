@@ -11,10 +11,12 @@ return new class extends Migration
         Schema::create('retur', function (Blueprint $table) {
             $table->id();
             $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('user')->onDelete('restrict');
 
             $table->char('kode', 15)->unique();
             $table->date('tanggal');
-            $table->unsignedInteger('pengembalian_dana');
+            $table->unsignedInteger('total_refund');
+            $table->string('metode_refund');
             $table->timestamps();
         });
     }
