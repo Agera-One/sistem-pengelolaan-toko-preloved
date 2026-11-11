@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany(Penjualan::class, 'user_id');
     }
 
+    public function retur(): HasMany
+    {
+        return $this->hasMany(Retur::class, 'user_id');
+    }
+
     protected function inisial(): Attribute
     {
         return Attribute::make(
