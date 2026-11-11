@@ -13,7 +13,7 @@
                         <path d="m15 18-6-6 6-6" />
                     </svg>
                 </a>
-                <h1 class="text-2xl font-semibold text-stone-900">Edit Pembelian</h1>
+                <h1 class="text-2xl font-semibold text-stone-900">Tambah Pembelian</h1>
             </div>
 
             <nav aria-label="Breadcrumb" class="order-first sm:order-last">
