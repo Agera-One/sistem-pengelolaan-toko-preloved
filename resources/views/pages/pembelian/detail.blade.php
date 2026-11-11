@@ -118,57 +118,57 @@
 
         <div class="mt-6 grid items-start gap-5 lg:grid-cols-3">
             <div class="space-y-5 lg:col-span-2">
-                    <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-pakaian">
-                        <div class="flex items-center justify-between">
-                            <h2 id="judul-pakaian" class="text-lg font-semibold text-stone-900">Daftar Pakaian</h2>
-                            <span class="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-700 ring-1 ring-inset ring-stone-300">
-                                {{ $pembelian->pakaian->count() }} barang
-                            </span>
-                        </div>
+                <section class="rounded-xl border border-stone-300 bg-white p-4 " aria-labelledby="judul-pakaian">
+                    <div class="flex items-center justify-between">
+                        <h2 id="judul-pakaian" class="text-lg font-semibold text-stone-900">Daftar Pakaian</h2>
+                        <span class="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-700 ring-1 ring-inset ring-stone-300">
+                            {{ $pembelian->pakaian->count() }} barang
+                        </span>
+                    </div>
 
-                        <ul class="mt-3 divide-y divide-dashed divide-stone-300">
-                            @foreach ($pembelian->pakaian as $pakaian)
-                                <li class="flex flex-wrap items-center gap-4 py-3.5">
-                                    <span aria-hidden="true"
-                                          class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
-                                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-                                        </svg>
-                                    </span>
+                    <ul class="mt-3 divide-y divide-dashed divide-stone-300">
+                        @foreach ($pembelian->pakaian as $pakaian)
+                            <li class="flex flex-wrap items-center gap-4 py-3.5">
+                                <span aria-hidden="true"
+                                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+                                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+                                    </svg>
+                                </span>
 
-                                    <div class="min-w-0 flex-1 basis-56">
-                                        <p class="text-xs font-medium tracking-wide text-stone-500">{{ $pakaian->kode }}</p>
-                                        <p class="break-words font-semibold text-stone-900">{{ $pakaian->nama }}</p>
-                                        <div class="mt-1 flex flex-wrap gap-1.5">
-                                            <span class="rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-700">Lingkar {{ $pakaian->lingkar }} cm</span>
-                                            <span class="rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-700">Panjang {{ $pakaian->panjang }} cm</span>
-                                        </div>
+                                <div class="min-w-0 flex-1 basis-56">
+                                    <p class="text-xs font-medium tracking-wide text-stone-500">{{ $pakaian->kode }}</p>
+                                    <p class="break-words font-semibold text-stone-900">{{ $pakaian->nama }}</p>
+                                    <div class="mt-1 flex flex-wrap gap-1.5">
+                                        <span class="rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-700">Lingkar {{ $pakaian->lingkar }} cm</span>
+                                        <span class="rounded-md bg-stone-100 px-2 py-0.5 text-xs text-stone-700">Panjang {{ $pakaian->panjang }} cm</span>
                                     </div>
+                                </div>
 
-                                    <p class="ml-auto font-bold text-stone-900">{{ format_rupiah($pakaian->harga_beli) }}</p>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </section>
+                                <p class="ml-auto font-bold text-stone-900">{{ format_rupiah($pakaian->harga_beli) }}</p>
+                            </li>
+                        @endforeach
+                    </ul>
+                </section>
 
-                    <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-ringkasan">
-                        <div class="flex items-center justify-between">
-                            <h2 id="judul-ringkasan" class="text-lg font-semibold text-stone-900">Ringkasan Pembelian</h2>
-                            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
-                                <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
-                                {{ $pembelian->status->label() }}
-                            </span>
-                        </div>
+                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-ringkasan">
+                    <div class="flex items-center justify-between">
+                        <h2 id="judul-ringkasan" class="text-lg font-semibold text-stone-900">Ringkasan Pembelian</h2>
+                        <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
+                            <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
+                            {{ $pembelian->status->label() }}
+                        </span>
+                    </div>
 
-                        <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3">
-                            <span class="font-semibold text-stone-900">Total</span>
-                            @if ($pembelian->status->value === 'sudah bayar')
-                                <span class="text-xl font-bold text-emerald-700">{{ format_rupiah($pembelian->total) }}</span>
-                            @else
-                                <span class="text-xl font-bold text-red-700">{{ format_rupiah($pembelian->total) }}</span>
-                            @endif
-                        </div>
-                    </section>
+                    <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3">
+                        <span class="font-semibold text-stone-900">Total</span>
+                        @if ($pembelian->status->value === 'sudah bayar')
+                            <span class="text-xl font-bold text-emerald-700">{{ format_rupiah($pembelian->total) }}</span>
+                        @else
+                            <span class="text-xl font-bold text-red-700">{{ format_rupiah($pembelian->total) }}</span>
+                        @endif
+                    </div>
+                </section>
             </div>
 
             <div class="space-y-5">
