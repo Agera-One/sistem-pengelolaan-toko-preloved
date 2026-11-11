@@ -9,7 +9,6 @@ use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PembayaranPembelianController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PembayaranPenjualanController;
-use App\Http\Controllers\PengirimanController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -32,7 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('pembayaran-penjualan', PembayaranPenjualanController::class)
         ->except(['show', 'create', 'edit'])
         ->names('pembayaran-penjualan');
-    Route::resource('pengiriman', PengirimanController::class);
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

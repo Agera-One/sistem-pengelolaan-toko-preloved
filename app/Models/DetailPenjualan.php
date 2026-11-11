@@ -14,7 +14,6 @@ class DetailPenjualan extends Model
     protected $fillable = [
         'pakaian_id',
         'penjualan_id',
-        'pengiriman_id',
         'harga_jual',
     ];
 
@@ -26,10 +25,5 @@ class DetailPenjualan extends Model
     public function penjualan(): BelongsTo
     {
         return $this->belongsTo(Penjualan::class, 'penjualan_id');
-    }
-
-    public function pengiriman(): BelongsTo
-    {
-        return $this->belongsTo(Pengiriman::class, 'pengiriman_id');
     }
 }
