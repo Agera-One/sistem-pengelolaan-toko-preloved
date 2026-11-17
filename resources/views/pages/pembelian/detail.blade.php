@@ -173,7 +173,7 @@
 
             <div class="space-y-5">
                 {{-- Informasi Supplier --}}
-                <section class="rounded-xl border border-stone-300 bg-white p-5" aria-labelledby="judul-supplier">
+                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-supplier">
                     <h2 class="font-semibold text-stone-900">Informasi Supplier</h2>
 
                     <div class="mt-4 flex items-center gap-3.5">
@@ -216,33 +216,38 @@
                     </div>
                 </section>
 
-                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-alamat">
-                    <h2 id="judul-alamat" class="text-base font-bold text-stone-900">Alamat Pengiriman</h2>
+                {{-- Ringkasan Pembelian --}}
+                <section class="rounded-xl border border-stone-300 bg-white p-4 shadow-sm" aria-labelledby="judul-ringkasan">
+                    <div class="flex items-center gap-2.5">
+                        <h2 id="judul-ringkasan" class="font-semibold text-stone-900">Ringkasan Pembelian</h2>
+                    </div>
 
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Alamat</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Jl. Graha Angkasa RRI No.A15</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Kelurahan</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Kedungrejo</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">kecamatan</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Waru</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Kota/Kabupaten</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Kabupaten Sidorajo</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Provinsi</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Jawa Timur</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Kode Pos</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">61256</dd>
-                    </dl>
+                    <div class="mt-4 flex items-center justify-between text-sm">
+                        <span class="inline-flex items-center gap-2 text-stone-500">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 5v14" /><path d="M8 5v14" /><path d="M12 5v14" /><path d="M17 5v14" /><path d="M21 5v14" />
+                            </svg>
+                            Kode Pembelian
+                        </span>
+                        <span class="font-mono font-semibold text-stone-900">{{ $pembelian->kode }}</span>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3 text-sm">
+                        <span class="inline-flex items-center gap-2 text-stone-500">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+                            </svg>
+                            Tanggal Pembelian
+                        </span>
+                        <span class="font-semibold text-stone-900">{{ $pembelian->tanggal->translatedFormat('d F Y') }}</span>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between rounded-lg border border-stone-200 border-l-4 border-l-brand bg-stone-50 px-4 py-3">
+                        <span class="text-sm text-stone-600">Total Tagihan</span>
+                        <span class="text-xl font-bold text-stone-900">
+                            {{ format_rupiah($pembelian->total) }}
+                        </span>
+                    </div>
                 </section>
             </div>
         </div>
