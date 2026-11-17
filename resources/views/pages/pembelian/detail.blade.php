@@ -150,25 +150,6 @@
                         @endforeach
                     </ul>
                 </section>
-
-                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-ringkasan">
-                    <div class="flex items-center justify-between">
-                        <h2 id="judul-ringkasan" class="text-lg font-semibold text-stone-900">Ringkasan Pembelian</h2>
-                        <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
-                            <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
-                            {{ $pembelian->status->label() }}
-                        </span>
-                    </div>
-
-                    <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3">
-                        <span class="font-semibold text-stone-900">Total</span>
-                        @if ($pembelian->status->value === 'sudah bayar')
-                            <span class="text-xl font-bold text-emerald-700">{{ format_rupiah($pembelian->total) }}</span>
-                        @else
-                            <span class="text-xl font-bold text-red-700">{{ format_rupiah($pembelian->total) }}</span>
-                        @endif
-                    </div>
-                </section>
             </div>
 
             <div class="space-y-5">
@@ -217,7 +198,7 @@
                 </section>
 
                 {{-- Ringkasan Pembelian --}}
-                <section class="rounded-xl border border-stone-300 bg-white p-4 shadow-sm" aria-labelledby="judul-ringkasan">
+                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-ringkasan">
                     <div class="flex items-center gap-2.5">
                         <h2 id="judul-ringkasan" class="font-semibold text-stone-900">Ringkasan Pembelian</h2>
                     </div>
