@@ -172,22 +172,46 @@
             </div>
 
             <div class="space-y-5">
-                <section class="rounded-md border border-stone-300 bg-white p-4" aria-labelledby="judul-supplier">
-                    <h2 id="judul-supplier" class="text-base font-bold text-stone-900">Informasi Supplier</h2>
+                {{-- Informasi Supplier --}}
+                <section class="rounded-xl border border-stone-300 bg-white p-5" aria-labelledby="judul-supplier">
+                    <h2 class="font-semibold text-stone-900">Informasi Supplier</h2>
 
                     <div class="mt-4 flex items-center gap-3.5">
                         <span aria-hidden="true"
-                              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand font-bold text-white">
+                              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/10 font-bold text-brand">
                             {{ $pembelian->supplier->inisial }}
                         </span>
-                        <div class="min-w-0 space-y-1.5">
-                            <p class="break-words text-sm font-semibold text-stone-900">{{ $pembelian->supplier->nama }}</p>
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-700 ring-1 ring-inset ring-stone-300">
-                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <div class="min-w-0 space-y-1">
+                            <p class="break-words font-semibold text-stone-900">{{ $pembelian->supplier->nama }}</p>
+                            <span class="inline-block rounded-md border border-stone-200 bg-stone-100 px-2 py-0.5 font-mono text-xs text-stone-600">
+                                {{ $pembelian->supplier->kode }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-3 border-t border-stone-200 pt-4">
+                        <div class="flex items-center gap-3">
+                            <span aria-hidden="true" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-200 bg-stone-50 text-stone-600">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
                                 </svg>
-                                {{ $pembelian->supplier->nomor_telepon }}
                             </span>
+                            <div>
+                                <p class="text-xs text-stone-500">Nomor Telepon</p>
+                                <p class="text-sm font-semibold text-stone-900">{{ $pembelian->supplier->nomor_telepon }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <span aria-hidden="true" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-200 bg-stone-50 text-stone-600">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" />
+                                </svg>
+                            </span>
+                            <div>
+                                <p class="text-xs text-stone-500">Kabupaten/Kota</p>
+                                <p class="text-sm font-semibold text-stone-900">{{ $pembelian->supplier->kabupaten_kota }}</p>
+                            </div>
                         </div>
                     </div>
                 </section>
