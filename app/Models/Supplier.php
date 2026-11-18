@@ -16,12 +16,7 @@ class Supplier extends Model
 
     protected $table = 'supplier';
 
-    protected $fillable = [
-        'kode',
-        'nama',
-        'nomor_telepon',
-        'kabupaten_kota',
-    ];
+    protected $guarded = [];
 
     public function pembelian(): HasMany
     {
