@@ -21,13 +21,7 @@ class PembayaranPenjualan extends Model
 
     protected $table = 'pembayaran_penjualan';
 
-    protected $fillable = [
-        'kode',
-        'tanggal',
-        'nominal',
-        'metode_pembayaran',
-        'penjualan_id',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
