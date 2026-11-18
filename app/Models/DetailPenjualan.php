@@ -11,11 +11,7 @@ class DetailPenjualan extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [
-        'pakaian_id',
-        'penjualan_id',
-        'harga_jual',
-    ];
+    protected $guarded = [];
 
     public function pakaian(): BelongsTo
     {
