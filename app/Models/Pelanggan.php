@@ -26,17 +26,7 @@ class Pelanggan extends Model
 
     protected $table = 'pelanggan';
 
-    protected $fillable = [
-        'kode',
-        'nama',
-        'nomor_telepon',
-        'provinsi',
-        'kabupaten_kota',
-        'kecamatan',
-        'kelurahan',
-        'alamat',
-        'kode_pos',
-    ];
+    protected $guarded = [];
 
     public function penjualan(): HasMany
     {
