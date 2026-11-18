@@ -21,14 +21,7 @@ class Pembelian extends Model
 
     protected $table = 'pembelian';
 
-    protected $fillable = [
-        'kode',
-        'tanggal',
-        'total',
-        'status',
-        'supplier_id',
-        'user_id',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
