@@ -21,7 +21,7 @@ class PembelianController extends Controller
 
     public function show(Pembelian $pembelian)
     {
-        return view('pages.pembelian.detail', compact('pembelian'));
+        return view('pages.pembelian.detail', $this->pembelianService->show($pembelian));
     }
 
     public function create()

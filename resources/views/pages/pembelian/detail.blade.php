@@ -150,76 +150,129 @@
                         @endforeach
                     </ul>
                 </section>
-
-                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-ringkasan">
-                    <div class="flex items-center justify-between">
-                        <h2 id="judul-ringkasan" class="text-lg font-semibold text-stone-900">Ringkasan Pembelian</h2>
-                        <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
-                            <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
-                            {{ $pembelian->status->label() }}
-                        </span>
-                    </div>
-
-                    <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3">
-                        <span class="font-semibold text-stone-900">Total</span>
-                        @if ($pembelian->status->value === 'sudah bayar')
-                            <span class="text-xl font-bold text-emerald-700">{{ format_rupiah($pembelian->total) }}</span>
-                        @else
-                            <span class="text-xl font-bold text-red-700">{{ format_rupiah($pembelian->total) }}</span>
-                        @endif
-                    </div>
-                </section>
             </div>
 
             <div class="space-y-5">
-                <section class="rounded-md border border-stone-300 bg-white p-4" aria-labelledby="judul-supplier">
-                    <h2 id="judul-supplier" class="text-base font-bold text-stone-900">Informasi Supplier</h2>
+                {{-- Informasi Supplier --}}
+                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-supplier">
+                    <h2 class="font-semibold text-stone-900">Informasi Supplier</h2>
 
                     <div class="mt-4 flex items-center gap-3.5">
                         <span aria-hidden="true"
-                              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand font-bold text-white">
+                              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/10 font-bold text-brand">
                             {{ $pembelian->supplier->inisial }}
                         </span>
-                        <div class="min-w-0 space-y-1.5">
-                            <p class="break-words text-sm font-semibold text-stone-900">{{ $pembelian->supplier->nama }}</p>
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-700 ring-1 ring-inset ring-stone-300">
-                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <div class="min-w-0 space-y-1">
+                            <p class="break-words font-semibold text-stone-900">{{ $pembelian->supplier->nama }}</p>
+                            <span class="inline-block rounded-md border border-stone-200 bg-stone-100 px-2 py-0.5 font-mono text-xs text-stone-600">
+                                {{ $pembelian->supplier->kode }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-3 border-t border-stone-200 pt-4">
+                        <div class="flex items-center gap-3">
+                            <span aria-hidden="true" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-200 bg-stone-50 text-stone-600">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
                                 </svg>
-                                {{ $pembelian->supplier->nomor_telepon }}
                             </span>
+                            <div>
+                                <p class="text-xs text-stone-500">Nomor Telepon</p>
+                                <p class="text-sm font-semibold text-stone-900">{{ $pembelian->supplier->nomor_telepon }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <span aria-hidden="true" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-200 bg-stone-50 text-stone-600">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" />
+                                </svg>
+                            </span>
+                            <div>
+                                <p class="text-xs text-stone-500">Kabupaten/Kota</p>
+                                <p class="text-sm font-semibold text-stone-900">{{ $pembelian->supplier->kabupaten_kota }}</p>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-alamat">
-                    <h2 id="judul-alamat" class="text-base font-bold text-stone-900">Alamat Pengiriman</h2>
+                {{-- Ringkasan Pembelian --}}
+                <section class="rounded-xl border border-stone-300 bg-white p-4" aria-labelledby="judul-ringkasan">
+                    <div class="flex items-center gap-2.5">
+                        <h2 id="judul-ringkasan" class="font-semibold text-stone-900">Ringkasan Pembelian</h2>
+                    </div>
 
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Alamat</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Jl. Graha Angkasa RRI No.A15</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Kelurahan</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Kedungrejo</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">kecamatan</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Waru</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Kota/Kabupaten</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Kabupaten Sidorajo</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Provinsi</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">Jawa Timur</dd>
-                    </dl>
-                    <dl class="mt-4 grid grid-cols-5 gap-x-4 gap-y-3.5 text-sm">
-                        <dt class="col-span-2 font-semibold text-stone-900">Kode Pos</dt>
-                        <dd class="col-span-3 text-left font-semibold text-stone-900">61256</dd>
-                    </dl>
+                    <div class="mt-4 flex items-center justify-between text-sm">
+                        <span class="inline-flex items-center gap-2 text-stone-500">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 5v14" /><path d="M8 5v14" /><path d="M12 5v14" /><path d="M17 5v14" /><path d="M21 5v14" />
+                            </svg>
+                            Kode Pembelian
+                        </span>
+                        <span class="font-mono font-semibold text-stone-900">{{ $pembelian->kode }}</span>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3 text-sm">
+                        <span class="inline-flex items-center gap-2 text-stone-500">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+                            </svg>
+                            Tanggal Pembelian
+                        </span>
+                        <span class="font-semibold text-stone-900">{{ $pembelian->tanggal->translatedFormat('d F Y') }}</span>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between rounded-lg border border-stone-200 border-l-4 border-l-brand bg-stone-50 px-4 py-3">
+                        <span class="text-sm text-stone-600">Total Tagihan</span>
+                        <span class="text-xl font-bold text-stone-900">
+                            {{ format_rupiah($pembelian->total) }}
+                        </span>
+                    </div>
                 </section>
+
+                {{-- Informasi Pembayaran --}}
+                @if ($sudahBayar && $pembayaran)
+                    <section class="rounded-2xl border border-stone-300 bg-white p-4" aria-labelledby="judul-pembayaran">
+                        <div class="flex items-center justify-between">
+                            <h2 id="judul-pembayaran" class="font-semibold text-stone-900">Informasi Pembayaran</h2>
+                            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
+                                <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
+                                {{ $pembelian->status->label() }}
+                            </span>
+                        </div>
+
+                        <dl class="mt-4 space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <dt class="text-stone-500">Kode Pembayaran</dt>
+                                <dd class="font-mono font-semibold text-stone-900">{{ $pembayaran->kode }}</dd>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-stone-200 pt-3">
+                                <dt class="text-stone-500">Tanggal Bayar</dt>
+                                <dd class="font-semibold text-stone-900">{{ ($pembayaran->tanggal)->translatedFormat('d F Y') }}</dd>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-stone-200 pt-3">
+                                <dt class="text-stone-500">Metode Pembayaran</dt>
+                                <dd>
+                                    <span class="inline-flex items-center gap-1.5 rounded-md border border-stone-200 bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-800">
+                                        {{ $pembayaran->metode_pembayaran->logo() }}
+                                        {{ $pembayaran->metode_pembayaran->label() }}
+                                    </span>
+                                </dd>
+                            </div>
+                        </dl>
+
+                        <div class="mt-4 flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+                            <span class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" />
+                                </svg>
+                                Nominal Pembayaran
+                            </span>
+                            <span class="text-lg font-bold text-emerald-700">{{ format_rupiah($pembayaran->nominal) }}</span>
+                        </div>
+                    </section>
+                @endif
             </div>
         </div>
     </div>

@@ -33,6 +33,18 @@ class PembelianService
         ];
     }
 
+    public function show(Pembelian $pembelian)
+    {
+        $sudahBayar = $pembelian->status->value === 'sudah bayar';
+        $pembayaran = $sudahBayar ? $pembelian->pembayaran : null;
+
+        return [
+            'pembelian'     => $pembelian,
+            'sudahBayar'    => $sudahBayar,
+            'pembayaran'    => $pembayaran,
+        ];
+    }
+
     public function create(): array
     {
         return [
