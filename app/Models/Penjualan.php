@@ -21,16 +21,7 @@ class Penjualan extends Model
 
     protected $table = 'penjualan';
 
-    protected $fillable = [
-        'tanggal',
-        'kode',
-        'ongkir',
-        'subtotal',
-        'total',
-        'status',
-        'user_id',
-        'pelanggan_id',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
