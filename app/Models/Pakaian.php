@@ -20,17 +20,7 @@ class Pakaian extends Model
 
     protected $table = 'pakaian';
 
-    protected $fillable = [
-        'kode',
-        'nama',
-        'lingkar',
-        'panjang',
-        'kategori',
-        'harga_beli',
-        'harga_jual',
-        'status',
-        'pembelian_id',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
