@@ -230,6 +230,49 @@
                         </span>
                     </div>
                 </section>
+
+                {{-- Informasi Pembayaran --}}
+                @if ($sudahBayar && $pembayaran)
+                    <section class="rounded-2xl border border-stone-300 bg-white p-4" aria-labelledby="judul-pembayaran">
+                        <div class="flex items-center justify-between">
+                            <h2 id="judul-pembayaran" class="font-semibold text-stone-900">Informasi Pembayaran</h2>
+                            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium {{ $pembelian->status->badgeColor() }}">
+                                <span class="h-1.5 w-1.5 rounded-full {{ $pembelian->status->dotColor() }}"></span>
+                                {{ $pembelian->status->label() }}
+                            </span>
+                        </div>
+
+                        <dl class="mt-4 space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <dt class="text-stone-500">Kode Pembayaran</dt>
+                                <dd class="font-mono font-semibold text-stone-900">{{ $pembayaran->kode }}</dd>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-stone-200 pt-3">
+                                <dt class="text-stone-500">Tanggal Bayar</dt>
+                                <dd class="font-semibold text-stone-900">{{ ($pembayaran->tanggal)->translatedFormat('d F Y') }}</dd>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-stone-200 pt-3">
+                                <dt class="text-stone-500">Metode Pembayaran</dt>
+                                <dd>
+                                    <span class="inline-flex items-center gap-1.5 rounded-md border border-stone-200 bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-800">
+                                        {{ $pembayaran->metode_pembayaran->logo() }}
+                                        {{ $pembayaran->metode_pembayaran->label() }}
+                                    </span>
+                                </dd>
+                            </div>
+                        </dl>
+
+                        <div class="mt-4 flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+                            <span class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" />
+                                </svg>
+                                Nominal Pembayaran
+                            </span>
+                            <span class="text-lg font-bold text-emerald-700">{{ format_rupiah($pembayaran->nominal) }}</span>
+                        </div>
+                    </section>
+                @endif
             </div>
         </div>
     </div>
