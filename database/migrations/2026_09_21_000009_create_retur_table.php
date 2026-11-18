@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('retur', function (Blueprint $table) {
             $table->id();
             $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
-            $table->foreignId('user_id')->constrained('user')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
 
             $table->char('kode', 15)->unique();
             $table->date('tanggal');

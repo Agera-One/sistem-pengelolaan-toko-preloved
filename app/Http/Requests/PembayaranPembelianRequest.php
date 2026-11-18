@@ -16,7 +16,7 @@ class PembayaranPembelianRequest extends FormRequest
         return [
             'pembelian_id'          => 'required|exists:pembelian,id',
             'tanggal'               => 'required|date',
-            'metode_pembayaran'     => 'required|in:tunai,transfer',
+            'metode_pembayaran'     => 'required|in:tunai,ewallet,bank',
         ];
     }
 
