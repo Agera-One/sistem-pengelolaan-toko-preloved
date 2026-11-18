@@ -11,14 +11,7 @@ class Retur extends Model
 {
     protected $table = 'retur';
 
-    protected $fillable = [
-        'penjualan_id',
-        'user_id',
-        'kode',
-        'tanggal',
-        'total_refund',
-        'metode_refund',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
