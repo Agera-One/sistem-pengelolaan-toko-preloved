@@ -327,12 +327,17 @@
                         </div>
 
                         <div>
-                            <span class="mb-1.5 block font-medium text-stone-700">Metode Pembayaran <span class="text-red-600">*</span></label>
-                            <div data-wrap-for="metode_pembayaran" class="grid grid-cols-2 gap-2">
+                            <span class="mb-2 block font-medium text-stone-700">Metode Pembayaran <span class="text-red-600">*</span></span>
+                            <div data-wrap-for="metode_pembayaran" class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                                 @foreach ($metode as $m)
-                                    <label class="cursor-pointer">
+                                    <label class="group cursor-pointer">
                                         <input type="radio" name="metode_pembayaran" value="{{ $m->value }}" class="peer sr-only">
-                                        <span class="block rounded-lg border border-stone-300 px-2 py-2.5 text-center text-sm text-stone-700 peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25">{{ $m->label() }}</span>
+                                        <div class="flex items-center gap-2.5 rounded-xl border border-stone-300 bg-white p-2.5 text-stone-700 transition-all peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:font-semibold peer-checked:text-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand/25">
+                                            <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-stone-100 text-stone-600 transition-colors group-hover:bg-brand/10 group-hover:text-brand group-has-[:checked]:bg-brand group-has-[:checked]:text-white [&>svg]:size-4">
+                                                {{ $m->logo() }}
+                                            </span>
+                                            <span class="truncate text-sm">{{ $m->label() }}</span>
+                                        </div>
                                     </label>
                                 @endforeach
                             </div>
@@ -359,8 +364,7 @@
             <div class="takik takik-bawah relative rounded-t-2xl bg-white px-6 pb-6 pt-8 text-center">
                 <button type="button" data-modal-tutup aria-label="Tutup" class="absolute right-3 top-3 rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-70 s:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                     <svg class="size-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3
-                        6.7a1 1 0 0 1 0-1.4Z"/>
+                        <path d="M5.3 5.3a1 1 0 0 1 1.4 0L10 8.6l3.3-3.3a1 1 0 1 1 1.4 1.4L11.4 10l3.3 3.3a1 1 0 0 1-1.4 1.4L10 11.4l-3.3 3.3a1 1 0 0 1-1.4-1.4L8.6 10 5.3 6.7a1 1 0 0 1 0-1.4Z"/>
                     </svg>
                 </button>
                 <p id="d-nominal" class="text-4xl font-semibold leading-tight text-stone-900"></p>
@@ -386,7 +390,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    @vite('resources/js/pembayaran.js')
-@endpush
