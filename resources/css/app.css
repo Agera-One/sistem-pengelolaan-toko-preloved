@@ -24,6 +24,7 @@
     --color-brand-hover: #3C4923;
     /* Olive terang: khusus ikon/dekorasi di latar gelap */
     --color-brand-light: #8A9B5B;
+    --color-background: #F0F0F0;
 
     /* Cokelat: link dan nama toko di versi mobile */
     --color-link: var(--color-amber-900);
