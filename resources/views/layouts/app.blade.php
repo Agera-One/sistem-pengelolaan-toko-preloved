@@ -22,7 +22,7 @@
     ])
 </head>
 
-<body class="min-h-screen bg-white text-stone-800 antialiased">
+<body class="min-h-screen bg-background antialiased">
     <a href="#konten-utama"
        class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-brand focus:px-4 focus:py-3 focus:text-lg focus:font-semibold focus:text-white">
         Lewati ke konten utama
