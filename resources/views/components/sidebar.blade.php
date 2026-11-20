@@ -88,7 +88,7 @@
     $user = auth()->user();
 @endphp
 
-<div id="sidebar-overlay" class="fixed inset-0 z-40 hidden bg-stone-900/50 lg:hidden" aria-hidden="true"></div>
+<div id="sidebar-overlay" class="fixed inset-0 z-40 hidden bg-white lg:hidden" aria-hidden="true"></div>
 
 <aside id="sidebar"
        aria-label="Menu samping"
