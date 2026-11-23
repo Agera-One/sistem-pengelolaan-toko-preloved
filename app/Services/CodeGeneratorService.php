@@ -2,31 +2,75 @@
 
 namespace App\Services;
 
+use App\Models\Pakaian;
+use App\Models\Supplier;
+use App\Models\Pelanggan;
+use App\Models\Pembelian;
+use App\Models\PembayaranPembelian;
+use App\Models\Penjualan;
+use App\Models\PembayaranPenjualan;
 use Illuminate\Database\Eloquent\Model;
 
 class CodeGeneratorService
 {
-    public function generate(
-        Model $model,
-        string $column,
-        string $prefix
-    ): string {
+    public function generate(Model $model, string $column, string $prefix): string
+    {
+        return $this->generateBatch($model, $column, $prefix, 1)[0];
+    }
+
+    public function generateBatch(Model $model, string $column, string $prefix, int $count): array
+    {
+        if ($count < 1) {
+            return [];
+        }
+
         $period = now()->format('Ym');
 
-        $lastRecord = $model
+        $last = $model->newQuery()
             ->where($column, 'like', "{$prefix}-{$period}-%")
             ->orderByDesc($column)
-            ->first();
+            ->lockForUpdate()
+            ->value($column);
 
-        $number = $lastRecord
-            ? ((int) substr($lastRecord->{$column}, -4)) + 1
-            : 1;
+        $start = $last ? ((int) substr($last, -4)) + 1 : 1;
 
-        return sprintf(
-            '%s-%s-%04d',
-            $prefix,
-            $period,
-            $number
+        return array_map(
+            fn (int $number) => sprintf('%s-%s-%04d', $prefix, $period, $number),
+            range($start, $start + $count - 1)
         );
+    }
+
+    public function pakaian(int $count) {
+        return $this->generateBatch(new Pakaian(), 'kode', 'PAK', $count);
+    }
+
+    public function supplier()
+    {
+        return $this->generate(new Supplier(), 'kode', 'SPL');
+    }
+
+    public function pelanggan()
+    {
+        return $this->generate(new Pelanggan(), 'kode', 'PLG');
+    }
+
+    public function pembelian()
+    {
+        return $this->generate(new Pembelian(), 'kode', 'BEL');
+    }
+
+    public function pembayaranPembelian()
+    {
+        return $this->generate(new PembayaranPembelian(), 'kode', 'KLR');
+    }
+
+    public function penjualan()
+    {
+        return $this->generate(new penjualan(), 'kode', 'JUA');
+    }
+
+    public function pembayaranPenjualan()
+    {
+        return $this->generate(new PembayaranPenjualan(), 'kode', 'MSK');
     }
 }

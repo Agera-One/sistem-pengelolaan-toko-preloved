@@ -1,88 +1,6 @@
 (function () {
     'use strict';
 
-    var activeToggle = null;
-
-    function menuOf(toggle) {
-        return document.getElementById(toggle.dataset.menuToggle);
-    }
-
-    function closeMenu() {
-        if (!activeToggle) return;
-
-        menuOf(activeToggle).hidden = true;
-        activeToggle.setAttribute('aria-expanded', 'false');
-        activeToggle = null;
-    }
-
-    function openMenu(toggle, focusFirst) {
-        closeMenu();
-
-        var menu = menuOf(toggle);
-        menu.hidden = false;
-
-        var rect = toggle.getBoundingClientRect();
-        var top = rect.bottom + 4;
-
-        if (top + menu.offsetHeight > window.innerHeight - 8) {
-            top = rect.top - menu.offsetHeight - 4;
-        }
-
-        var left = Math.min(rect.right - menu.offsetWidth, window.innerWidth - menu.offsetWidth - 8);
-
-        menu.style.top = Math.max(8, top) + 'px';
-        menu.style.left = Math.max(8, left) + 'px';
-
-        toggle.setAttribute('aria-expanded', 'true');
-        activeToggle = toggle;
-
-        if (focusFirst) {
-            var first = menu.querySelector('[role="menuitem"]');
-            if (first) first.focus({ preventScroll: true });
-        }
-    }
-
-    document.addEventListener('click', function (e) {
-        var toggle = e.target.closest('[data-menu-toggle]');
-
-        if (toggle) {
-            toggle === activeToggle ? closeMenu() : openMenu(toggle, e.detail === 0);
-            return;
-        }
-
-        if (activeToggle && !e.target.closest('[role="menu"]')) {
-            closeMenu();
-        }
-    });
-
-    document.addEventListener('keydown', function (e) {
-        if (!activeToggle) return;
-
-        if (e.key === 'Escape') {
-            var toggle = activeToggle;
-            closeMenu();
-            toggle.focus();
-            return;
-        }
-
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            e.preventDefault();
-
-            var items = Array.prototype.slice.call(
-                menuOf(activeToggle).querySelectorAll('[role="menuitem"]')
-            );
-            var index = items.indexOf(document.activeElement);
-            var next = index === -1
-                ? (e.key === 'ArrowDown' ? 0 : items.length - 1)
-                : (e.key === 'ArrowDown' ? index + 1 : index - 1);
-
-            items[(next + items.length) % items.length].focus();
-        }
-    });
-
-    window.addEventListener('resize', closeMenu);
-    window.addEventListener('scroll', closeMenu, true);
-
     document.addEventListener('submit', function (e) {
         var message = e.target.dataset ? e.target.dataset.confirm : null;
 
@@ -91,23 +9,65 @@
         }
     });
 
-    /* ------------------------------------------------------------------
-     * Validasi form di sisi klien
-     *
-     * Cara pakai di Blade, pada setiap input:
-     *   data-label="Nama lengkap"      -> nama field di pesan error
-     *   data-rules="required|max:15"   -> aturan, dipisah tanda |
-     * Dan sediakan elemen pesan dengan id "err-{id input}".
-     * ---------------------------------------------------------------- */
+    document.addEventListener('keydown', function (e) {
+        var input = e.target;
+
+        if (input.tagName === 'INPUT' && input.type === 'number') {
+            if (e.ctrlKey || e.metaKey) return;
+
+            var allowedKeys = ['Backspace', 'Tab', 'Enter', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (allowedKeys.includes(e.key)) return;
+
+            if (!/^[0-9]$/.test(e.key)) {
+                e.preventDefault();
+            }
+        }
+    });
+
+    document.addEventListener('input', function (e) {
+        var input = e.target;
+
+        if (input.tagName === 'INPUT' && input.type === 'number') {
+            if (input.value && !/^\d*$/.test(input.value)) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+        }
+    });
+
     var ruleTests = {
         required: function (value) {
             return value.trim() !== '';
         },
-        min: function (value, n) {
+        numeric: function (value) {
+            if (value.trim() === '') return true;
+            return !isNaN(value) && !isNaN(parseFloat(value));
+        },
+        string: function () {
+            return true;
+        },
+        min: function (value, n, field) {
+            if (value.trim() === '') return true;
+            if (field && field.type === 'number') {
+                return Number(value) >= Number(n);
+            }
             return value.trim().length >= Number(n);
         },
-        max: function (value, n) {
+        max: function (value, n, field) {
+            if (value.trim() === '') return true;
+            if (field && field.type === 'number') {
+                return Number(value) <= Number(n);
+            }
             return value.length <= Number(n);
+        },
+        gt: function (value, targetName, field) {
+            if (value.trim() === '') return true;
+            var form = field ? field.form : null;
+            if (!form) return true;
+
+            var targetField = form.querySelector('[name="' + targetName + '"]');
+            if (!targetField || targetField.value.trim() === '') return true;
+
+            return Number(value) > Number(targetField.value);
         }
     };
 
@@ -115,11 +75,34 @@
         required: function (label) {
             return label + ' wajib diisi.';
         },
-        min: function (label, n) {
+        numeric: function (label) {
+            return label + ' harus berupa angka.';
+        },
+        string: function (label) {
+            return label + ' harus berupa teks.';
+        },
+        min: function (label, n, field) {
+            if (field && field.type === 'number') {
+                return label + ' minimal bernilai ' + n + '.';
+            }
             return label + ' minimal ' + n + ' karakter.';
         },
-        max: function (label, n) {
+        max: function (label, n, field) {
+            if (field && field.type === 'number') {
+                return label + ' maksimal bernilai ' + n + '.';
+            }
             return label + ' maksimal ' + n + ' karakter.';
+        },
+        gt: function (label, targetName, field) {
+            var form = field ? field.form : null;
+            var targetLabel = targetName;
+            if (form) {
+                var targetField = form.querySelector('[name="' + targetName + '"]');
+                if (targetField && targetField.dataset.label) {
+                    targetLabel = targetField.dataset.label;
+                }
+            }
+            return label + ' harus lebih besar dari ' + targetLabel + '.';
         }
     };
 
@@ -148,8 +131,8 @@
             var name = parts[0];
             var param = parts[1];
 
-            if (ruleTests[name] && !ruleTests[name](field.value, param)) {
-                message = ruleMessages[name](label, param);
+            if (ruleTests[name] && !ruleTests[name](field.value, param, field)) {
+                message = ruleMessages[name](label, param, field);
                 break;
             }
         }
@@ -179,7 +162,7 @@
     }
 
     function openModal(dialog) {
-        closeMenu();
+        document.dispatchEvent(new CustomEvent('dropdown:close'));
         dialog.showModal();
         document.body.classList.add('overflow-hidden');
     }
@@ -190,11 +173,6 @@
         });
     });
 
-    var detailStatusStyles = {
-        draft: { badge: 'bg-stone-100 text-stone-600 ring-1 ring-inset ring-stone-300', dot: 'bg-stone-400' },
-        tersedia: { badge: 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200', dot: 'bg-emerald-500' },
-        terjual: { badge: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200', dot: 'bg-blue-500' }
-    };
     var detailSizeFields = { lingkar: true, panjang: true };
     var detailPriceFields = { hargaBeli: true, hargaJual: true };
 
@@ -223,7 +201,7 @@
                 }
 
                 var value = rawValue;
-                if (value !== '' && detailSizeFields[key]) {
+                if (value !== '' && (key === 'lingkar' || key === 'panjang')) {
                     value += ' cm';
                 }
 
@@ -239,23 +217,15 @@
             var badge = dialog.querySelector('[data-detail-status-badge]');
             var dot = dialog.querySelector('[data-detail-status-dot]');
 
-            if (badge && dot) {
-                var statusKey = (btn.dataset.status || '').trim().toLowerCase();
-                var style = detailStatusStyles[statusKey] || detailStatusStyles.draft;
-
-                badge.className = 'mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ' + style.badge;
-                dot.className = 'h-1.5 w-1.5 rounded-full ' + style.dot;
+            if (badge && dot && btn.dataset.statusBadge) {
+                badge.className = 'mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ' + btn.dataset.statusBadge;
+                dot.className = 'h-1.5 w-1.5 rounded-full ' + btn.dataset.statusDot;
             }
 
             openModal(dialog);
         });
     });
 
-    /* Modal ubah: isi form dari data-* tombol, lalu arahkan action ke rute update.
-     *   data-edit-open="{id dialog}"
-     *   data-action="{url update}"
-     *   data-{nama}="..." -> diisi ke input yang punya data-fill="{nama}"
-     */
     document.querySelectorAll('[data-edit-open]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var dialog = document.getElementById(btn.dataset.editOpen);
@@ -291,6 +261,7 @@
 
             form.reset();
             clearErrors(form);
+            setLockedFields(dialog, false);
 
             var submit = form.querySelector('[type="submit"]');
             if (submit) submit.disabled = false;

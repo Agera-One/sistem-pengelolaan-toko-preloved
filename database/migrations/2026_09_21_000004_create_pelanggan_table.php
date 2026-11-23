@@ -13,7 +13,12 @@ return new class extends Migration
             $table->char('kode', 15)->unique();
             $table->string('nama');
             $table->string('nomor_telepon', 15)->unique();
+            $table->string('provinsi');
+            $table->string('kabupaten_kota');
+            $table->string('kecamatan');
+            $table->string('kelurahan');
             $table->text('alamat');
+            $table->char('kode_pos', 5);
             $table->timestamps();
         });
     }

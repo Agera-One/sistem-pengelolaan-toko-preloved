@@ -2,48 +2,53 @@
 
 namespace App\Models;
 
+use App\Enums\PembelianStatus;
+use App\Traits\Filterable;
+use App\Traits\Searchable;
+use App\Traits\HasDateRange;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pembelian extends Model
 {
+    use Searchable, Filterable, HasDateRange;
+
+    protected array $searchable = ['kode'];
+    protected array $searchableRelations = ['supplier' => 'nama'];
+    protected array $filterable = ['status'];
+
     protected $table = 'pembelian';
 
-    protected $fillable = [
-        'tanggal',
-        'kode',
-        'total',
-        'pemasok_id',
-        'user_id',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'   => 'date',
+            'status'    => PembelianStatus::class,
         ];
     }
 
-    public function pemasok(): BelongsTo
+    public function pembayaran(): HasOne
     {
-        return $this->belongsTo(Pemasok::class, 'pemasok_id');
+        return $this->hasOne(PembayaranPembelian::class, 'pembelian_id');
+    }
+
+    public function pakaian(): HasMany
+    {
+        return $this->hasMany(Pakaian::class, 'pembelian_id');
+    }
+
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function detailPembelian(): HasMany
-    {
-        return $this->hasMany(DetailPembelian::class, 'pembelian_id');
-    }
-
-    public function barang(): BelongsToMany
-    {
-        return $this->belongsToMany(Barang::class, 'detail_pembelian', 'pembelian_id', 'barang_id')
-            ->withPivot('harga_beli');
     }
 }

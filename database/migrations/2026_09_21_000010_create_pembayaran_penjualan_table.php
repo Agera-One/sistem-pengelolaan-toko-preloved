@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('pembayaran_penjualan', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('penjualan_id')->constrained('penjualan')->onDelete('restrict');
+
+            $table->char('kode', 15)->unique();
+            $table->date('tanggal');
+            $table->unsignedInteger('nominal');
+            $table->string('metode_pembayaran');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('pembayaran_penjualan');
+    }
+};

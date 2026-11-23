@@ -2,28 +2,32 @@
 
 namespace App\Models;
 
+use App\Enums\PenjualanStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\Filterable;
+use App\Traits\Searchable;
+use App\Traits\HasDateRange;
 
 class Penjualan extends Model
 {
+    use Searchable, Filterable, HasDateRange;
+
+    protected array $searchable = ['kode'];
+    protected array $searchableRelations = ['pelanggan' => 'nama'];
+    protected array $filterable = ['status'];
+
     protected $table = 'penjualan';
 
-    protected $fillable = [
-        'tanggal',
-        'kode',
-        'ongkir',
-        'total',
-        'user_id',
-        'pelanggan_id',
-    ];
+    protected $guarded = [];
 
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'   => 'date',
+            'status'    => PenjualanStatus::class,
         ];
     }
 
@@ -47,9 +51,9 @@ class Penjualan extends Model
         return $this->hasMany(DetailRetur::class, 'penjualan_id');
     }
 
-    public function barang(): BelongsToMany
+    public function pakaian(): BelongsToMany
     {
-        return $this->belongsToMany(Barang::class, 'detail_penjualan', 'penjualan_id', 'barang_id')
+        return $this->belongsToMany(Pakaian::class, 'detail_penjualan', 'penjualan_id', 'pakaian_id')
             ->withPivot('harga_jual');
     }
 

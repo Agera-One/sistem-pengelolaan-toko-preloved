@@ -16,8 +16,6 @@ class UserSeeder extends Seeder
             'name'          => 'Yani Tristanti',
             'email'         => 'yanitristanti@gmail.com',
             'password'      => Hash::make('yani123'),
-            'nomor_telepon' => '0881010788808',
-            'alamat'        => 'Jl. Graha Angkasa RRI Surabaya No.A15, Balongpoh, Kedungrejo, Kec. Waru, Kabupaten Sidoarjo, Jawa Timur',
         ]);
 
     }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Masuk - Sistem Pengelolaan Toko Preloved</title>
+    <title>Masuk - TRISTANTI PRELOVED</title>
 
     @vite(['resources/css/app.css', 'resources/js/login.js'])
 </head>
@@ -30,7 +30,7 @@
                     <path d="M12 2 22 12 12 22 2 12Z"/>
                     <path d="M12 8 16 12 12 16 8 12Z" fill="currentColor"/>
                 </svg>
-                TRISTANTI STORE
+                TRISTANTI PRELOVED
             </p>
 
             <p class="mt-10 font-serif text-3xl font-bold leading-tight text-stone-50 lg:text-4xl xl:text-5xl">
@@ -74,7 +74,7 @@
         <div class="w-full max-w-md">
 
             <div class="mb-8 md:hidden">
-                <p class="font-serif text-xl font-bold text-link">TRISTANTI STORE</p>
+                <p class="font-serif text-xl font-bold text-link">TRISTANTI PRELOVED</p>
                 <p class="mt-1 text-base text-stone-700">Sistem Pengelolaan Toko Preloved</p>
             </div>
 

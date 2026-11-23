@@ -13,7 +13,7 @@ return new class extends Migration
             $table->char('kode', 15)->unique();
             $table->string('nama');
             $table->string('nomor_telepon', 15)->unique();
-            $table->string('kota');
+            $table->string('kabupaten_kota');
             $table->timestamps();
         });
     }

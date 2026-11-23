@@ -3,112 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
+use App\Services\PelangganService;
 use Illuminate\Http\Request;
-use App\Services\CodeGeneratorService;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\PelangganRequest;
 
 class PelangganController extends Controller
 {
-    public function index(Request $request, CodeGeneratorService $codeGenerator)
+    public function __construct(protected PelangganService $pelangganService) {}
+
+    public function index(Request $request)
     {
-        $keyword = trim((string) $request->query('q', ''));
-
-        $pelanggan = Pelanggan::query()
-            ->when($keyword !== '', function ($query) use ($keyword) {
-                $like = '%' . addcslashes($keyword, '%_\\') . '%';
-
-                $query->where(function ($q) use ($like) {
-                    $q->where('kode', 'like', $like)
-                      ->orWhere('nama', 'like', $like)
-                      ->orWhere('nomor_telepon', 'like', $like)
-                      ->orWhere('alamat', 'like', $like);
-                });
-            })
-            ->latest('id')
-            ->paginate(10)
-            ->withQueryString();
-
-        $kode = $codeGenerator->generate(
-        new Pelanggan(),
-            'kode',
-            'PLG'
-        );
-
-        return view('pages.pelanggan', compact('pelanggan', 'kode'));
+        return view('pages.pelanggan', $this->pelangganService->index($request->query()));
     }
 
-    public function store(Request $request, CodeGeneratorService $codeGenerator)
+    public function store(PelangganRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'alamat'        => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('pelanggan.index');
-        }
-
-        $kode = $codeGenerator->generate(new Pelanggan(), 'kode', 'PLG');
-
-        try {
-            Pelanggan::create([
-                'kode'          => $kode,
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'alamat'        => $request->alamat,
-            ]);
-
-            return redirect()->route('pelanggan.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('pelanggan.index')
-                ->with('error', 'Nomor telepon tidak boleh sama.');
-        }
+        $this->pelangganService->store($request->validated());
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di tambahkan');
     }
 
-    public function update(Request $request, string $id)
+    public function update(PelangganRequest $request, Pelanggan $pelanggan)
     {
-        $pelanggan = Pelanggan::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
-            'nama'          => 'required|string|max:255',
-            'nomor_telepon' => 'required|max:15',
-            'alamat'        => 'required',
-        ], [
-            'nama.required'          => 'Nama lengkap wajib diisi.',
-            'nama.max'               => 'Nama lengkap maksimal 255 karakter.',
-            'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
-            'nomor_telepon.max'      => 'Nomor telepon maksimal 15 karakter.',
-            'alamat.required'        => 'Alamat lengkap wajib diisi.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('pelanggan.index')
-                ->with('error', $validator->errors()->first());
-        }
-
-        try {
-            $pelanggan->update([
-                'nama'          => $request->nama,
-                'nomor_telepon' => $request->nomor_telepon,
-                'alamat'        => $request->alamat,
-            ]);
-
-            return redirect()->route('pelanggan.index');
-        } catch (\Exception $e) {
-            report($e);
-
-            return redirect()->route('pelanggan.index')
-                ->with('error', 'Gagal memperbarui data pelanggan.');
-        }
+        $pelanggan->update($request->validated());
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di perbarui');
     }
 
-    public function destroy(string $id)
+    public function destroy(Pelanggan $pelanggan)
     {
-        $pelanggan = Pelanggan::findOrFail($id);
         $pelanggan->delete();
-        return redirect()->route('pelanggan.index');
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil di hapus');
     }
 }

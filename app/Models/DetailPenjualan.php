@@ -11,15 +11,11 @@ class DetailPenjualan extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [
-        'barang_id',
-        'penjualan_id',
-        'harga_jual',
-    ];
+    protected $guarded = [];
 
-    public function barang(): BelongsTo
+    public function pakaian(): BelongsTo
     {
-        return $this->belongsTo(Barang::class, 'barang_id');
+        return $this->belongsTo(Pakaian::class, 'pakaian_id');
     }
 
     public function penjualan(): BelongsTo

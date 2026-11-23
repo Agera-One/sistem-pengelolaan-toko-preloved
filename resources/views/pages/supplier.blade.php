@@ -22,14 +22,24 @@
                             <path d="m9 18 6-6-6-6" />
                         </svg>
                     </li>
+                    <li>
+                        <a class="rounded transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                            Data Utama
+                        </a>
+                    </li>
+                    <li aria-hidden="true">
+                        <svg class="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </li>
                     <li class="font-medium text-stone-900" aria-current="page">Daftar Supplier</li>
                 </ol>
             </nav>
         </div>
 
-        @if (session('error'))
-            <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800" role="alert">
-                {{ session('error') }}
+        @if (session('success'))
+            <div class="mt-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800" role="alert">
+                {{ session('success') }}
             </div>
         @endif
 
@@ -61,7 +71,7 @@
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Tambah supplier
+                    Tambah Supplier
                 </button>
             </div>
 
@@ -73,7 +83,7 @@
                             <th scope="col" class="px-4 py-3 font-medium">Kode</th>
                             <th scope="col" class="px-4 py-3 font-medium">Nama</th>
                             <th scope="col" class="px-4 py-3 font-medium">Telepon</th>
-                            <th scope="col" class="px-4 py-3 font-medium">kota</th>
+                            <th scope="col" class="px-4 py-3 font-medium">kota/Kabupaten</th>
                             <th scope="col" class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
                     </thead>
@@ -90,15 +100,15 @@
                                 </td>
 
                                 <td class="px-4 py-3.5 font-medium text-stone-900">
-                                    {{ Str::title($s->nama) }}
+                                    {{ $s->nama }}
                                 </td>
 
                                 <td class="whitespace-nowrap px-4 py-3.5 text-stone-700">
                                     {{ $s->nomor_telepon }}
                                 </td>
 
-                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700" title="{{ Str::title($s->kota) }}">
-                                    {{ Str::title($s->kota) }}
+                                <td class="max-w-xs truncate px-4 py-3.5 text-stone-700">
+                                    {{ $s->kabupaten_kota }}
                                 </td>
 
                                 <td class="px-4 py-3.5 text-center">
@@ -106,7 +116,7 @@
                                             data-menu-toggle="menu-supplier-{{ $s->getKey() }}"
                                             aria-haspopup="menu"
                                             aria-expanded="false"
-                                            aria-label="Aksi untuk {{ Str::title($s->nama) }}"
+                                            aria-label="Aksi untuk {{ $s->nama }}"
                                             class="inline-flex h-8 w-8 items-center justify-center rounded-md text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <circle cx="12" cy="5" r="1.75" />
@@ -124,9 +134,8 @@
                                                 data-kode="{{ $s->kode }}"
                                                 data-nama="{{ $s->nama }}"
                                                 data-telepon="{{ $s->nomor_telepon }}"
-                                                data-kota="{{ $s->kota }}"
+                                                data-kabupaten-kota="{{ $s->kabupaten_kota }}"
                                                 data-dibuat="{{ $s->created_at?->translatedFormat('d F Y') }}"
-                                                data-diperbarui="{{ $s->updated_at?->translatedFormat('d F Y') }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
@@ -141,7 +150,7 @@
                                                 data-kode="{{ $s->kode }}"
                                                 data-nama="{{ $s->nama }}"
                                                 data-telepon="{{ $s->nomor_telepon }}"
-                                                data-kota="{{ $s->kota }}"
+                                                data-kabupaten-kota="{{ $s->kabupaten_kota }}"
                                                 class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-stone-700 transition hover:bg-brand/10 hover:text-brand focus:bg-brand/10 focus:outline-none">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" />
@@ -174,13 +183,8 @@
                                 <td colspan="6" class="px-4 py-16 text-center">
                                     <div class="mx-auto flex max-w-sm flex-col items-center">
                                         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 text-brand">
-                                            <!-- SVG Icon Supplier / Truk -->
-                                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
-                                                <path d="M15 18H9" />
-                                                <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
-                                                <circle cx="7" cy="18" r="2" />
-                                                <circle cx="17" cy="18" r="2" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
                                             </svg>
                                         </span>
 
@@ -200,7 +204,7 @@
                                             </p>
                                             <button type="button" data-modal-open="modal-tambah"
                                                     class="mt-4 rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover">
-                                                Tambah supplier
+                                                Tambah Supplier
                                             </button>
                                         @endif
                                     </div>
@@ -214,10 +218,6 @@
             <x-pagination :paginator="$supplier" />
         </div>
     </div>
-
-    @php
-        $field = 'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500';
-    @endphp
 
     <dialog id="modal-tambah"
             aria-labelledby="modal-tambah-title"
@@ -236,12 +236,26 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div>
-                    <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
-                    <input name="kode" type="text" id="kode" value="{{ $kode }}"
-                            readonly aria-describedby="hint-kode"
-                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
-                    <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                        <input name="kode" type="text" id="kode" value="{{ $kode }}"
+                                readonly aria-describedby="hint-kode"
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 placeholder:text-stone-400 focus:outline-none">
+                        <p id="hint-kode" class="mt-1.5 text-xs text-stone-500">Terisi saat data disimpan.</p>
+                    </div>
+
+                    <div>
+                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-nomor_telepon"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
 
                 <div>
@@ -252,34 +266,20 @@
                             autocomplete="off" autofocus
                             data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-nama"
-                            class="{{ $field }}">
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                     <p id="err-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="tel" inputmode="tel" id="nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-nomor_telepon"
-                                class="{{ $field }}">
-                        <p id="err-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="kota" class="mb-1.5 block text-stone-900">
-                            Kota <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="text" id="kota" name="kota"
-                                placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-label="Kota" data-rules="required|string|max:255"
-                                aria-describedby="err-kota"
-                                class="{{ $field }}">
-                        <p id="err-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
+                <div>
+                    <label for="kabupaten_kota" class="mb-1.5 block text-stone-900">
+                        Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="kabupaten_kota" name="kabupaten_kota"
+                            placeholder="Kota Surabaya" autocomplete="off"
+                            data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                            aria-describedby="err-kabupaten_kota"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -290,7 +290,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan supplier
+                    Simpan
                 </button>
             </div>
         </form>
@@ -314,12 +314,27 @@
             </div>
 
             <div class="space-y-6 overflow-y-auto px-6 py-5">
-                <div>
-                    <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
-                    <input type="text" id="edit-kode" data-fill="kode"
-                            readonly aria-describedby="hint-edit-kode"
-                            class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
-                    <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit-kode" class="mb-1.5 block text-stone-900">Kode supplier</label>
+                        <input type="text" id="edit-kode" data-fill="kode"
+                                readonly aria-describedby="hint-edit-kode"
+                                class="w-full cursor-not-allowed rounded-lg border border-stone-300 bg-stone-100 px-3 py-2 text-stone-500 focus:outline-none">
+                        <p id="hint-edit-kode" class="mt-1.5 text-xs text-stone-500">Kode tidak dapat diubah.</p>
+                    </div>
+
+                    <div>
+                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
+                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
+                                placeholder="08xxxxxxxxxx" autocomplete="off"
+                                data-fill="telepon"
+                                data-label="Nomor telepon" data-rules="required|max:15"
+                                aria-describedby="err-edit-nomor_telepon"
+                                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
+                    </div>
                 </div>
 
                 <div>
@@ -331,36 +346,21 @@
                             data-fill="nama"
                             data-label="Nama" data-rules="required|string|max:255"
                             aria-describedby="err-edit-nama"
-                            class="{{ $field }}">
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
                     <p id="err-edit-nama" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label for="edit-nomor_telepon" class="mb-1.5 block text-stone-900">
-                            Nomor telepon <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="tel" inputmode="tel" id="edit-nomor_telepon" name="nomor_telepon"
-                                placeholder="08xxxxxxxxxx" autocomplete="off"
-                                data-fill="telepon"
-                                data-label="Nomor telepon" data-rules="required|max:15"
-                                aria-describedby="err-edit-nomor_telepon"
-                                class="{{ $field }}">
-                        <p id="err-edit-nomor_telepon" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
-
-                    <div>
-                        <label for="edit-kota" class="mb-1.5 block text-stone-900">
-                            Kota <span class="text-red-500" aria-hidden="true">*</span>
-                        </label>
-                        <input type="text" id="edit-kota" name="kota"
-                                placeholder="Contoh: Surabaya" autocomplete="off"
-                                data-fill="kota"
-                                data-label="Kota" data-rules="required|string|max:255"
-                                aria-describedby="err-edit-kota"
-                                class="{{ $field }}">
-                        <p id="err-edit-kota" class="mt-1.5 text-xs text-red-600" hidden></p>
-                    </div>
+                <div>
+                    <label for="edit-kabupaten_kota" class="mb-1.5 block text-stone-900">
+                        Kota/Kabupaten <span class="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="edit-kabupaten_kota" name="kabupaten_kota"
+                            placeholder="Contoh: Surabaya" autocomplete="off"
+                            data-fill="kabupatenKota"
+                            data-label="Kota/Kabupaten" data-rules="required|string|max:255"
+                            aria-describedby="err-edit-kabupaten_kota"
+                            class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-500">
+                    <p id="err-edit-kabupaten_kota" class="mt-1.5 text-xs text-red-600" hidden></p>
                 </div>
             </div>
 
@@ -371,7 +371,7 @@
                 </button>
                 <button type="submit"
                         class="rounded-lg bg-brand px-4 py-2 font-medium text-white transition hover:bg-brand-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
-                    Simpan perubahan
+                    Simpan
                 </button>
             </div>
         </form>
@@ -404,20 +404,16 @@
 
                 <dl class="mt-5 divide-y divide-stone-300 border-t border-stone-100">
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Nomor telepon</dt>
+                        <dt class="text-stone-500">Nomor Telepon</dt>
                         <dd data-detail="telepon" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">kota</dt>
-                        <dd data-detail="kota" class="break-words text-stone-900 sm:col-span-2"></dd>
+                        <dt class="text-stone-500">Kota/Kabupaten</dt>
+                        <dd data-detail="kabupaten_kota" class="break-words text-stone-900 sm:col-span-2"></dd>
                     </div>
                     <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terdaftar pada</dt>
+                        <dt class="text-stone-500">Terdaftar Pada</dt>
                         <dd data-detail="dibuat" class="text-stone-900 sm:col-span-2"></dd>
-                    </div>
-                    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-stone-500">Terakhir diperbarui</dt>
-                        <dd data-detail="diperbarui" class="text-stone-900 sm:col-span-2"></dd>
                     </div>
                 </dl>
             </div>

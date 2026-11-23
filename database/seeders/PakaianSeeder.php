@@ -1,0 +1,82 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class PakaianSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $pakaian = [];
+        $counterKode = 1;
+
+        $templatePakaian = [
+            [
+                'kategori'      => 'atasan',
+                'nama'          => 'Blouse Casual Cotton',
+                'lingkar'       => 98,
+                'panjang'       => 65,
+                'harga_beli'    => 35000,
+                'harga_jual'    => 65000
+            ],
+            [
+                'kategori'      => 'atasan',
+                'nama'          => 'Kemeja Slim Fit Polos',
+                'lingkar'       => 102,
+                'panjang'       => 72,
+                'harga_beli'    => 40000,
+                'harga_jual'    => 75000
+            ],
+            [
+                'kategori'      => 'bawahan',
+                'nama'          => 'Rok Plisket Panjang',
+                'lingkar'       => 70,
+                'panjang'       => 92,
+                'harga_beli'    => 45000,
+                'harga_jual'    => 80000
+            ],
+            [
+                'kategori'      => 'bawahan',
+                'nama'          => 'Celana Chino Reguler',
+                'lingkar'       => 82,
+                'panjang'       => 100,
+                'harga_beli'    => 50000,
+                'harga_jual'    => 95000
+            ],
+            [
+                'kategori'      => 'terusan',
+                'nama'          => 'Overall Denim Style',
+                'lingkar'       => 96,
+                'panjang'       => 130,
+                'harga_beli'    => 65000,
+                'harga_jual'    => 120000
+            ],
+        ];
+
+        for ($pembelianId = 1; $pembelianId <= 20; $pembelianId++) {
+            foreach ($templatePakaian as $tb) {
+                $kodeNomor = str_pad($counterKode, 4, '0', STR_PAD_LEFT);
+
+                $pakaian[] = [
+                    'kode'         => "PAK-202610-{$kodeNomor}",
+                    'nama'         => $tb['nama'],
+                    'lingkar'      => $tb['lingkar'],
+                    'panjang'      => $tb['panjang'],
+                    'kategori'     => $tb['kategori'],
+                    'harga_beli'   => $tb['harga_beli'],
+                    'harga_jual'   => $tb['harga_jual'],
+                    'status'       => 'tersedia',
+                    'pembelian_id' => $pembelianId,
+                    'created_at'   => now(),
+                    'updated_at'   => now(),
+                ];
+
+                $counterKode++;
+            }
+        }
+
+        DB::table('pakaian')->insert($pakaian);
+    }
+}
